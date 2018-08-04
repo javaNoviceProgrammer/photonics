@@ -1,69 +1,68 @@
 package photonics.modes;
 
+import java.util.ArrayList;
+
+import Jama.EigenvalueDecomposition;
+import mathLib.numbers.Complex;
+import mathLib.utils.MathUtils;
+import photonics.util.Fields;
 import photonics.util.Units;
 import plotter.chart.MatlabChart;
 
-import static mathLib.numbers.Complex.*;
-
-import Jama.Matrix;
-import ch.epfl.javancox.results_manager.display.gui.MatlabPlot;
-import mathLib.numbers.Complex;
-import mathLib.utils.MathUtils;
-
 public class FDESolver1D {
-	
-	int numPoints = 50 ;
+
+	int numPoints, numModes ;
 	double lambda, xMin, xMax, dx, scale ;
 	IndexProfile1D indexProfile = null ;
 	Units gridUnit, lambdaUnit;
 	double[] x ;
-	double[] Ex, Ey, Ez ;
-	double[] Hx, Hy, Hz ;
 	double[] index ;
 	double[] epsilon ;
 	double[][] coeffEy, coeffHy ;
-	double[] eigensReal, eigensImag ;
-	Complex[] eigens ; 
-	
+//	double[] eigensReal, eigensImag ;
+	ArrayList<Complex[]> Ex, Ey, Ez ;
+	ArrayList<Complex[]> Hx, Hy, Hz ;
+	ArrayList<Complex> neff ;
+
 	public FDESolver1D() {
 	}
-	
+
 	public void setGrid(int numPoints, Units unit) {
 		this.numPoints = numPoints ;
-		this.gridUnit = unit ;	
+		this.gridUnit = unit ;
 	}
-	
+
 	public void setIndexProfile(IndexProfile1D profile) {
 		this.indexProfile = profile ;
 	}
-	
+
 	public void setWavelength(double lambda, Units unit) {
 		this.lambda = lambda ;
 		this.lambdaUnit = unit ;
 	}
-	
+
 	public void setBoundary() {
-		
+
 	}
-	
+
 	public void solve() {
 		if(indexProfile == null)
 			throw new NullPointerException("First setup the index profile!") ;
 		computeScale() ;
 		createMesh() ;
-		solveForEy();
+		solveForE();
 	}
-	
+
 	private void computeScale() {
 		scale = 1.0 ;
-		if(gridUnit.equals(Units.um) && lambdaUnit.equals(Units.nm)) 
+		if(gridUnit.equals(Units.um) && lambdaUnit.equals(Units.nm))
 			scale = 1e3 ;
 		else if(gridUnit.equals(Units.nm) && lambdaUnit.equals(Units.um))
 			scale = 1e-3 ;
-		else 
+		else
 			scale = 1.0 ;
 	}
-	
+
 	private void createMesh() {
 		xMin = indexProfile.getLowerBoundary() ;
 		xMax = indexProfile.getUpperBoundary() ;
@@ -76,40 +75,48 @@ public class FDESolver1D {
 			epsilon[i] = index[i]*index[i] ;
 		}
 	}
-	
-	private void solveForEy() {
+
+	private void solveForE() {
 		printDebugInfo();
 		// Ey, Hx, Hz
-		Ey = new double[numPoints] ;
-		Hx = new double[numPoints] ;
-		Hz = new double[numPoints] ;
+//		Ey = new double[numPoints] ;
+//		Hx = new double[numPoints] ;
+//		Hz = new double[numPoints] ;
 		coeffEy = new double[numPoints][numPoints] ;
 		double var1 = 2*Math.PI*dx/lambda*scale ;
 		double var2 = var1*var1 ;
-		assemble(coeffEy, var2) ;
+		assembleE(coeffEy, var2) ;
 		Jama.Matrix coeffEyMatrix = new Jama.Matrix(coeffEy) ;
-		eigensReal = coeffEyMatrix.eig().getRealEigenvalues() ;
-		eigensImag = coeffEyMatrix.eig().getImagEigenvalues() ;
-		eigens = new Complex[numPoints] ;
-		for(int i=0; i<numPoints; i++) {
-			eigens[i] = new Complex(eigensReal[i], eigensImag[i]).sqrt().divides(var1) ;
-			System.out.println(eigens[i]);
+		EigenvalueDecomposition eigDecomp = coeffEyMatrix.eig() ;
+		double[] tempReal = eigDecomp.getRealEigenvalues() ;
+		double[] tempImag = eigDecomp.getImagEigenvalues() ;
+		neff = new ArrayList<>() ;
+		double minIndex = MathUtils.Arrays.FindMinimum.getValue(index) ;
+		for(int i=numPoints-1; i>=0; i--) {
+			Complex eig = new Complex(tempReal[i], tempImag[i]).sqrt().divides(var1) ;
+			if(eig.re()>minIndex){
+				System.out.println(eig);
+				neff.add(eig) ;
+				numModes ++ ;
+				// finding corresponding eigen vectors
+			}
 		}
 	}
-	
-	private void solveForHy() {
+
+	private void solveForH() {
 		printDebugInfo();
 		// Hy, Ex, Ez
-		
+
 	}
-	
-	private void assemble(double[][] coeff, double var) {
+
+	// f''(x) = ( f(x+h) -2 f(x) + f(x-h) ) / h^2
+
+	private void assembleE(double[][] coeff, double var) {
 		int M = coeff.length ;
-		System.out.println(M);
 		coeff[0][0] = -2 ;
 		coeff[0][1] = 1 ;
-		coeff[M-1][M-1] = 1 ;
-		coeff[M-1][M-2] = -2 ;
+		coeff[M-1][M-1] = -2 ;
+		coeff[M-1][M-2] = 1 ;
 		for(int i=1; i<M-1; i++) {
 				coeff[i][i] = -2 ;
 				coeff[i][i-1] = 1;
@@ -119,7 +126,7 @@ public class FDESolver1D {
 			coeff[i][i] += var*epsilon[i] ;
 		}
 	}
-	
+
 	private void printDebugInfo() {
 		System.out.println("xMin = " + xMin + " "+ gridUnit.name());
 		System.out.println("xMax = " + xMax + " "+ gridUnit.name());
@@ -127,45 +134,72 @@ public class FDESolver1D {
 		System.out.println("number of grid points = " + numPoints);
 		plotIndexProfile();
 	}
-	
+
 	public void plotIndexProfile() {
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, index);
 		fig.RenderPlot();
+		fig.xlabel("X " + "(" + gridUnit.name() + ")");
+		fig.ylabel("Index");
 		fig.run(true);
 		fig.markerON();
 	}
-	
-	
+
+	private void plotComponent(double[] x, Complex[] f, String name){
+		MatlabChart fig = new MatlabChart() ;
+		double[] fReal = new double[f.length] ;
+		for(int i=0; i<f.length; i++){
+			fReal[i] = f[i].re() ;
+		}
+		fig.plot(x, fReal);
+		fig.RenderPlot();
+		fig.xlabel("X " + "(" + gridUnit.name() + ")");
+		fig.ylabel(name);
+		fig.run();
+		fig.markerON();
+	}
+
+	public void plotField(Fields field, int modeNum){
+		switch (field) {
+		case Ey: { plotComponent(x, Ey.get(modeNum-1), Fields.Ey.name()); break; }
+
+		default:
+			break;
+		}
+	}
+
+
 	// for test
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
-		fde.setWavelength(1550.0, Units.nm);
+		fde.setWavelength(1.55, Units.um);
 		fde.setGrid(500, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
-			
+
 			@Override
 			public double getUpperBoundary() {
-				return 1000.0;
+				return 2000.0;
 			}
-			
+
 			@Override
 			public double getLowerBoundary() {
 				return -500.0;
 			}
-			
+
 			@Override
 			public double getIndex(double x) {
 				if(x<0) return 1.444 ;
-				else if(x < 500.0) return 3.4777 ;
+				else if(x < 400.0) return 3.4777 ;
+				else if(x<400+200) return 1.444 ;
+				else if(x<400+200+400) return 3.4777 ;
 				else return 1.444 ;
 			}
 		});
-		fde.computeScale();
+
 		fde.solve();
-		
-		
-		
+//		fde.plotField(Fields.Ey, 1);
+		System.out.println(fde.numModes);
+
 	}
 
 }
