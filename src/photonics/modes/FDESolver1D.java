@@ -1,6 +1,7 @@
 package photonics.modes;
 
 import photonics.util.Units;
+import static mathLib.numbers.Complex.*;
 
 public class FDESolver1D {
 	
