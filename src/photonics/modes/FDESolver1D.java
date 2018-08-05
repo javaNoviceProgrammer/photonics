@@ -19,12 +19,16 @@ public class FDESolver1D {
 	double[] index ;
 	double[] epsilon ;
 	double[][] coeffEy, coeffHy ;
-//	double[] eigensReal, eigensImag ;
 	ArrayList<Complex[]> Ex, Ey, Ez ;
 	ArrayList<Complex[]> Hx, Hy, Hz ;
 	ArrayList<Complex> neff ;
+	boolean debug = false ;
 
 	public FDESolver1D() {
+	}
+
+	public void setDebug(boolean debug){
+		this.debug = debug ;
 	}
 
 	public void setGrid(int numPoints, Units unit) {
@@ -50,7 +54,7 @@ public class FDESolver1D {
 			throw new NullPointerException("First setup the index profile!") ;
 		computeScale() ;
 		createMesh() ;
-		solveForE();
+		solveTE();
 	}
 
 	private void computeScale() {
@@ -76,16 +80,17 @@ public class FDESolver1D {
 		}
 	}
 
-	private void solveForE() {
+	private void solveTE() {
 		printDebugInfo();
+		numModes = 0 ;
 		// Ey, Hx, Hz
-//		Ey = new double[numPoints] ;
-//		Hx = new double[numPoints] ;
-//		Hz = new double[numPoints] ;
+		Ey = new ArrayList<>() ;
+//		Hx = new ArrayList<>() ;
+//		Hz = new ArrayList<>() ;
 		coeffEy = new double[numPoints][numPoints] ;
 		double var1 = 2*Math.PI*dx/lambda*scale ;
 		double var2 = var1*var1 ;
-		assembleE(coeffEy, var2) ;
+		assembleTE(coeffEy, var2) ;
 		Jama.Matrix coeffEyMatrix = new Jama.Matrix(coeffEy) ;
 		EigenvalueDecomposition eigDecomp = coeffEyMatrix.eig() ;
 		double[] tempReal = eigDecomp.getRealEigenvalues() ;
@@ -99,11 +104,17 @@ public class FDESolver1D {
 				neff.add(eig) ;
 				numModes ++ ;
 				// finding corresponding eigen vectors
+				double[][] vec = eigDecomp.getV().getArray() ;
+				Complex[] ey = new Complex[numPoints] ;
+				for(int j=0;j<numPoints; j++){
+					ey[j] = new Complex(vec[j][i], 0.0) ;
+				}
+				Ey.add(ey) ;
 			}
 		}
 	}
 
-	private void solveForH() {
+	private void solveTM() {
 		printDebugInfo();
 		// Hy, Ex, Ez
 
@@ -111,7 +122,7 @@ public class FDESolver1D {
 
 	// f''(x) = ( f(x+h) -2 f(x) + f(x-h) ) / h^2
 
-	private void assembleE(double[][] coeff, double var) {
+	private void assembleTE(double[][] coeff, double var) {
 		int M = coeff.length ;
 		coeff[0][0] = -2 ;
 		coeff[0][1] = 1 ;
@@ -173,32 +184,38 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1.55, Units.um);
-		fde.setGrid(500, Units.nm);
+		fde.setGrid(1000, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
 			public double getUpperBoundary() {
-				return 2000.0;
+				return 5000.0;
 			}
 
 			@Override
 			public double getLowerBoundary() {
-				return -500.0;
+				return -2500.0;
 			}
 
 			@Override
 			public double getIndex(double x) {
 				if(x<0) return 1.444 ;
-				else if(x < 400.0) return 3.4777 ;
-				else if(x<400+200) return 1.444 ;
-				else if(x<400+200+400) return 3.4777 ;
+				else if(x < 1000.0) return 3.4777 ;
+				else if(x<1000+200) return 1.444 ;
+				else if(x<1000+200+1000) return 3.4777 ;
 				else return 1.444 ;
 			}
 		});
 
 		fde.solve();
-//		fde.plotField(Fields.Ey, 1);
-		System.out.println(fde.numModes);
+		fde.plotField(Fields.Ey, 1);
+		fde.plotField(Fields.Ey, 2);
+//		fde.plotField(Fields.Ey, 3);
+//		fde.plotField(Fields.Ey, 4);
+//		fde.plotField(Fields.Ey, 5);
+//		fde.plotField(Fields.Ey, 6);
+//		fde.plotField(Fields.Ey, 9);
+//		fde.plotField(Fields.Ey, 10);
 
 	}
 

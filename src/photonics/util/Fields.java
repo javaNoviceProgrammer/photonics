@@ -8,5 +8,8 @@ public enum Fields {
 	// H field components
 	Hx,
 	Hy,
-	Hz
+	Hz,
+	// amplitude or phase
+	Amplitude,
+	Phase
 }
