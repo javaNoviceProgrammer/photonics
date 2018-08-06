@@ -36,6 +36,11 @@ public class FDESolver1D {
 		this.gridUnit = unit ;
 	}
 
+	public void setGrid(double dx, Units unit) {
+		this.dx = dx ;
+		this.gridUnit = unit ;
+	}
+
 	public void setIndexProfile(IndexProfile1D profile) {
 		this.indexProfile = profile ;
 	}
@@ -70,6 +75,9 @@ public class FDESolver1D {
 	private void createMesh() {
 		xMin = indexProfile.getLowerBoundary() ;
 		xMax = indexProfile.getUpperBoundary() ;
+		if(numPoints == 0){
+			numPoints = (int) ((xMax-xMin)/dx) ;
+		}
 		x = MathUtils.linspace(xMin, xMax, numPoints) ;
 		dx = x[2] - x[1] ;
 		index = new double[numPoints] ;
@@ -184,7 +192,7 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1.55, Units.um);
-		fde.setGrid(500, Units.nm);
+		fde.setGrid(10.0, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
@@ -201,7 +209,7 @@ public class FDESolver1D {
 			public double getIndex(double x) {
 				if(x<0) return 1.444 ;
 				else if(x < 300.0) return 3.4777 ;
-				else if(x<300+200) return 1.444 ;
+				else if(x<300+200) return 2 ;
 				else if(x<300+200+500) return 3.4777 ;
 				else if(x<300+200+500+200) return 1.444 ;
 				else if(x<300+200+500+200+300) return 3.4777 ;
