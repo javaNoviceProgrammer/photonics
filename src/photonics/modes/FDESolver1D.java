@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import Jama.EigenvalueDecomposition;
 import mathLib.numbers.Complex;
-import mathLib.utils.MathUtils;
-import mathLib.utils.Timer;
+import mathLib.util.MathUtils;
+import mathLib.util.Timer;
+import mathLib.util.Units;
 import photonics.util.Fields;
 import photonics.util.Modes;
-import photonics.util.Units;
 import plotter.chart.MatlabChart;
 
 public class FDESolver1D {
