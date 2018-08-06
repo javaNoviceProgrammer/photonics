@@ -208,7 +208,7 @@ public class FDESolver1D {
 
 			@Override
 			public double getUpperBoundary() {
-				return 3000.0;
+				return 4000.0;
 			}
 
 			@Override
@@ -218,11 +218,11 @@ public class FDESolver1D {
 
 			@Override
 			public double getRealIndex(double x) {
-				if(x<0) return 1.444 ;
-				else if(x < 400.0) return 3.4777 ;
-//				else if(x<400+300) return 1.444 ;
+				if(x<0) return 3.4 ;
+				else if(x < 3000.0) return 1.444 ;
+				else if(x<3000+400) return 2.1 ;
 //				else if(x<400+300+400) return 3.4777 + 0.1 *Math.sin(x/200.0 * Math.PI) ;
-				else return 1.444 ;
+				else return 1 ;
 			}
 
 			@Override
@@ -234,16 +234,19 @@ public class FDESolver1D {
 		Timer timer = new Timer() ;
 		timer.start();
 		fde.solve(Modes.TE);
-		fde.plotField(Fields.Ey, 1);
-		fde.plotField(Fields.Ey, 2);
+//		fde.plotField(Fields.Ey, 1);
+//		fde.plotField(Fields.Ey, 2);
 //		fde.plotField(Fields.Ey, 3);
 //		fde.plotField(Fields.Ey, 4);
-		timer.end();
-		timer.show();
 //		fde.plotField(Fields.Ey, 5);
-//		fde.plotField(Fields.Ey, 6);
+		fde.plotField(Fields.Ey, 6);
+//		fde.plotField(Fields.Ey, 7);
+//		fde.plotField(Fields.Ey, 8);
 //		fde.plotField(Fields.Ey, 9);
 //		fde.plotField(Fields.Ey, 10);
+		timer.end();
+		timer.show();
+
 
 	}
 
