@@ -184,25 +184,27 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1.55, Units.um);
-		fde.setGrid(1000, Units.nm);
+		fde.setGrid(500, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
 			public double getUpperBoundary() {
-				return 5000.0;
+				return 3000.0;
 			}
 
 			@Override
 			public double getLowerBoundary() {
-				return -2500.0;
+				return -500.0;
 			}
 
 			@Override
 			public double getIndex(double x) {
 				if(x<0) return 1.444 ;
-				else if(x < 1000.0) return 3.4777 ;
-				else if(x<1000+200) return 1.444 ;
-				else if(x<1000+200+1000) return 1.444 ;
+				else if(x < 300.0) return 3.4777 ;
+				else if(x<300+200) return 1.444 ;
+				else if(x<300+200+500) return 3.4777 ;
+				else if(x<300+200+500+200) return 1.444 ;
+				else if(x<300+200+500+200+300) return 3.4777 ;
 				else return 1.444 ;
 			}
 		});
