@@ -7,6 +7,7 @@ import mathLib.numbers.Complex;
 import mathLib.utils.MathUtils;
 import mathLib.utils.Timer;
 import photonics.util.Fields;
+import photonics.util.Modes;
 import photonics.util.Units;
 import plotter.chart.MatlabChart;
 
@@ -24,6 +25,7 @@ public class FDESolver1D {
 	ArrayList<Complex[]> Hx, Hy, Hz ;
 	ArrayList<Complex> neff ;
 	boolean debug = false ;
+	Modes modes ;
 
 	public FDESolver1D() {
 	}
@@ -55,12 +57,19 @@ public class FDESolver1D {
 
 	}
 
-	public void solve() {
+	public void solve(Modes modes) {
 		if(indexProfile == null)
 			throw new NullPointerException("First setup the index profile!") ;
+		this.modes = modes ;
 		computeScale() ;
 		createMesh() ;
-		solveTE();
+		if(modes == Modes.TE) {
+			solveTE();
+		}
+		else {
+			solveTM();
+		}
+		
 	}
 
 	private void computeScale() {
@@ -84,7 +93,7 @@ public class FDESolver1D {
 		index = new double[numPoints] ;
 		epsilon = new double[numPoints] ;
 		for(int i=0; i<x.length; i++) {
-			index[i] = indexProfile.getIndex(x[i]) ;
+			index[i] = indexProfile.getRealIndex(x[i]) ;
 			epsilon[i] = index[i]*index[i] ;
 		}
 	}
@@ -152,6 +161,7 @@ public class FDESolver1D {
 		System.out.println("xMax = " + xMax + " "+ gridUnit.name());
 		System.out.println("dx = " + dx + " "+ gridUnit.name());
 		System.out.println("number of grid points = " + numPoints);
+		System.out.println("computing " + modes + "...");
 		plotIndexProfile();
 	}
 
@@ -207,18 +217,23 @@ public class FDESolver1D {
 			}
 
 			@Override
-			public double getIndex(double x) {
+			public double getRealIndex(double x) {
 				if(x<0) return 1.444 ;
 				else if(x < 400.0) return 3.4777 ;
-				else if(x<400+200) return 1.444 ;
-				else if(x<400+200+400) return 3.4777 ;
+				else if(x<400+300) return 1.444 ;
+				else if(x<400+300+400) return 3.4777 ;
 				else return 1.444 ;
+			}
+
+			@Override
+			public double getImagIndex(double x) {
+				return 0;
 			}
 		});
 		// time benchmarking
 		Timer timer = new Timer() ;
 		timer.start();
-		fde.solve();
+		fde.solve(Modes.TE);
 //		fde.plotField(Fields.Ey, 1);
 //		fde.plotField(Fields.Ey, 2);
 //		fde.plotField(Fields.Ey, 3);
