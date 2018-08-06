@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Jama.EigenvalueDecomposition;
 import mathLib.numbers.Complex;
 import mathLib.utils.MathUtils;
+import mathLib.utils.Timer;
 import photonics.util.Fields;
 import photonics.util.Units;
 import plotter.chart.MatlabChart;
@@ -191,7 +192,7 @@ public class FDESolver1D {
 	// for test
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
-		fde.setWavelength(1.55, Units.um);
+		fde.setWavelength(1550.0, Units.nm);
 		fde.setGrid(10.0, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
 
@@ -202,26 +203,28 @@ public class FDESolver1D {
 
 			@Override
 			public double getLowerBoundary() {
-				return -500.0;
+				return -1500.0;
 			}
 
 			@Override
 			public double getIndex(double x) {
 				if(x<0) return 1.444 ;
-				else if(x < 300.0) return 3.4777 ;
-				else if(x<300+200) return 2 ;
-				else if(x<300+200+500) return 3.4777 ;
-				else if(x<300+200+500+200) return 1.444 ;
-				else if(x<300+200+500+200+300) return 3.4777 ;
+				else if(x < 400.0) return 3.4777 ;
+				else if(x<400+200) return 1.444 ;
+				else if(x<400+200+400) return 3.4777 ;
 				else return 1.444 ;
 			}
 		});
-
+		// time benchmarking
+		Timer timer = new Timer() ;
+		timer.start();
 		fde.solve();
-		fde.plotField(Fields.Ey, 1);
-		fde.plotField(Fields.Ey, 2);
+//		fde.plotField(Fields.Ey, 1);
+//		fde.plotField(Fields.Ey, 2);
 //		fde.plotField(Fields.Ey, 3);
 //		fde.plotField(Fields.Ey, 4);
+		timer.end();
+		timer.show();
 //		fde.plotField(Fields.Ey, 5);
 //		fde.plotField(Fields.Ey, 6);
 //		fde.plotField(Fields.Ey, 9);
