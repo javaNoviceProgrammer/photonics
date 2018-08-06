@@ -202,7 +202,7 @@ public class FDESolver1D {
 				if(x<0) return 1.444 ;
 				else if(x < 1000.0) return 3.4777 ;
 				else if(x<1000+200) return 1.444 ;
-				else if(x<1000+200+1000) return 3.4777 ;
+				else if(x<1000+200+1000) return 1.444 ;
 				else return 1.444 ;
 			}
 		});
