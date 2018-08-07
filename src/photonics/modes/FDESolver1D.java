@@ -73,7 +73,7 @@ public class FDESolver1D {
 		else {
 			solveTM();
 		}
-		
+
 	}
 
 	private void computeScale() {
@@ -135,7 +135,7 @@ public class FDESolver1D {
 				Ey.add(ey) ;
 			}
 		}
-		
+
 	}
 
 	// f''(x) = ( f(x+h) -2 f(x) + f(x-h) ) / h^2
@@ -155,7 +155,7 @@ public class FDESolver1D {
 			coeff[i][i] += var*epsilon[i] ;
 		}
 	}
-	
+
 	private void solveTM() {
 		printDebugInfo();
 		numModes = 0 ;
@@ -254,12 +254,12 @@ public class FDESolver1D {
 
 			@Override
 			public double getUpperBoundary() {
-				return 1500.0;
+				return 2500.0;
 			}
 
 			@Override
 			public double getLowerBoundary() {
-				return -1000.0;
+				return -2000.0;
 			}
 
 			@Override
@@ -277,8 +277,8 @@ public class FDESolver1D {
 		// time benchmarking
 		Timer timer = new Timer() ;
 		timer.start();
-		fde.solve(Modes.TM);
-		fde.plotField(Fields.Hy, 1);
+		fde.solve(Modes.TE);
+		fde.plotField(Fields.Ey, 1);
 //		fde.plotField(Fields.Hy, 2);
 //		fde.plotField(Fields.Hy, 3);
 //		fde.plotField(Fields.Ey, 4);
