@@ -1,9 +1,12 @@
 package photonics.modes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Jama.EigenvalueDecomposition;
+import mathLib.matrix.Matrix;
 import mathLib.numbers.Complex;
+import mathLib.ode.DiffOperator;
 import mathLib.util.MathUtils;
 import mathLib.util.Timer;
 import mathLib.util.Units;
@@ -23,7 +26,8 @@ public class FDESolver1D {
 	double[][] coeffEy, coeffHy ;
 	ArrayList<Complex[]> Ex, Ey, Ez ;
 	ArrayList<Complex[]> Hx, Hy, Hz ;
-	ArrayList<Complex> neff ;
+//	ArrayList<Complex> neff ;
+	List<Complex> neff ;
 	boolean debug = false ;
 	Modes modes ;
 
@@ -106,7 +110,7 @@ public class FDESolver1D {
 //		Hx = new ArrayList<>() ;
 //		Hz = new ArrayList<>() ;
 		coeffEy = new double[numPoints][numPoints] ;
-		double var1 = 2*Math.PI*dx/lambda*scale ;
+		double var1 = (2*Math.PI*dx/lambda)*scale ;
 		double var2 = var1*var1 ;
 		assembleTE(coeffEy, var2) ;
 		Jama.Matrix coeffEyMatrix = new Jama.Matrix(coeffEy) ;
@@ -115,9 +119,10 @@ public class FDESolver1D {
 		double[] tempImag = eigDecomp.getImagEigenvalues() ;
 		neff = new ArrayList<>() ;
 		double minIndex = MathUtils.Arrays.FindMinimum.getValue(index) ;
+		double maxIndex = MathUtils.Arrays.FindMaximum.getValue(index) ;
 		for(int i=numPoints-1; i>=0; i--) {
 			Complex eig = new Complex(tempReal[i], tempImag[i]).sqrt().divides(var1) ;
-			if(eig.re()>minIndex){
+			if(eig.re()>minIndex && eig.re()<maxIndex){
 				System.out.println(eig);
 				neff.add(eig) ;
 				numModes ++ ;
@@ -130,12 +135,7 @@ public class FDESolver1D {
 				Ey.add(ey) ;
 			}
 		}
-	}
-
-	private void solveTM() {
-		printDebugInfo();
-		// Hy, Ex, Ez
-
+		
 	}
 
 	// f''(x) = ( f(x+h) -2 f(x) + f(x-h) ) / h^2
@@ -154,6 +154,52 @@ public class FDESolver1D {
 		for(int i=0; i<M; i++) {
 			coeff[i][i] += var*epsilon[i] ;
 		}
+	}
+	
+	private void solveTM() {
+		printDebugInfo();
+		numModes = 0 ;
+		// Hy, Ex, Ez
+		Hy = new ArrayList<>() ;
+//		Ex = new ArrayList<>() ;
+//		Ez = new ArrayList<>() ;
+		coeffHy = new double[numPoints][numPoints] ;
+		coeffHy = assembleTM();
+		Jama.Matrix coeffHyMatrix = new Jama.Matrix(coeffHy) ;
+		EigenvalueDecomposition eigDecomp = coeffHyMatrix.eig() ;
+		double[] tempReal = eigDecomp.getRealEigenvalues() ;
+		double[] tempImag = eigDecomp.getImagEigenvalues() ;
+		neff = new ArrayList<>() ;
+		double minIndex = MathUtils.Arrays.FindMinimum.getValue(index) ;
+		double maxIndex = MathUtils.Arrays.FindMaximum.getValue(index) ;
+		for(int i=0; i<numPoints; i++) {
+			Complex eig = new Complex(tempReal[i], tempImag[i]).sqrt() ;
+			if(eig.re()>minIndex && eig.re()<maxIndex){
+				System.out.println(eig);
+				neff.add(eig) ;
+				numModes ++ ;
+				// finding corresponding eigen vectors
+				double[][] vec = eigDecomp.getV().getArray() ;
+				Complex[] hy = new Complex[numPoints] ;
+				for(int j=0;j<numPoints; j++){
+					hy[j] = new Complex(Math.abs(vec[j][i]), 0.0) ;
+				}
+				Hy.add(hy) ;
+			}
+		}
+	}
+
+	private double[][] assembleTM() {
+		double var1 = lambda/(2*Math.PI) ;
+		double var2 = var1*var1 ;
+		DiffOperator D = new DiffOperator(numPoints, dx*scale) ;
+		double[] invEps = new double[numPoints] ;
+		for(int i=0; i<numPoints; i++)
+			invEps[i] = 1.0/epsilon[i] ;
+//		Matrix M = var2 * D.getDxxMatrix() + Matrix.diag(epsilon) ;
+		Matrix M = var2 * D.getDxxMatrix() + Matrix.diag(epsilon) + Matrix.diag(epsilon) * D.getDxMatrix() *
+											Matrix.diag(invEps)* D.getDxMatrix() * var2 ;
+		return M.getData() ;
 	}
 
 	private void printDebugInfo() {
@@ -192,7 +238,7 @@ public class FDESolver1D {
 	public void plotField(Fields field, int modeNum){
 		switch (field) {
 		case Ey: { plotComponent(x, Ey.get(modeNum-1), Fields.Ey.name()); break; }
-
+		case Hy: { plotComponent(x, Hy.get(modeNum-1), Fields.Hy.name()); break; }
 		default:
 			break;
 		}
@@ -208,21 +254,19 @@ public class FDESolver1D {
 
 			@Override
 			public double getUpperBoundary() {
-				return 4000.0;
+				return 1500.0;
 			}
 
 			@Override
 			public double getLowerBoundary() {
-				return -1500.0;
+				return -1000.0;
 			}
 
 			@Override
 			public double getRealIndex(double x) {
-				if(x<0) return 3.4 ;
-				else if(x < 3000.0) return 1.444 ;
-				else if(x<3000+400) return 2.1 ;
-//				else if(x<400+300+400) return 3.4777 + 0.1 *Math.sin(x/200.0 * Math.PI) ;
-				else return 1 ;
+				if(x<0) return 1.444 ;
+				else if(x < 400.0) return 3.477 ;
+				else return 1.444 ;
 			}
 
 			@Override
@@ -233,13 +277,13 @@ public class FDESolver1D {
 		// time benchmarking
 		Timer timer = new Timer() ;
 		timer.start();
-		fde.solve(Modes.TE);
-//		fde.plotField(Fields.Ey, 1);
-//		fde.plotField(Fields.Ey, 2);
-//		fde.plotField(Fields.Ey, 3);
+		fde.solve(Modes.TM);
+		fde.plotField(Fields.Hy, 1);
+//		fde.plotField(Fields.Hy, 2);
+//		fde.plotField(Fields.Hy, 3);
 //		fde.plotField(Fields.Ey, 4);
 //		fde.plotField(Fields.Ey, 5);
-		fde.plotField(Fields.Ey, 6);
+//		fde.plotField(Fields.Ey, 6);
 //		fde.plotField(Fields.Ey, 7);
 //		fde.plotField(Fields.Ey, 8);
 //		fde.plotField(Fields.Ey, 9);
