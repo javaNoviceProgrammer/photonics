@@ -271,7 +271,7 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1550.0, Units.nm);
-		fde.setGrid(20.0, Units.nm);
+		fde.setGrid(10.0, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
