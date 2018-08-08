@@ -121,7 +121,7 @@ public class FDESolver1D {
 		double minIndex = MathUtils.Arrays.FindMinimum.getValue(index) ;
 		double maxIndex = MathUtils.Arrays.FindMaximum.getValue(index) ;
 		for(int i=numPoints-1; i>=0; i--) {
-			Complex eig = new Complex(tempReal[i], tempImag[i]).sqrt().divides(var1) ;
+			Complex eig = (new Complex(tempReal[i], tempImag[i])).sqrt().divides(var1) ;
 			if(eig.re()>minIndex && eig.re()<maxIndex){
 				System.out.println(eig);
 				neff.add(eig) ;
@@ -175,8 +175,8 @@ public class FDESolver1D {
 		numModes = 0 ;
 		// Hy, Ex, Ez
 		Hy = new ArrayList<>() ;
-//		Ex = new ArrayList<>() ;
-//		Ez = new ArrayList<>() ;
+		Ex = new ArrayList<>() ;
+		Ez = new ArrayList<>() ;
 		coeffHy = new double[numPoints][numPoints] ;
 		coeffHy = assembleTM();
 		Jama.Matrix coeffHyMatrix = new Jama.Matrix(coeffHy) ;
@@ -271,7 +271,7 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1550.0, Units.nm);
-		fde.setGrid(10.0, Units.nm);
+		fde.setGrid(20.0, Units.nm);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
@@ -281,13 +281,13 @@ public class FDESolver1D {
 
 			@Override
 			public double getLowerBoundary() {
-				return -2000.0;
+				return -1000.0;
 			}
 
 			@Override
 			public double getRealIndex(double x) {
 				if(x<0) return 1.444 ;
-				else if(x < 400.0) return 3.477 ;
+				else if(x < 400.0) return 1.444 ;
 				else if(x < 400.0+200.0) return 1.444 ;
 				else if(x < 400.0+200.0+400.0) return 3.477 ;
 				else return 1.444 ;
