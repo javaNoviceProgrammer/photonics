@@ -1,9 +1,9 @@
 package photonics.modes;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import Jama.EigenvalueDecomposition;
+import mathLib.matrix.ComplexMatrix;
 import mathLib.matrix.Matrix;
 import mathLib.numbers.Complex;
 import mathLib.ode.DiffOperator;
@@ -13,6 +13,7 @@ import mathLib.util.Units;
 import photonics.util.Fields;
 import photonics.util.Modes;
 import plotter.chart.MatlabChart;
+import static mathLib.numbers.Complex.*;
 
 public class FDESolver1D {
 
@@ -26,8 +27,7 @@ public class FDESolver1D {
 	double[][] coeffEy, coeffHy ;
 	ArrayList<Complex[]> Ex, Ey, Ez ;
 	ArrayList<Complex[]> Hx, Hy, Hz ;
-//	ArrayList<Complex> neff ;
-	List<Complex> neff ;
+	ArrayList<Complex> neff ;
 	boolean debug = false ;
 	Modes modes ;
 
@@ -107,12 +107,12 @@ public class FDESolver1D {
 		numModes = 0 ;
 		// Ey, Hx, Hz
 		Ey = new ArrayList<>() ;
-//		Hx = new ArrayList<>() ;
-//		Hz = new ArrayList<>() ;
+		Hx = new ArrayList<>() ;
+		Hz = new ArrayList<>() ;
 		coeffEy = new double[numPoints][numPoints] ;
 		double var1 = (2*Math.PI*dx/lambda)*scale ;
 		double var2 = var1*var1 ;
-		assembleTE(coeffEy, var2) ;
+		coeffEy = assembleTE(var2) ;
 		Jama.Matrix coeffEyMatrix = new Jama.Matrix(coeffEy) ;
 		EigenvalueDecomposition eigDecomp = coeffEyMatrix.eig() ;
 		double[] tempReal = eigDecomp.getRealEigenvalues() ;
@@ -129,10 +129,22 @@ public class FDESolver1D {
 				// finding corresponding eigen vectors
 				double[][] vec = eigDecomp.getV().getArray() ;
 				Complex[] ey = new Complex[numPoints] ;
+				Complex[] hx = new Complex[numPoints] ;
+				Complex[] hz = new Complex[numPoints] ;
 				for(int j=0;j<numPoints; j++){
 					ey[j] = new Complex(vec[j][i], 0.0) ;
+					hx[j] = -eig/(120.0*Math.PI)*ey[j] ;
 				}
 				Ey.add(ey) ;
+				Hx.add(hx) ;
+				DiffOperator D = new DiffOperator(numPoints, scale*dx) ;
+				ComplexMatrix dX = new ComplexMatrix(D.getDx()) ;
+				ComplexMatrix field = (new ComplexMatrix(ey)).transpose() ;
+				ComplexMatrix result = dX.times(field).times(-j*lambda/(240.0*Math.PI*Math.PI)) ;
+				for(int k=0; k<numPoints; k++){
+					hz[k] = result.getElement(k, 0) ;
+				}
+				Hz.add(hz) ;
 			}
 		}
 
@@ -140,8 +152,9 @@ public class FDESolver1D {
 
 	// f''(x) = ( f(x+h) -2 f(x) + f(x-h) ) / h^2
 
-	private void assembleTE(double[][] coeff, double var) {
-		int M = coeff.length ;
+	private double[][] assembleTE(double var) {
+		int M = numPoints ;
+		double[][] coeff = new double[M][M] ;
 		coeff[0][0] = -2 ;
 		coeff[0][1] = 1 ;
 		coeff[M-1][M-1] = -2 ;
@@ -154,6 +167,7 @@ public class FDESolver1D {
 		for(int i=0; i<M; i++) {
 			coeff[i][i] += var*epsilon[i] ;
 		}
+		return coeff ;
 	}
 
 	private void solveTM() {
@@ -227,17 +241,25 @@ public class FDESolver1D {
 		for(int i=0; i<f.length; i++){
 			fReal[i] = f[i].re() ;
 		}
-		fig.plot(x, fReal);
+		double[] fImag = new double[f.length] ;
+		for(int i=0; i<f.length; i++){
+			fImag[i] = f[i].im() ;
+		}
+		fig.plot(x, fReal, "b-", 2f, "Re("+name+")");
+		fig.plot(x, fImag, "r-", 2f, "Im("+name+")");
 		fig.RenderPlot();
 		fig.xlabel("X " + "(" + gridUnit.name() + ")");
 		fig.ylabel(name);
 		fig.run();
-		fig.markerON();
+//		fig.markerON();
+
 	}
 
 	public void plotField(Fields field, int modeNum){
 		switch (field) {
 		case Ey: { plotComponent(x, Ey.get(modeNum-1), Fields.Ey.name()); break; }
+		case Hx: { plotComponent(x, Hx.get(modeNum-1), Fields.Hx.name()); break; }
+		case Hz: { plotComponent(x, Hz.get(modeNum-1), Fields.Hz.name()); break; }
 		case Hy: { plotComponent(x, Hy.get(modeNum-1), Fields.Hy.name()); break; }
 		default:
 			break;
@@ -266,6 +288,8 @@ public class FDESolver1D {
 			public double getRealIndex(double x) {
 				if(x<0) return 1.444 ;
 				else if(x < 400.0) return 3.477 ;
+				else if(x < 400.0+200.0) return 1.444 ;
+				else if(x < 400.0+200.0+400.0) return 3.477 ;
 				else return 1.444 ;
 			}
 
@@ -279,7 +303,8 @@ public class FDESolver1D {
 		timer.start();
 		fde.solve(Modes.TE);
 		fde.plotField(Fields.Ey, 1);
-//		fde.plotField(Fields.Hy, 2);
+		fde.plotField(Fields.Hx, 1);
+		fde.plotField(Fields.Hz, 1);
 //		fde.plotField(Fields.Hy, 3);
 //		fde.plotField(Fields.Ey, 4);
 //		fde.plotField(Fields.Ey, 5);
@@ -290,8 +315,6 @@ public class FDESolver1D {
 //		fde.plotField(Fields.Ey, 10);
 		timer.end();
 		timer.show();
-
-
 	}
 
 }
