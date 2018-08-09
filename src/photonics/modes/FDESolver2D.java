@@ -3,22 +3,23 @@ package photonics.modes;
 import java.util.ArrayList;
 
 import mathLib.numbers.Complex;
+import mathLib.util.Conversions;
 import mathLib.util.MathUtils;
 import mathLib.util.Units;
 import photonics.util.Modes;
 
 public class FDESolver2D {
 
-	int numPoints, numModes;
+	int numPointsX, numPointsY, numModes;
 	double lambda, xMin, xMax, dx, yMin, yMax, dy, scale;
-	IndexProfile1D indexProfile = null;
+	IndexProfile2D indexProfile = null;
 	Units gridUnit, lambdaUnit;
-	double[] x;
-	double[] index;
-	double[] epsilon;
-	double[][] coeffEy, coeffHy;
-	ArrayList<Complex[]> Ex, Ey, Ez;
-	ArrayList<Complex[]> Hx, Hy, Hz;
+	double[] x, y;
+	double[][] index;
+	double[][] epsilon;
+	double[][] coeffE, coeffH;
+	ArrayList<Complex[][]> Ex, Ey, Ez;
+	ArrayList<Complex[][]> Hx, Hy, Hz;
 	ArrayList<Complex> neff;
 	boolean debug = false;
 	Modes modes;
@@ -30,17 +31,19 @@ public class FDESolver2D {
 		this.debug = debug;
 	}
 
-	public void setGrid(int numPoints, Units unit) {
-		this.numPoints = numPoints;
+	public void setGrid(int numPointsX, int numPointsY, Units unit) {
+		this.numPointsX = numPointsX ;
+		this.numPointsY = numPointsY ;
 		this.gridUnit = unit;
 	}
 
-	public void setGrid(double dx, Units unit) {
+	public void setGrid(double dx, double dy, Units unit) {
 		this.dx = dx;
+		this.dy = dy ;
 		this.gridUnit = unit;
 	}
 
-	public void setIndexProfile(IndexProfile1D profile) {
+	public void setIndexProfile(IndexProfile2D profile) {
 		this.indexProfile = profile;
 	}
 
@@ -52,42 +55,45 @@ public class FDESolver2D {
 	public void solve(Modes modes) {
 		if(indexProfile == null)
 			throw new NullPointerException("First setup the index profile!") ;
-		this.modes = modes ;
 		computeScale() ;
 		createMesh() ;
-		if(modes == Modes.TE) {
-			solveTE();
-		}
-		else {
-			solveTM();
+		this.modes = modes ;
+		if(modes == Modes.quasiTE) {
+			solveQuasiTE() ;
 		}
 
 	}
 
 	private void computeScale() {
 		scale = 1.0 ;
-		if(gridUnit.equals(Units.um) && lambdaUnit.equals(Units.nm))
-			scale = 1e3 ;
-		else if(gridUnit.equals(Units.nm) && lambdaUnit.equals(Units.um))
-			scale = 1e-3 ;
-		else
-			scale = 1.0 ;
+		scale = Conversions.length(scale, gridUnit, lambdaUnit) ;
 	}
 
 	private void createMesh() {
-		xMin = indexProfile.getLowerBoundary() ;
-		xMax = indexProfile.getUpperBoundary() ;
-		if(numPoints == 0){
-			numPoints = (int) ((xMax-xMin)/dx) ;
+		yMin = indexProfile.getLowerBoundary() ;
+		yMax = indexProfile.getUpperBoundary() ;
+		xMin = indexProfile.getLeftBoundary() ;
+		xMax = indexProfile.getRightBoundary() ;
+		if(numPointsX == 0 && numPointsY == 0){
+			numPointsX = (int) ((xMax-xMin)/dx) ;
+			numPointsY = (int) ((yMax-yMin)/dy) ;
 		}
-		x = MathUtils.linspace(xMin, xMax, numPoints) ;
+		x = MathUtils.linspace(xMin, xMax, numPointsX) ;
+		y = MathUtils.linspace(yMin, yMax, numPointsY) ;
 		dx = x[2] - x[1] ;
-		index = new double[numPoints] ;
-		epsilon = new double[numPoints] ;
+		dy = y[2] - y[1] ;
+		index = new double[numPointsX][numPointsY] ;
+		epsilon = new double[numPointsX][numPointsY] ;
 		for(int i=0; i<x.length; i++) {
-			index[i] = indexProfile.getRealIndex(x[i]) ;
-			epsilon[i] = index[i]*index[i] ;
+			for(int j=0; j<y.length; j++) {
+				index[i][j] = indexProfile.getRealIndex(x[i], y[j]) ;
+				epsilon[i][j] = index[i][j]*index[i][j] ;
+			}
 		}
+	}
+	
+	private void solveQuasiTE() {
+		
 	}
 
 
