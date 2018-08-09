@@ -2,5 +2,9 @@ package photonics.util;
 
 public enum Modes {
 	TE,
-	TM
+	TM,
+	quasiTE,
+	quasiTM,
+	hybridEH,
+	hybridHE
 }

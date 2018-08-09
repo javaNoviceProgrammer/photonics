@@ -302,9 +302,9 @@ public class FDESolver1D {
 		Timer timer = new Timer() ;
 		timer.start();
 		fde.solve(Modes.TE);
-		fde.plotField(Fields.Ey, 1);
-		fde.plotField(Fields.Hx, 1);
-		fde.plotField(Fields.Hz, 1);
+		fde.plotField(Fields.Ey, 2);
+		fde.plotField(Fields.Hx, 2);
+		fde.plotField(Fields.Hz, 2);
 //		fde.plotField(Fields.Hy, 3);
 //		fde.plotField(Fields.Ey, 4);
 //		fde.plotField(Fields.Ey, 5);
