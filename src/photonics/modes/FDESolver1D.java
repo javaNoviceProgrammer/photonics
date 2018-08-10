@@ -103,7 +103,7 @@ public class FDESolver1D {
 	}
 
 	private void solveTE() {
-		printDebugInfo();
+		if(debug) printDebugInfo();
 		numModes = 0 ;
 		// Ey, Hx, Hz
 		Ey = new ArrayList<>() ;
@@ -123,7 +123,7 @@ public class FDESolver1D {
 		for(int i=numPoints-1; i>=0; i--) {
 			Complex eig = (new Complex(tempReal[i], tempImag[i])).sqrt().divides(var1) ;
 			if(eig.re()>minIndex && eig.re()<maxIndex){
-				System.out.println(eig);
+				if(debug) System.out.println(eig);
 				neff.add(eig) ;
 				numModes ++ ;
 				// finding corresponding eigen vectors
@@ -171,7 +171,7 @@ public class FDESolver1D {
 	}
 
 	private void solveTM() {
-		printDebugInfo();
+		if(debug) printDebugInfo();
 		numModes = 0 ;
 		// Hy, Ex, Ez
 		Hy = new ArrayList<>() ;
@@ -189,7 +189,7 @@ public class FDESolver1D {
 		for(int i=0; i<numPoints; i++) {
 			Complex eig = new Complex(tempReal[i], tempImag[i]).sqrt() ;
 			if(eig.re()>minIndex && eig.re()<maxIndex){
-				System.out.println(eig);
+				if(debug) System.out.println(eig);
 				neff.add(eig) ;
 				numModes ++ ;
 				// finding corresponding eigen vectors
@@ -222,7 +222,7 @@ public class FDESolver1D {
 		System.out.println("dx = " + dx + " "+ gridUnit.name());
 		System.out.println("number of grid points = " + numPoints);
 		System.out.println("computing " + modes + "...");
-		plotIndexProfile();
+//		plotIndexProfile();
 	}
 
 	public void plotIndexProfile() {
@@ -271,7 +271,8 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1550.0, Units.nm);
-		fde.setGrid(10.0, Units.nm);
+		fde.setGrid(5.0, Units.nm);
+//		fde.setDebug(true);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
@@ -286,10 +287,8 @@ public class FDESolver1D {
 
 			@Override
 			public double getRealIndex(double x) {
-				if(x<0) return 1.444 ;
-				else if(x < 400.0) return 1.444 ;
-				else if(x < 400.0+100.0) return 1.444 ;
-				else if(x < 400.0+100.0+200.0) return 3.477 ;
+				if(x<300) return 1.444 ;
+				else if(x < 700.0) return 3.477 ;
 				else return 1.444 ;
 			}
 
@@ -304,6 +303,7 @@ public class FDESolver1D {
 		fde.solve(Modes.TE);
 		timer.end();
 		timer.show();
+		fde.plotIndexProfile();
 		fde.plotField(Fields.Ey, 1);
 		fde.plotField(Fields.Hx, 1);
 		fde.plotField(Fields.Hz, 1);
