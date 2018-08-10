@@ -29,6 +29,7 @@ public class FDESolver1D {
 	ArrayList<Complex[]> Hx, Hy, Hz ;
 	ArrayList<Complex> neff ;
 	boolean debug = false ;
+	boolean calculateFields = true ;
 	Modes modes ;
 
 	public FDESolver1D() {
@@ -36,6 +37,10 @@ public class FDESolver1D {
 
 	public void setDebug(boolean debug){
 		this.debug = debug ;
+	}
+	
+	public void setCalculateFields(boolean calculateFields) {
+		this.calculateFields = calculateFields ;
 	}
 
 	public void setGrid(int numPoints, Units unit) {
@@ -106,9 +111,11 @@ public class FDESolver1D {
 		if(debug) printDebugInfo();
 		numModes = 0 ;
 		// Ey, Hx, Hz
-		Ey = new ArrayList<>() ;
-		Hx = new ArrayList<>() ;
-		Hz = new ArrayList<>() ;
+		if(calculateFields) {
+			Ey = new ArrayList<>() ;
+			Hx = new ArrayList<>() ;
+			Hz = new ArrayList<>() ;
+		}
 		coeffEy = new double[numPoints][numPoints] ;
 		double var1 = (2*Math.PI*dx/lambda)*scale ;
 		double var2 = var1*var1 ;
@@ -126,25 +133,27 @@ public class FDESolver1D {
 				if(debug) System.out.println(eig);
 				neff.add(eig) ;
 				numModes ++ ;
-				// finding corresponding eigen vectors
-				double[][] vec = eigDecomp.getV().getArray() ;
-				Complex[] ey = new Complex[numPoints] ;
-				Complex[] hx = new Complex[numPoints] ;
-				Complex[] hz = new Complex[numPoints] ;
-				for(int j=0;j<numPoints; j++){
-					ey[j] = new Complex(vec[j][i], 0.0) ;
-					hx[j] = -eig/(120.0*Math.PI)*ey[j] ;
+				if(calculateFields) {
+					// finding corresponding eigen vectors
+					double[][] vec = eigDecomp.getV().getArray() ;
+					Complex[] ey = new Complex[numPoints] ;
+					Complex[] hx = new Complex[numPoints] ;
+					Complex[] hz = new Complex[numPoints] ;
+					for(int j=0;j<numPoints; j++){
+						ey[j] = new Complex(vec[j][i], 0.0) ;
+						hx[j] = -eig/(120.0*Math.PI)*ey[j] ;
+					}
+					Ey.add(ey) ;
+					Hx.add(hx) ;
+					DiffOperator D = new DiffOperator(numPoints, scale*dx) ;
+					ComplexMatrix dX = new ComplexMatrix(D.getDx()) ;
+					ComplexMatrix field = (new ComplexMatrix(ey)).transpose() ;
+					ComplexMatrix result = dX.times(field).times(-j*lambda/(240.0*Math.PI*Math.PI)) ;
+					for(int k=0; k<numPoints; k++){
+						hz[k] = result.getElement(k, 0) ;
+					}
+					Hz.add(hz) ;
 				}
-				Ey.add(ey) ;
-				Hx.add(hx) ;
-				DiffOperator D = new DiffOperator(numPoints, scale*dx) ;
-				ComplexMatrix dX = new ComplexMatrix(D.getDx()) ;
-				ComplexMatrix field = (new ComplexMatrix(ey)).transpose() ;
-				ComplexMatrix result = dX.times(field).times(-j*lambda/(240.0*Math.PI*Math.PI)) ;
-				for(int k=0; k<numPoints; k++){
-					hz[k] = result.getElement(k, 0) ;
-				}
-				Hz.add(hz) ;
 			}
 		}
 
@@ -174,9 +183,11 @@ public class FDESolver1D {
 		if(debug) printDebugInfo();
 		numModes = 0 ;
 		// Hy, Ex, Ez
-		Hy = new ArrayList<>() ;
-		Ex = new ArrayList<>() ;
-		Ez = new ArrayList<>() ;
+		if(calculateFields) {
+			Hy = new ArrayList<>() ;
+			Ex = new ArrayList<>() ;
+			Ez = new ArrayList<>() ;
+		}
 		coeffHy = new double[numPoints][numPoints] ;
 		coeffHy = assembleTM();
 		Jama.Matrix coeffHyMatrix = new Jama.Matrix(coeffHy) ;
@@ -192,13 +203,15 @@ public class FDESolver1D {
 				if(debug) System.out.println(eig);
 				neff.add(eig) ;
 				numModes ++ ;
-				// finding corresponding eigen vectors
-				double[][] vec = eigDecomp.getV().getArray() ;
-				Complex[] hy = new Complex[numPoints] ;
-				for(int j=0;j<numPoints; j++){
-					hy[j] = new Complex(Math.abs(vec[j][i]), 0.0) ;
+				if(calculateFields) {
+					// finding corresponding eigen vectors
+					double[][] vec = eigDecomp.getV().getArray() ;
+					Complex[] hy = new Complex[numPoints] ;
+					for(int j=0;j<numPoints; j++){
+						hy[j] = new Complex(Math.abs(vec[j][i]), 0.0) ;
+					}
+					Hy.add(hy) ;
 				}
-				Hy.add(hy) ;
 			}
 		}
 	}
@@ -222,7 +235,6 @@ public class FDESolver1D {
 		System.out.println("dx = " + dx + " "+ gridUnit.name());
 		System.out.println("number of grid points = " + numPoints);
 		System.out.println("computing " + modes + "...");
-//		plotIndexProfile();
 	}
 
 	public void plotIndexProfile() {
@@ -271,8 +283,8 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1550.0, Units.nm);
-		fde.setGrid(5.0, Units.nm);
-//		fde.setDebug(true);
+		fde.setGrid(10.0, Units.nm);
+		fde.setDebug(true);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
@@ -287,8 +299,10 @@ public class FDESolver1D {
 
 			@Override
 			public double getRealIndex(double x) {
-				if(x<300) return 1.444 ;
-				else if(x < 700.0) return 3.477 ;
+				if(x<0) return 1.444 ;
+				else if(x < 450.0) return 3.477 ;
+				else if(x < 450.0 + 150.0) return 1.444 ;
+				else if(x < 450.0 + 150.0 + 450.0) return 3.477;
 				else return 1.444 ;
 			}
 

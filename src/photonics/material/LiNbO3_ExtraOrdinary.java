@@ -1,6 +1,7 @@
 package photonics.material;
 
 import flanagan.interpolation.CubicSpline;
+import photonics.util.Wavelength;
 
 public class LiNbO3_ExtraOrdinary extends AbstractDielectric {
 
@@ -35,6 +36,30 @@ public class LiNbO3_ExtraOrdinary extends AbstractDielectric {
 	@Override
 	public String getMaterialName() {
 		return "LiNbO3-ExtraOrdinary";
+	}
+
+	@Override
+	public double getIndex(Wavelength inputLambda) {
+		return indexInterpolator.interpolate(inputLambda.getWavelengthNm());
+	}
+
+	@Override
+	public double getGroupIndex(Wavelength inputLambda) {
+		double lambdaNm = inputLambda.getWavelengthNm() ;
+		double dlambdaNm = 1 ;
+		double dneff = indexInterpolator.interpolate(lambdaNm+dlambdaNm) - indexInterpolator.interpolate(lambdaNm) ;
+		double ng = getIndex(inputLambda) - lambdaNm * dneff/dlambdaNm ;
+		return ng;
+	}
+
+	@Override
+	public double getEpsilon(Wavelength inputLambda) {
+		return Math.pow(getIndex(inputLambda), 2);
+	}
+
+	@Override
+	public double getMu(Wavelength inputLambda) {
+		return (4*Math.PI*1E-7);
 	}
 
 }
