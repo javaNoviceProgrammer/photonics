@@ -288,8 +288,8 @@ public class FDESolver1D {
 			public double getRealIndex(double x) {
 				if(x<0) return 1.444 ;
 				else if(x < 400.0) return 1.444 ;
-				else if(x < 400.0+200.0) return 1.444 ;
-				else if(x < 400.0+200.0+400.0) return 3.477 ;
+				else if(x < 400.0+100.0) return 1.444 ;
+				else if(x < 400.0+100.0+200.0) return 3.477 ;
 				else return 1.444 ;
 			}
 
@@ -302,9 +302,11 @@ public class FDESolver1D {
 		Timer timer = new Timer() ;
 		timer.start();
 		fde.solve(Modes.TE);
-		fde.plotField(Fields.Ey, 2);
-		fde.plotField(Fields.Hx, 2);
-		fde.plotField(Fields.Hz, 2);
+		timer.end();
+		timer.show();
+		fde.plotField(Fields.Ey, 1);
+		fde.plotField(Fields.Hx, 1);
+		fde.plotField(Fields.Hz, 1);
 //		fde.plotField(Fields.Hy, 3);
 //		fde.plotField(Fields.Ey, 4);
 //		fde.plotField(Fields.Ey, 5);
@@ -313,8 +315,8 @@ public class FDESolver1D {
 //		fde.plotField(Fields.Ey, 8);
 //		fde.plotField(Fields.Ey, 9);
 //		fde.plotField(Fields.Ey, 10);
-		timer.end();
-		timer.show();
+
+
 	}
 
 }
