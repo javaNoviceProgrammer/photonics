@@ -7,6 +7,9 @@ import mathLib.util.Conversions;
 import mathLib.util.MathUtils;
 import mathLib.util.Units;
 import photonics.util.Modes;
+import plotter.chart.ColorMapPlot;
+import plotter.chart.MatlabChart;
+import plotter.util.MeshGrid;
 
 public class FDESolver2D {
 
@@ -95,7 +98,93 @@ public class FDESolver2D {
 	private void solveQuasiTE() {
 		
 	}
+	
+	public void plotIndexProfile() {
+		MeshGrid xyGrid = new MeshGrid(x, y) ;
+		ColorMapPlot fig = new ColorMapPlot(xyGrid, index) ;
+		fig.run(true);
+	}
+	
+	public void plotIndexProfileXCut(double x) {
+		MatlabChart fig = new MatlabChart() ;
+		int M = 1000 ;
+		double[] yRange = MathUtils.linspace(yMin, yMax, M) ;
+		double[] indexXCut = new double[M] ;
+		for(int i=0; i<M; i++) {
+			indexXCut[i] = indexProfile.getRealIndex(x, yRange[i]) ;
+		}
+		fig.plot(yRange, indexXCut);
+		fig.RenderPlot();
+		fig.xlabel("Y " + "(" + gridUnit.name() + ")");
+		fig.ylabel("Index");
+		fig.run(true);
+		fig.markerON();
+	}
+	
+	public void plotIndexProfileYCut(double y) {
+		MatlabChart fig = new MatlabChart() ;
+		int M = 1000 ;
+		double[] xRange = MathUtils.linspace(xMin, xMax, M) ;
+		double[] indexYCut = new double[M] ;
+		for(int i=0; i<M; i++) {
+			indexYCut[i] = indexProfile.getRealIndex(xRange[i], y) ;
+		}
+		fig.plot(xRange, indexYCut);
+		fig.RenderPlot();
+		fig.xlabel("X " + "(" + gridUnit.name() + ")");
+		fig.run(true);
+		fig.markerON();
+	}
 
+	
+	// for test
+	public static void main(String[] args) {
+		IndexProfile2D profile = new IndexProfile2D() {
+			
+			@Override
+			public double getUpperBoundary() {
+				return 1000;
+			}
+			
+			@Override
+			public double getRightBoundary() {
+				return 1500;
+			}
+			
+			@Override
+			public double getRealIndex(double x, double y) {
+				if(x >=0 && x <=400 && y>=0 && y<=220)
+					return x*y ;
+				else
+					return 1.444 ;
+			}
+			
+			@Override
+			public double getLowerBoundary() {
+				return -500;
+			}
+			
+			@Override
+			public double getLeftBoundary() {
+				return -500;
+			}
+			
+			@Override
+			public double getImagIndex(double x, double y) {
+				return 0;
+			}
+		};
+		
+		FDESolver2D fde = new FDESolver2D() ;
+		fde.setDebug(true);
+		fde.setGrid(10, 10, Units.nm);
+		fde.setIndexProfile(profile);
+		fde.setWavelength(1550, Units.nm);
+		fde.createMesh();
+		fde.plotIndexProfileXCut(100);
+		fde.plotIndexProfileYCut(150);
+		fde.plotIndexProfile();
+	}
 
 
 }
