@@ -34,11 +34,11 @@ public class FDESolver2D {
 		this.debug = debug;
 	}
 
-	public void setGrid(int numPointsX, int numPointsY, Units unit) {
-		this.numPointsX = numPointsX ;
-		this.numPointsY = numPointsY ;
-		this.gridUnit = unit;
-	}
+//	public void setGrid(int numPointsX, int numPointsY, Units unit) {
+//		this.numPointsX = numPointsX ;
+//		this.numPointsY = numPointsY ;
+//		this.gridUnit = unit;
+//	}
 
 	public void setGrid(double dx, double dy, Units unit) {
 		this.dx = dx;
@@ -154,7 +154,7 @@ public class FDESolver2D {
 			@Override
 			public double getRealIndex(double x, double y) {
 				if(x >=0 && x <=400 && y>=0 && y<=220)
-					return x*y ;
+					return 3.477 ;
 				else
 					return 1.444 ;
 			}
@@ -177,13 +177,15 @@ public class FDESolver2D {
 		
 		FDESolver2D fde = new FDESolver2D() ;
 		fde.setDebug(true);
-		fde.setGrid(10, 10, Units.nm);
+		fde.setGrid(10.0, 10.0, Units.nm);
 		fde.setIndexProfile(profile);
 		fde.setWavelength(1550, Units.nm);
 		fde.createMesh();
 		fde.plotIndexProfileXCut(100);
 		fde.plotIndexProfileYCut(150);
 		fde.plotIndexProfile();
+		System.out.println(fde.numPointsX);
+		System.out.println(fde.numPointsY);
 	}
 
 
