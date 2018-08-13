@@ -143,12 +143,12 @@ public class FDESolver2D {
 			
 			@Override
 			public double getUpperBoundary() {
-				return 1000;
+				return 600;
 			}
 			
 			@Override
 			public double getRightBoundary() {
-				return 1500;
+				return 1000;
 			}
 			
 			@Override
