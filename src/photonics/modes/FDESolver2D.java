@@ -94,17 +94,20 @@ public class FDESolver2D {
 			}
 		}
 	}
-	
+
 	private void solveQuasiTE() {
-		
+		// operator:
+		// size: nx * ny
+		// field
+
 	}
-	
+
 	public void plotIndexProfile() {
 		MeshGrid xyGrid = new MeshGrid(x, y) ;
 		ColorMapPlot fig = new ColorMapPlot(xyGrid, index) ;
 		fig.run(true);
 	}
-	
+
 	public void plotIndexProfileXCut(double x) {
 		MatlabChart fig = new MatlabChart() ;
 		int M = 1000 ;
@@ -120,7 +123,7 @@ public class FDESolver2D {
 		fig.run(true);
 		fig.markerON();
 	}
-	
+
 	public void plotIndexProfileYCut(double y) {
 		MatlabChart fig = new MatlabChart() ;
 		int M = 1000 ;
@@ -136,21 +139,21 @@ public class FDESolver2D {
 		fig.markerON();
 	}
 
-	
+
 	// for test
 	public static void main(String[] args) {
 		IndexProfile2D profile = new IndexProfile2D() {
-			
+
 			@Override
 			public double getUpperBoundary() {
 				return 600;
 			}
-			
+
 			@Override
 			public double getRightBoundary() {
 				return 1000;
 			}
-			
+
 			@Override
 			public double getRealIndex(double x, double y) {
 				if(x >=0 && x <=400 && y>=0 && y<=220)
@@ -158,23 +161,23 @@ public class FDESolver2D {
 				else
 					return 1.444 ;
 			}
-			
+
 			@Override
 			public double getLowerBoundary() {
 				return -500;
 			}
-			
+
 			@Override
 			public double getLeftBoundary() {
 				return -500;
 			}
-			
+
 			@Override
 			public double getImagIndex(double x, double y) {
 				return 0;
 			}
 		};
-		
+
 		FDESolver2D fde = new FDESolver2D() ;
 		fde.setDebug(true);
 		fde.setGrid(10.0, 10.0, Units.nm);
@@ -183,9 +186,7 @@ public class FDESolver2D {
 		fde.createMesh();
 		fde.plotIndexProfileXCut(100);
 		fde.plotIndexProfileYCut(150);
-		fde.plotIndexProfile();
-		System.out.println(fde.numPointsX);
-		System.out.println(fde.numPointsY);
+//		fde.plotIndexProfile();
 	}
 
 
