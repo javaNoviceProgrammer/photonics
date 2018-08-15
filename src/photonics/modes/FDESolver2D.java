@@ -10,6 +10,7 @@ import photonics.util.Modes;
 import plotter.chart.ColorMapPlot;
 import plotter.chart.MatlabChart;
 import plotter.util.MeshGrid;
+import plotter.util.ColorMap.ColorMapName;
 
 public class FDESolver2D {
 
@@ -104,7 +105,7 @@ public class FDESolver2D {
 
 	public void plotIndexProfile() {
 		MeshGrid xyGrid = new MeshGrid(x, y) ;
-		ColorMapPlot fig = new ColorMapPlot(xyGrid, index) ;
+		ColorMapPlot fig = new ColorMapPlot(xyGrid, index, ColorMapName.Heat) ;
 		fig.run(true);
 	}
 
@@ -186,7 +187,7 @@ public class FDESolver2D {
 		fde.createMesh();
 		fde.plotIndexProfileXCut(100);
 		fde.plotIndexProfileYCut(150);
-//		fde.plotIndexProfile();
+		fde.plotIndexProfile();
 	}
 
 
