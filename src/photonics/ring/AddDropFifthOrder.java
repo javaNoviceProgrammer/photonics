@@ -2,9 +2,10 @@ package photonics.ring;
 
 import java.util.ArrayList;
 import ch.epfl.general_libraries.clazzes.ParamName;
-import complexSFG.math.Complex;
-import static complexSFG.math.Complex.*;
-import complexSFG.solver.SFG;
+import mathLib.numbers.Complex;
+import mathLib.sfg.numeric.SFG;
+import static mathLib.numbers.Complex.*;
+import static mathLib.numbers.ComplexMath.*;
 
 public class AddDropFifthOrder {
 
@@ -75,49 +76,50 @@ public class AddDropFifthOrder {
 
 		sfg = new SFG(nodes.size(), nodes) ;
 		
-		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
+//		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
+		Complex gain = exp(-j*phi_rad/2.0)*Math.pow(L, 0.25) ;
 
-		sfg.addArrow("DC1.N1", "DC1.N2", new Complex(tin, 0));
-		sfg.addArrow("DC1.N1", "DC1.N3", new Complex(0, -kin));
-		sfg.addArrow("DC1.N4", "DC1.N3", new Complex(tin, 0));
-		sfg.addArrow("DC1.N4", "DC1.N2", new Complex(0, -kin));
+		sfg.addArrow("DC1.N1", "DC1.N2", tin);
+		sfg.addArrow("DC1.N1", "DC1.N3", -j*kin);
+		sfg.addArrow("DC1.N4", "DC1.N3", tin);
+		sfg.addArrow("DC1.N4", "DC1.N2", -j*kin);
 
-		sfg.addArrow("DC2.N2", "DC2.N1", new Complex(t12, 0));
-		sfg.addArrow("DC2.N2", "DC2.N4", new Complex(0, -k12));
-		sfg.addArrow("DC2.N3", "DC2.N4", new Complex(t12, 0));
-		sfg.addArrow("DC2.N3", "DC2.N1", new Complex(0, -k12));
+		sfg.addArrow("DC2.N2", "DC2.N1", t12);
+		sfg.addArrow("DC2.N2", "DC2.N4", -j*k12);
+		sfg.addArrow("DC2.N3", "DC2.N4", t12);
+		sfg.addArrow("DC2.N3", "DC2.N1", -j*k12);
 		
 		sfg.addArrow("DC1.N3", "DC2.N2", gain);
 		sfg.addArrow("DC2.N1", "DC1.N4", gain);
 		
-		sfg.addArrow("DC3.N1", "DC3.N2", new Complex(t23, 0));
-		sfg.addArrow("DC3.N1", "DC3.N3", new Complex(0, -k23));
-		sfg.addArrow("DC3.N4", "DC3.N3", new Complex(t23, 0));
-		sfg.addArrow("DC3.N4", "DC3.N2", new Complex(0, -k23));
+		sfg.addArrow("DC3.N1", "DC3.N2", t23);
+		sfg.addArrow("DC3.N1", "DC3.N3", -j*k23);
+		sfg.addArrow("DC3.N4", "DC3.N3", t23);
+		sfg.addArrow("DC3.N4", "DC3.N2", -j*k23);
 		
 		sfg.addArrow("DC2.N4", "DC3.N1", gain);
 		sfg.addArrow("DC3.N2", "DC2.N3", gain);
 		
-		sfg.addArrow("DC4.N2", "DC4.N1", new Complex(t34, 0));
-		sfg.addArrow("DC4.N2", "DC4.N4", new Complex(0, -k34));
-		sfg.addArrow("DC4.N3", "DC4.N4", new Complex(t34, 0));
-		sfg.addArrow("DC4.N3", "DC4.N1", new Complex(0, -k34));
+		sfg.addArrow("DC4.N2", "DC4.N1", t34);
+		sfg.addArrow("DC4.N2", "DC4.N4", -j*k34);
+		sfg.addArrow("DC4.N3", "DC4.N4", t34);
+		sfg.addArrow("DC4.N3", "DC4.N1", -j*k34);
 		
 		sfg.addArrow("DC3.N3", "DC4.N2", gain);
 		sfg.addArrow("DC4.N1", "DC3.N4", gain);
 		
-		sfg.addArrow("DC5.N1", "DC5.N2", new Complex(t45, 0));
-		sfg.addArrow("DC5.N1", "DC5.N3", new Complex(0, -k45));
-		sfg.addArrow("DC5.N4", "DC5.N3", new Complex(t45, 0));
-		sfg.addArrow("DC5.N4", "DC5.N2", new Complex(0, -k45));
+		sfg.addArrow("DC5.N1", "DC5.N2", t45);
+		sfg.addArrow("DC5.N1", "DC5.N3", -j*k45);
+		sfg.addArrow("DC5.N4", "DC5.N3", t45);
+		sfg.addArrow("DC5.N4", "DC5.N2", -j*k45);
 		
 		sfg.addArrow("DC4.N4", "DC5.N1", gain);
 		sfg.addArrow("DC5.N2", "DC4.N3", gain);
 		
-		sfg.addArrow("DC6.N2", "DC6.N1", new Complex(tout, 0));
-		sfg.addArrow("DC6.N2", "DC6.N4", new Complex(0, -kout));
-		sfg.addArrow("DC6.N3", "DC6.N4", new Complex(tout, 0));
-		sfg.addArrow("DC6.N3", "DC6.N1", new Complex(0, -kout));
+		sfg.addArrow("DC6.N2", "DC6.N1", tout);
+		sfg.addArrow("DC6.N2", "DC6.N4", -j*kout);
+		sfg.addArrow("DC6.N3", "DC6.N4", tout);
+		sfg.addArrow("DC6.N3", "DC6.N1", -j*kout);
 		
 		sfg.addArrow("DC5.N3", "DC6.N2", gain);
 		sfg.addArrow("DC6.N1", "DC5.N4", gain);

@@ -2,9 +2,10 @@ package photonics.ring;
 
 import java.util.ArrayList;
 import ch.epfl.general_libraries.clazzes.ParamName;
-import complexSFG.math.Complex;
-import static complexSFG.math.Complex.*;
-import complexSFG.solver.SFG;
+import mathLib.numbers.Complex;
+import mathLib.sfg.numeric.SFG;
+import static mathLib.numbers.Complex.*;
+import static mathLib.numbers.ComplexMath.*;
 
 public class AddDropFirstOrder {
 
@@ -43,17 +44,18 @@ public class AddDropFirstOrder {
 
 		sfg = new SFG(nodes.size(), nodes) ;
 		
-		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
+//		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
+		Complex gain = exp(-j*phi_rad/2.0)*Math.pow(L, 0.25) ;
 
-		sfg.addArrow("DC1.N1", "DC1.N2", new Complex(tin, 0));
-		sfg.addArrow("DC1.N1", "DC1.N3", new Complex(0, -kin));
-		sfg.addArrow("DC1.N4", "DC1.N3", new Complex(tin, 0));
-		sfg.addArrow("DC1.N4", "DC1.N2", new Complex(0, -kin));
+		sfg.addArrow("DC1.N1", "DC1.N2", tin);
+		sfg.addArrow("DC1.N1", "DC1.N3", -j*kin);
+		sfg.addArrow("DC1.N4", "DC1.N3", tin);
+		sfg.addArrow("DC1.N4", "DC1.N2", -j*kin);
 
-		sfg.addArrow("DC2.N2", "DC2.N1", new Complex(tout, 0));
-		sfg.addArrow("DC2.N2", "DC2.N4", new Complex(0, -kout));
-		sfg.addArrow("DC2.N3", "DC2.N4", new Complex(tout, 0));
-		sfg.addArrow("DC2.N3", "DC2.N1", new Complex(0, -kout));
+		sfg.addArrow("DC2.N2", "DC2.N1", tout);
+		sfg.addArrow("DC2.N2", "DC2.N4", -j*kout);
+		sfg.addArrow("DC2.N3", "DC2.N4", tout);
+		sfg.addArrow("DC2.N3", "DC2.N1", -j*kout);
 		
 		sfg.addArrow("DC1.N3", "DC2.N2", gain);
 		sfg.addArrow("DC2.N1", "DC1.N4", gain);

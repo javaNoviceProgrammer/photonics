@@ -2,9 +2,10 @@ package photonics.ring;
 
 import java.util.ArrayList;
 import ch.epfl.general_libraries.clazzes.ParamName;
-import complexSFG.math.Complex;
-import static complexSFG.math.Complex.*;
-import complexSFG.solver.SFG;
+import mathLib.numbers.Complex;
+import mathLib.sfg.numeric.SFG;
+import static mathLib.numbers.Complex.*;
+import static mathLib.numbers.ComplexMath.*;
 
 public class AddDropSeventhOrder {
 
@@ -91,7 +92,8 @@ public class AddDropSeventhOrder {
 		
 		sfg = new SFG(nodes.size(), nodes) ;
 		
-		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
+//		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
+		Complex gain = exp(-j*phi_rad/2.0)*Math.pow(L, 0.25) ;
 
 		sfg.addArrow("DC1.N1", "DC1.N2", new Complex(tin, 0));
 		sfg.addArrow("DC1.N1", "DC1.N3", new Complex(0, -kin));
