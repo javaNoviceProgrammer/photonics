@@ -72,13 +72,16 @@ public class FDESolver1D {
 		this.modes = modes ;
 		computeScale() ;
 		createMesh() ;
-		if(modes == Modes.TE) {
+		switch (modes) {
+		case TE:
 			solveTE();
-		}
-		else {
+			break;
+		case TM:
 			solveTM();
+			break ;
+		default:
+			throw new IllegalArgumentException("unsupported mode") ;
 		}
-
 	}
 
 	private void computeScale() {

@@ -2,15 +2,22 @@ package photonics.modes;
 
 import java.util.ArrayList;
 
+import org.netlib.util.doubleW;
+
+import Jama.EigenvalueDecomposition;
+import mathLib.matrix.Matrix;
 import mathLib.numbers.Complex;
+import mathLib.pde.DiffOperator2D;
 import mathLib.util.Conversions;
 import mathLib.util.MathUtils;
+import mathLib.util.Timer;
 import mathLib.util.Units;
 import photonics.util.Modes;
 import plotter.chart.ColorMapPlot;
 import plotter.chart.MatlabChart;
 import plotter.util.MeshGrid;
 import plotter.util.ColorMap.ColorMapName;
+import static mathLib.numbers.Complex.* ;
 
 public class FDESolver2D {
 
@@ -62,8 +69,15 @@ public class FDESolver2D {
 		computeScale() ;
 		createMesh() ;
 		this.modes = modes ;
-		if(modes == Modes.quasiTE) {
-			solveQuasiTE() ;
+		switch (modes) {
+		case quasiTE:
+			solveQuasiTE();
+			break;
+		case quasiTM:
+			solveQuasiTM();
+			break ;
+		default:
+			break;
 		}
 
 	}
@@ -96,11 +110,46 @@ public class FDESolver2D {
 		}
 	}
 
+	private void solveQuasiTM() {
+		// operator:
+		// size: nx * ny
+		// field
+		double k0 = 2*Math.PI/lambda ;
+		double k0Squared = k0*k0 ;
+		DiffOperator2D diff = new DiffOperator2D(numPointsX, numPointsY, dx*scale, dy*scale) ;
+		Matrix Dxx = diff.getDxxMatrix() ;
+		Matrix Dyy = diff.getDyyMatrix() ;
+		Matrix operator = (Dxx+Dyy)*1.0/k0Squared + getDiagEpsilon() ;
+		EigenvalueDecomposition eig = new EigenvalueDecomposition(new Jama.Matrix(operator.getData())) ;
+		double[] eigReal = eig.getRealEigenvalues() ;
+		double[] eigIma = eig.getImagEigenvalues() ;
+		for(int i=0; i<eigReal.length; i++) {
+			if(eigReal[i] < 3.444 && eigReal[i] > 1.444 ) {
+				Complex eigVal = (eigReal[i] + j*eigIma[i]).sqrt() ;
+				System.out.println(eigVal);
+			}
+		}
+	}
+	
 	private void solveQuasiTE() {
 		// operator:
 		// size: nx * ny
 		// field
-
+		double k0 = 2*Math.PI/lambda ;
+		double k0Squared = k0*k0 ;
+		DiffOperator2D diff = new DiffOperator2D(numPointsX, numPointsY, dx*scale, dy*scale) ;
+		Matrix Dyy = diff.getDyyMatrix() ;
+		Matrix Dx = diff.getDxMatrix() ;
+		Matrix operator = 1.0/k0Squared * (getDiagEpsilon()*Dx*getDiagInvEpsilon()*Dx + Dyy) + getDiagEpsilon() ;
+		EigenvalueDecomposition eig = new EigenvalueDecomposition(new Jama.Matrix(operator.getData())) ;
+		double[] eigReal = eig.getRealEigenvalues() ;
+		double[] eigIma = eig.getImagEigenvalues() ;
+		for(int i=0; i<eigReal.length; i++) {
+			if(eigReal[i] < 3.444*3.444 && eigReal[i] > 1.444*1.444 ) {
+				Complex eigVal = (eigReal[i] + j*eigIma[i]).sqrt() ;
+				System.out.println(eigVal);
+			}
+		}
 	}
 
 	public void plotIndexProfile() {
@@ -139,6 +188,24 @@ public class FDESolver2D {
 		fig.run(true);
 		fig.markerON();
 	}
+	
+	private Matrix getDiagEpsilon() {
+		double[] diagEps = new double[numPointsX*numPointsY] ;
+		for(int i=0; i<numPointsX; i++)
+			for(int j=0; j<numPointsY; j++)
+				diagEps[i*numPointsY+j] = epsilon[i][j] ;
+		
+		return Matrix.diag(diagEps) ;
+	}
+	
+	private Matrix getDiagInvEpsilon() {
+		double[] diagInvEps = new double[numPointsX*numPointsY] ;
+		for(int i=0; i<numPointsX; i++)
+			for(int j=0; j<numPointsY; j++)
+				diagInvEps[i*numPointsY+j] = 1.0/epsilon[i][j] ;
+		
+		return Matrix.diag(diagInvEps) ;
+	}
 
 
 	// for test
@@ -147,12 +214,12 @@ public class FDESolver2D {
 
 			@Override
 			public double getUpperBoundary() {
-				return 600;
+				return 320;
 			}
 
 			@Override
 			public double getRightBoundary() {
-				return 1000;
+				return 600;
 			}
 
 			@Override
@@ -165,12 +232,12 @@ public class FDESolver2D {
 
 			@Override
 			public double getLowerBoundary() {
-				return -500;
+				return -100;
 			}
 
 			@Override
 			public double getLeftBoundary() {
-				return -500;
+				return -200;
 			}
 
 			@Override
@@ -181,13 +248,18 @@ public class FDESolver2D {
 
 		FDESolver2D fde = new FDESolver2D() ;
 		fde.setDebug(true);
-		fde.setGrid(10.0, 10.0, Units.nm);
+		fde.setGrid(20.0, 10.0, Units.nm);
 		fde.setIndexProfile(profile);
 		fde.setWavelength(1550, Units.nm);
 		fde.createMesh();
 		fde.plotIndexProfileXCut(100);
 		fde.plotIndexProfileYCut(150);
 		fde.plotIndexProfile();
+		Timer timer = new Timer() ;
+		timer.start();
+		fde.solve(Modes.quasiTE);
+		timer.end();
+		System.out.println(timer);
 	}
 
 
