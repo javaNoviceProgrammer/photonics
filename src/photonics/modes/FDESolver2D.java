@@ -1,8 +1,8 @@
 package photonics.modes;
 
-import java.util.ArrayList;
+import static mathLib.numbers.Complex.j;
 
-import org.netlib.util.doubleW;
+import java.util.ArrayList;
 
 import Jama.EigenvalueDecomposition;
 import mathLib.matrix.Matrix;
@@ -15,9 +15,8 @@ import mathLib.util.Units;
 import photonics.util.Modes;
 import plotter.chart.ColorMapPlot;
 import plotter.chart.MatlabChart;
-import plotter.util.MeshGrid;
 import plotter.util.ColorMap.ColorMapName;
-import static mathLib.numbers.Complex.* ;
+import plotter.util.MeshGrid;
 
 public class FDESolver2D {
 
@@ -248,7 +247,7 @@ public class FDESolver2D {
 
 		FDESolver2D fde = new FDESolver2D() ;
 		fde.setDebug(true);
-		fde.setGrid(20.0, 10.0, Units.nm);
+		fde.setGrid(20.0, 20.0, Units.nm);
 		fde.setIndexProfile(profile);
 		fde.setWavelength(1550, Units.nm);
 		fde.createMesh();
