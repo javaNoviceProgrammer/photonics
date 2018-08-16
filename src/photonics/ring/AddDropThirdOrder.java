@@ -38,56 +38,63 @@ public class AddDropThirdOrder {
 	}
 
 	private void buildSFG(){
-		nodes.add("DC1.N1") ;
-		nodes.add("DC1.N2") ;
-		nodes.add("DC1.N3") ;
-		nodes.add("DC1.N4") ;
-
-		nodes.add("DC2.N1") ;
-		nodes.add("DC2.N2") ;
-		nodes.add("DC2.N3") ;
-		nodes.add("DC2.N4") ;
+		for(int i=1; i<=4; i++) {
+			for(int j=1; j<=4; j++) {
+				String st = "DC"+i+".N"+j ;
+				nodes.add(st) ;
+			}
+		}
 		
-		nodes.add("DC3.N1") ;
-		nodes.add("DC3.N2") ;
-		nodes.add("DC3.N3") ;
-		nodes.add("DC3.N4") ;
-		
-		nodes.add("DC4.N1") ;
-		nodes.add("DC4.N2") ;
-		nodes.add("DC4.N3") ;
-		nodes.add("DC4.N4") ;
+//		nodes.add("DC1.N1") ;
+//		nodes.add("DC1.N2") ;
+//		nodes.add("DC1.N3") ;
+//		nodes.add("DC1.N4") ;
+//
+//		nodes.add("DC2.N1") ;
+//		nodes.add("DC2.N2") ;
+//		nodes.add("DC2.N3") ;
+//		nodes.add("DC2.N4") ;
+//		
+//		nodes.add("DC3.N1") ;
+//		nodes.add("DC3.N2") ;
+//		nodes.add("DC3.N3") ;
+//		nodes.add("DC3.N4") ;
+//		
+//		nodes.add("DC4.N1") ;
+//		nodes.add("DC4.N2") ;
+//		nodes.add("DC4.N3") ;
+//		nodes.add("DC4.N4") ;
 
 		sfg = new SFG(nodes.size(), nodes) ;
 		
 //		Complex gain = minusJ.times(phi_rad/2).exp().times(Math.pow(L, 0.25)) ;
 		Complex gain = exp(-j*phi_rad/2.0)*Math.pow(L, 0.25) ;
 
-		sfg.addArrow("DC1.N1", "DC1.N2", new Complex(tin, 0));
-		sfg.addArrow("DC1.N1", "DC1.N3", new Complex(0, -kin));
-		sfg.addArrow("DC1.N4", "DC1.N3", new Complex(tin, 0));
-		sfg.addArrow("DC1.N4", "DC1.N2", new Complex(0, -kin));
+		sfg.addArrow("DC1.N1", "DC1.N2", tin);
+		sfg.addArrow("DC1.N1", "DC1.N3", -j*kin);
+		sfg.addArrow("DC1.N4", "DC1.N3", tin);
+		sfg.addArrow("DC1.N4", "DC1.N2", -j*kin);
 
-		sfg.addArrow("DC2.N2", "DC2.N1", new Complex(t12, 0));
-		sfg.addArrow("DC2.N2", "DC2.N4", new Complex(0, -k12));
-		sfg.addArrow("DC2.N3", "DC2.N4", new Complex(t12, 0));
-		sfg.addArrow("DC2.N3", "DC2.N1", new Complex(0, -k12));
+		sfg.addArrow("DC2.N2", "DC2.N1", t12);
+		sfg.addArrow("DC2.N2", "DC2.N4", -j*k12);
+		sfg.addArrow("DC2.N3", "DC2.N4", t12);
+		sfg.addArrow("DC2.N3", "DC2.N1", -j*k12);
 		
 		sfg.addArrow("DC1.N3", "DC2.N2", gain);
 		sfg.addArrow("DC2.N1", "DC1.N4", gain);
 		
-		sfg.addArrow("DC3.N1", "DC3.N2", new Complex(t23, 0));
-		sfg.addArrow("DC3.N1", "DC3.N3", new Complex(0, -k23));
-		sfg.addArrow("DC3.N4", "DC3.N3", new Complex(t23, 0));
-		sfg.addArrow("DC3.N4", "DC3.N2", new Complex(0, -k23));
+		sfg.addArrow("DC3.N1", "DC3.N2", t23);
+		sfg.addArrow("DC3.N1", "DC3.N3", -j*k23);
+		sfg.addArrow("DC3.N4", "DC3.N3", t23);
+		sfg.addArrow("DC3.N4", "DC3.N2", -j*k23);
 		
 		sfg.addArrow("DC2.N4", "DC3.N1", gain);
 		sfg.addArrow("DC3.N2", "DC2.N3", gain);
 		
-		sfg.addArrow("DC4.N2", "DC4.N1", new Complex(tout, 0));
-		sfg.addArrow("DC4.N2", "DC4.N4", new Complex(0, -kout));
-		sfg.addArrow("DC4.N3", "DC4.N4", new Complex(tout, 0));
-		sfg.addArrow("DC4.N3", "DC4.N1", new Complex(0, -kout));
+		sfg.addArrow("DC4.N2", "DC4.N1", tout);
+		sfg.addArrow("DC4.N2", "DC4.N4", -j*kout);
+		sfg.addArrow("DC4.N3", "DC4.N4", tout);
+		sfg.addArrow("DC4.N3", "DC4.N1", -j*kout);
 		
 		sfg.addArrow("DC3.N3", "DC4.N2", gain);
 		sfg.addArrow("DC4.N1", "DC3.N4", gain);

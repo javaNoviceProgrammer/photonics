@@ -50,45 +50,52 @@ public class AddDropSeventhOrder {
 	}
 
 	private void buildSFG(){
-		nodes.add("DC1.N1") ;
-		nodes.add("DC1.N2") ;
-		nodes.add("DC1.N3") ;
-		nodes.add("DC1.N4") ;
-
-		nodes.add("DC2.N1") ;
-		nodes.add("DC2.N2") ;
-		nodes.add("DC2.N3") ;
-		nodes.add("DC2.N4") ;
+		for(int i=1; i<=8; i++) {
+			for(int j=1; j<=4; j++) {
+				String st = "DC"+i+".N"+j ;
+				nodes.add(st) ;
+			}
+		}
 		
-		nodes.add("DC3.N1") ;
-		nodes.add("DC3.N2") ;
-		nodes.add("DC3.N3") ;
-		nodes.add("DC3.N4") ;
-		
-		nodes.add("DC4.N1") ;
-		nodes.add("DC4.N2") ;
-		nodes.add("DC4.N3") ;
-		nodes.add("DC4.N4") ;
-		
-		nodes.add("DC5.N1") ;
-		nodes.add("DC5.N2") ;
-		nodes.add("DC5.N3") ;
-		nodes.add("DC5.N4") ;
-		
-		nodes.add("DC6.N1") ;
-		nodes.add("DC6.N2") ;
-		nodes.add("DC6.N3") ;
-		nodes.add("DC6.N4") ;
-
-		nodes.add("DC7.N1") ;
-		nodes.add("DC7.N2") ;
-		nodes.add("DC7.N3") ;
-		nodes.add("DC7.N4") ;
-		
-		nodes.add("DC8.N1") ;
-		nodes.add("DC8.N2") ;
-		nodes.add("DC8.N3") ;
-		nodes.add("DC8.N4") ;
+//		nodes.add("DC1.N1") ;
+//		nodes.add("DC1.N2") ;
+//		nodes.add("DC1.N3") ;
+//		nodes.add("DC1.N4") ;
+//
+//		nodes.add("DC2.N1") ;
+//		nodes.add("DC2.N2") ;
+//		nodes.add("DC2.N3") ;
+//		nodes.add("DC2.N4") ;
+//		
+//		nodes.add("DC3.N1") ;
+//		nodes.add("DC3.N2") ;
+//		nodes.add("DC3.N3") ;
+//		nodes.add("DC3.N4") ;
+//		
+//		nodes.add("DC4.N1") ;
+//		nodes.add("DC4.N2") ;
+//		nodes.add("DC4.N3") ;
+//		nodes.add("DC4.N4") ;
+//		
+//		nodes.add("DC5.N1") ;
+//		nodes.add("DC5.N2") ;
+//		nodes.add("DC5.N3") ;
+//		nodes.add("DC5.N4") ;
+//		
+//		nodes.add("DC6.N1") ;
+//		nodes.add("DC6.N2") ;
+//		nodes.add("DC6.N3") ;
+//		nodes.add("DC6.N4") ;
+//
+//		nodes.add("DC7.N1") ;
+//		nodes.add("DC7.N2") ;
+//		nodes.add("DC7.N3") ;
+//		nodes.add("DC7.N4") ;
+//		
+//		nodes.add("DC8.N1") ;
+//		nodes.add("DC8.N2") ;
+//		nodes.add("DC8.N3") ;
+//		nodes.add("DC8.N4") ;
 		
 		sfg = new SFG(nodes.size(), nodes) ;
 		

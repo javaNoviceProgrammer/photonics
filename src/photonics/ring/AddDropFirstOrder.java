@@ -32,15 +32,22 @@ public class AddDropFirstOrder {
 	}
 
 	private void buildSFG(){
-		nodes.add("DC1.N1") ;
-		nodes.add("DC1.N2") ;
-		nodes.add("DC1.N3") ;
-		nodes.add("DC1.N4") ;
-
-		nodes.add("DC2.N1") ;
-		nodes.add("DC2.N2") ;
-		nodes.add("DC2.N3") ;
-		nodes.add("DC2.N4") ;
+		for(int i=1; i<=2; i++) {
+			for(int j=1; j<=4; j++) {
+				String st = "DC"+i+".N"+j ;
+				nodes.add(st) ;
+			}
+		}
+		
+//		nodes.add("DC1.N1") ;
+//		nodes.add("DC1.N2") ;
+//		nodes.add("DC1.N3") ;
+//		nodes.add("DC1.N4") ;
+//
+//		nodes.add("DC2.N1") ;
+//		nodes.add("DC2.N2") ;
+//		nodes.add("DC2.N3") ;
+//		nodes.add("DC2.N4") ;
 
 		sfg = new SFG(nodes.size(), nodes) ;
 		
