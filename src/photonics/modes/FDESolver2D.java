@@ -123,8 +123,8 @@ public class FDESolver2D {
 		double[] eigReal = eig.getRealEigenvalues() ;
 		double[] eigIma = eig.getImagEigenvalues() ;
 		for(int i=0; i<eigReal.length; i++) {
-			if(eigReal[i] < 3.444 && eigReal[i] > 1.444 ) {
-				Complex eigVal = (eigReal[i] + j*eigIma[i]).sqrt() ;
+			Complex eigVal = (eigReal[i] + j*eigIma[i]).sqrt() ;
+			if(eigVal.re() < 3.444 && eigVal.re() > 1.444 ) {
 				System.out.println(eigVal);
 			}
 		}
@@ -140,15 +140,22 @@ public class FDESolver2D {
 		Matrix Dyy = diff.getDyyMatrix() ;
 		Matrix Dx = diff.getDxMatrix() ;
 		Matrix operator = 1.0/k0Squared * (getDiagEpsilon()*Dx*getDiagInvEpsilon()*Dx + Dyy) + getDiagEpsilon() ;
+		
+//		PowerIteration eigen = new RegularIteration() ;
+//		EigenValueVector v1 = eigen.solve(operator.getPowerIterationMatrix(), 1e-4) ;
+//		System.out.println(v1.eigenValue.sqrt());
+		
 		EigenvalueDecomposition eig = new EigenvalueDecomposition(new Jama.Matrix(operator.getData())) ;
 		double[] eigReal = eig.getRealEigenvalues() ;
 		double[] eigIma = eig.getImagEigenvalues() ;
 		for(int i=0; i<eigReal.length; i++) {
-			if(eigReal[i] < 3.444*3.444 && eigReal[i] > 1.444*1.444 ) {
-				Complex eigVal = (eigReal[i] + j*eigIma[i]).sqrt() ;
+			Complex eigVal = (eigReal[i] + j*eigIma[i]).sqrt() ;
+			if(eigVal.re() < 3.444 && eigVal.re() > 1.444 ) {
 				System.out.println(eigVal);
 			}
 		}
+		
+		
 	}
 
 	public void plotIndexProfile() {
@@ -213,12 +220,12 @@ public class FDESolver2D {
 
 			@Override
 			public double getUpperBoundary() {
-				return 320;
+				return 400;
 			}
 
 			@Override
 			public double getRightBoundary() {
-				return 600;
+				return 1000;
 			}
 
 			@Override
@@ -231,12 +238,12 @@ public class FDESolver2D {
 
 			@Override
 			public double getLowerBoundary() {
-				return -100;
+				return -200;
 			}
 
 			@Override
 			public double getLeftBoundary() {
-				return -200;
+				return -500;
 			}
 
 			@Override
@@ -247,7 +254,7 @@ public class FDESolver2D {
 
 		FDESolver2D fde = new FDESolver2D() ;
 		fde.setDebug(true);
-		fde.setGrid(20.0, 20.0, Units.nm);
+		fde.setGrid(40.0, 40.0, Units.nm);
 		fde.setIndexProfile(profile);
 		fde.setWavelength(1550, Units.nm);
 		fde.createMesh();

@@ -292,7 +292,7 @@ public class FDESolver1D {
 
 			@Override
 			public double getUpperBoundary() {
-				return 2500.0;
+				return 3500.0;
 			}
 
 			@Override
@@ -304,8 +304,8 @@ public class FDESolver1D {
 			public double getRealIndex(double x) {
 				if(x<0) return 1.444 ;
 				else if(x < 450.0) return 3.477 ;
-				else if(x < 450.0 + 150.0) return 1.444 ;
-				else if(x < 450.0 + 150.0 + 450.0) return 3.477;
+				else if(x < 450.0 + 250.0) return 1.444 ;
+				else if(x < 450.0 + 250.0 + 450.0) return 3.477;
 				else return 1.444 ;
 			}
 
@@ -322,12 +322,12 @@ public class FDESolver1D {
 		timer.show();
 		fde.plotIndexProfile();
 		fde.plotField(Fields.Ey, 1);
-		fde.plotField(Fields.Hx, 1);
-		fde.plotField(Fields.Hz, 1);
+//		fde.plotField(Fields.Hx, 1);
+//		fde.plotField(Fields.Hz, 1);
 //		fde.plotField(Fields.Hy, 3);
-//		fde.plotField(Fields.Ey, 4);
-//		fde.plotField(Fields.Ey, 5);
-//		fde.plotField(Fields.Ey, 6);
+		fde.plotField(Fields.Ey, 2);
+		fde.plotField(Fields.Ey, 3);
+		fde.plotField(Fields.Ey, 4);
 //		fde.plotField(Fields.Ey, 7);
 //		fde.plotField(Fields.Ey, 8);
 //		fde.plotField(Fields.Ey, 9);
