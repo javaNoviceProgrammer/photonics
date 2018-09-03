@@ -318,7 +318,7 @@ public class FDESolver1D {
 		Timer timer = new Timer() ;
 		timer.start();
 		fde.solve(Modes.TE);
-		timer.end();
+		timer.stop();
 		timer.show();
 		fde.plotIndexProfile();
 		fde.plotField(Fields.Ey, 1);

@@ -264,7 +264,7 @@ public class FDESolver2D {
 		Timer timer = new Timer() ;
 		timer.start();
 		fde.solve(Modes.quasiTE);
-		timer.end();
+		timer.stop();
 		System.out.println(timer);
 	}
 

@@ -162,7 +162,7 @@ public class ModeCoupledSlabWgTE_fast {
 			neff_odd = MathUtils.Arrays.append(neff_odd, modeSolver.findNeffOdd(1)) ;
 		}
 		
-		timer.end();
+		timer.stop();
 		timer.show();
 		
 		MatlabChart fig = new MatlabChart() ;
