@@ -1,46 +1,52 @@
 package photonics.wg.bend;
 
 import mathLib.util.ArrayUtils.FindMinimum;
-import mathLib.func.ArrayFunc;
 import mathLib.util.MathUtils;
 import plotter.chart.MatlabChart;
 
 public class Optimum180BezierBend {
 
 	public static void main(String[] args){
-		double R = 5 ; // in micron
+		double R = 3 ; // in micron
 		// sweep d to find minimum loss
-		double[] B = MathUtils.linspace(0.1, 0.8, 1000) ;
-		double[] lossdB = new double[B.length] ;
+		double[] d = MathUtils.linspace(2.0, 10.0, 1000) ;
+		double[] lossdB = new double[d.length] ;
 
 		double a = 2096.3 ;
-		double b = 2.9123 ;
-		LossModel model = new LossModel(a, b, 0.0) ;
+		double[] bb = MathUtils.linspace(1, 10, 100) ;
+		double[] lossRatio = new double[bb.length] ;
+		for(int j=0; j<bb.length; j++){
+			double b = bb[j] ;
+			LossModel model = new LossModel(a, b, 0.0) ;
 
-		for(int i=0; i<B.length; i++) {
-			BezierCurve90 bezier = new BezierCurve90(R, B[i]) ;
-			BendLossCalculate lossCalc = new BendLossCalculate(model, bezier) ;
-			lossdB[i] = lossCalc.getLossDB(0.0, 1.0) ;
+			for(int i=0; i<d.length; i++) {
+				BezierCurve180 bezier = new BezierCurve180(R, d[i]) ;
+				BendLossCalculate lossCalc = new BendLossCalculate(model, bezier) ;
+				lossdB[i] = lossCalc.getLossDB(0.0, 1.0) ;
+			}
+
+			int minIndex = FindMinimum.getIndex(lossdB) ;
+
+			double dOpt = d[minIndex] ;
+			BezierCurve180 optBend = new BezierCurve180(R, dOpt) ;
+			BendLossCalculate lossCalcOpt = new BendLossCalculate(model, optBend) ;
+			CircleCurve circ = new CircleCurve(R) ;
+			BendLossCalculate lossCalcCirc = new BendLossCalculate(model, circ) ;
+			lossRatio[j] = lossCalcOpt.getLossDB(0, 1)/lossCalcCirc.getLossDB(0, Math.PI);
 		}
 
-		System.out.println(FindMinimum.getValue(lossdB));
 
-		int minIndex = FindMinimum.getIndex(lossdB) ;
-		System.out.println(B[minIndex]);
-
-		double dOpt = B[minIndex] ;
-		BezierCurve90 optBend = new BezierCurve90(R, dOpt) ;
-		double[] t = MathUtils.linspace(0.0, 1.0, 200) ;
-		double[] x = ArrayFunc.apply(s -> optBend.getX(s) , t) ;
-		double[] y = ArrayFunc.apply(s -> optBend.getY(s), t) ;
+//		double[] t = MathUtils.linspace(0.0, 1.0, 200) ;
+//		double[] x = ArrayFunc.apply(s -> optBend.getX(s) , t) ;
+//		double[] y = ArrayFunc.apply(s -> optBend.getY(s), t) ;
 
 		MatlabChart fig = new MatlabChart() ;
-		fig.plot(x, y);
+		fig.plot(bb, lossRatio);
 		fig.RenderPlot();
 		fig.markerON();
 		fig.setFigLineWidth(0, 0f);
-		fig.xlabel("X (um)");
-		fig.ylabel("Y (um)");
+		fig.xlabel("b");
+		fig.ylabel("Loss Ratio");
 		fig.run(true);
 
 

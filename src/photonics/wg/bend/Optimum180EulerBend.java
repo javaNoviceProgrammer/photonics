@@ -5,7 +5,7 @@ import mathLib.func.ArrayFunc;
 import mathLib.util.MathUtils;
 import plotter.chart.MatlabChart;
 
-public class Optimum90BezierBend {
+public class Optimum180EulerBend {
 
 	public static void main(String[] args){
 		double R = 5 ; // in micron
