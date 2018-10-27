@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.JSlider;
 
 public class BendWgGUI extends JFrame {
 
@@ -246,9 +247,9 @@ public class BendWgGUI extends JFrame {
 										gbc_panel_1.gridy = 3;
 										contentPane.add(panel_1, gbc_panel_1);
 										GridBagLayout gbl_panel_1 = new GridBagLayout();
-										gbl_panel_1.columnWidths = new int[]{0, 0, 0};
+										gbl_panel_1.columnWidths = new int[]{0, 0, 0, 0};
 										gbl_panel_1.rowHeights = new int[]{0, 0, 0};
-										gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+										gbl_panel_1.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 										gbl_panel_1.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 										panel_1.setLayout(gbl_panel_1);
 
@@ -262,7 +263,7 @@ public class BendWgGUI extends JFrame {
 
 										textField_2 = new JTextField();
 										GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-										gbc_textField_2.insets = new Insets(0, 0, 5, 0);
+										gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 										gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 										gbc_textField_2.gridx = 1;
 										gbc_textField_2.gridy = 0;
@@ -274,8 +275,16 @@ public class BendWgGUI extends JFrame {
 											public void actionPerformed(ActionEvent e) {
 											}
 										});
+
+										JSlider slider = new JSlider();
+										GridBagConstraints gbc_slider = new GridBagConstraints();
+										gbc_slider.insets = new Insets(0, 0, 5, 0);
+										gbc_slider.gridx = 2;
+										gbc_slider.gridy = 0;
+										panel_1.add(slider, gbc_slider);
 										GridBagConstraints gbc_gdsButton = new GridBagConstraints();
-										gbc_gdsButton.anchor = GridBagConstraints.EAST;
+										gbc_gdsButton.fill = GridBagConstraints.HORIZONTAL;
+										gbc_gdsButton.insets = new Insets(0, 0, 0, 5);
 										gbc_gdsButton.gridx = 1;
 										gbc_gdsButton.gridy = 1;
 										panel_1.add(gdsButton, gbc_gdsButton);
