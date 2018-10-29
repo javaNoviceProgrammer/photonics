@@ -8,15 +8,15 @@ import Jama.EigenvalueDecomposition;
 import mathLib.matrix.Matrix;
 import mathLib.numbers.Complex;
 import mathLib.pde.DiffOperator2D;
+import mathLib.plot.ColorMapPlot;
+import mathLib.plot.MatlabChart;
+import mathLib.plot.util.ColorMap.ColorMapName;
+import mathLib.plot.util.MeshGrid;
 import mathLib.util.Conversions;
 import mathLib.util.MathUtils;
 import mathLib.util.Timer;
 import mathLib.util.Units;
 import photonics.util.Modes;
-import plotter.chart.ColorMapPlot;
-import plotter.chart.MatlabChart;
-import plotter.util.ColorMap.ColorMapName;
-import plotter.util.MeshGrid;
 
 public class FDESolver2D {
 

@@ -4,11 +4,11 @@ import ch.epfl.general_libraries.clazzes.ParamName;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.matrix.ComplexMatrix;
+import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 import mathLib.util.Timer;
 import photonics.transfer.TransferMatrixTE;
 import photonics.util.Wavelength;
-import plotter.chart.MatlabChart;
 
 public class ModeCoupledSlabWgTE_fast {
 

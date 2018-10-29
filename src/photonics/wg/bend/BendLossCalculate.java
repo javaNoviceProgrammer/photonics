@@ -1,7 +1,7 @@
 package photonics.wg.bend;
 
 import flanagan.integration.IntegralFunction;
-import plotter.util.AdaptiveIntegral;
+import mathLib.integral.Integral1D;
 
 public class BendLossCalculate {
 
@@ -23,7 +23,7 @@ public class BendLossCalculate {
 			}
 		};
 
-		AdaptiveIntegral integral = new AdaptiveIntegral(func, tStart, tEnd) ;
+		Integral1D integral = new Integral1D(func, tStart, tEnd) ;
 		return integral.getIntegral() ;
 	}
 

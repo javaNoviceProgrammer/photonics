@@ -1,5 +1,7 @@
 package photonics.modes;
 
+import static mathLib.numbers.Complex.j;
+
 import java.util.ArrayList;
 
 import Jama.EigenvalueDecomposition;
@@ -7,13 +9,12 @@ import mathLib.matrix.ComplexMatrix;
 import mathLib.matrix.Matrix;
 import mathLib.numbers.Complex;
 import mathLib.ode.DiffOperator;
+import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 import mathLib.util.Timer;
 import mathLib.util.Units;
 import photonics.util.Fields;
 import photonics.util.Modes;
-import plotter.chart.MatlabChart;
-import static mathLib.numbers.Complex.*;
 
 public class FDESolver1D {
 

@@ -1,8 +1,8 @@
 package photonics.wg.bend;
 
+import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils.FindMinimum;
 import mathLib.util.MathUtils;
-import plotter.chart.MatlabChart;
 
 public class Optimum180BezierBend {
 
