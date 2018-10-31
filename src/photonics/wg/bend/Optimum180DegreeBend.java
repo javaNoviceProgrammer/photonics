@@ -28,7 +28,7 @@ public class Optimum180DegreeBend {
 	public static void main(String[] args){
 		double R = 5 ; // in micron
 		OptimalLossFunc lossFunc = new OptimalLossFunc() ;
-		double b = 2.9123 ;
+		double b = 3 ;
 		double p = (3*b-1)/(2*b) ;
 
 		double A = lossFunc.getValue(b)/R ;
