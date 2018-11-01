@@ -14,7 +14,7 @@ public class ProfileCoupledSlabWgTE {
 	int modeNumber ;
 	CoupledSlabWg coupledSlab ;
 	TransferMatrixTE Q1, Q2, Q3, Q4 ;
-	ModeCoupledSlabWgTE_fast modeTE ;
+	ModeCoupledSlabWgTE modeTE ;
 	
 /*				n_up
 		-----------------------
@@ -36,7 +36,7 @@ public class ProfileCoupledSlabWgTE {
 		this.xValNm = xValNm ;
 		this.modeNumber = modeNumber ;
 		this.coupledSlab = coupledSlab ;
-		modeTE = new ModeCoupledSlabWgTE_fast(inputLambda, coupledSlab) ;
+		modeTE = new ModeCoupledSlabWgTE(inputLambda, coupledSlab) ;
 		if(isEvenMode){
 			neff = modeTE.findNeffEven(modeNumber);
 		}
@@ -59,7 +59,7 @@ public class ProfileCoupledSlabWgTE {
 		this.xValNm = xValNm ;
 		this.coupledSlab = coupledSlab ;
 		this.neff = neff ;
-		modeTE = new ModeCoupledSlabWgTE_fast(inputLambda, coupledSlab) ;
+		modeTE = new ModeCoupledSlabWgTE(inputLambda, coupledSlab) ;
 		Q1 = new TransferMatrixTE(inputLambda, coupledSlab.n_up, coupledSlab.n_core1, neff, 0, 0) ;
 		Q2 = new TransferMatrixTE(inputLambda, coupledSlab.n_core1, coupledSlab.n_gap, neff, coupledSlab.w1_nm, 0) ;
 		Q3 = new TransferMatrixTE(inputLambda, coupledSlab.n_gap, coupledSlab.n_core2, neff, coupledSlab.w1_nm+coupledSlab.gap_nm, 0) ;

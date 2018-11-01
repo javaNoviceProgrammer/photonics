@@ -4,19 +4,18 @@ import ch.epfl.general_libraries.clazzes.ParamName;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.matrix.ComplexMatrix;
-import mathLib.plot.MatlabChart;
-import mathLib.util.MathUtils;
-import mathLib.util.Timer;
-import photonics.transfer.TransferMatrixTE;
+import mathLib.numbers.Complex;
+import photonics.transfer.TransferMatrixTM;
 import photonics.util.Wavelength;
 
-public class ModeCoupledSlabWgTE_fast {
+public class ModeCoupledSlabWgTM {
+
+	Complex plusJ = new Complex(0,1), minusJ = new Complex(0,-1), one = new Complex(1,0), zero = new Complex(0,0) ;
 
 	Wavelength inputLambda ;
 	double w1_nm, w2_nm, gap_nm , lambdaNm , k0;
 	double n_down, n_core1, n_core2, n_up, n_gap, n_high, n_low ;
-	ModeSlabWgTE slabTE1, slabTE2 ;
-
+	double neffSlabTM_min, neffSlabTM_max ;
 	double[] neff_AllModes ;
 
 /*				n_up
@@ -30,9 +29,8 @@ public class ModeCoupledSlabWgTE_fast {
 				n_down
 */
 
-
-	// First type of constructor for directly inputting parameters of the slab
-	public ModeCoupledSlabWgTE_fast(
+	// First type of constructor for directly inputing parameters of the slab
+	public ModeCoupledSlabWgTM(
 			@ParamName(name="wavelength (nm)") Wavelength inputLambda,
 			@ParamName(name="Coupled Slab Structure") CoupledSlabWg coupledSlab
 			){
@@ -51,7 +49,7 @@ public class ModeCoupledSlabWgTE_fast {
 
 	}
 
-	public ModeCoupledSlabWgTE_fast(
+	public ModeCoupledSlabWgTM(
 			@ParamName(name="wavelength (nm)") double lambdaNm,
 			@ParamName(name="waveguide 1 width (nm)") double w1_nm,
 			@ParamName(name="waveguide 2 width (nm)") double w2_nm,
@@ -73,24 +71,24 @@ public class ModeCoupledSlabWgTE_fast {
 		this.n_gap = n_g ;
 		this.n_core2 = n_c_2 ;
 		this.n_down = n_d ;
-		this.n_high = Math.max(n_c_1, n_c_2) ;
-		this.n_low = Math.min(Math.min(n_u, n_d), n_g) ;
-
+		this.n_high = Math.min(n_c_1, n_c_2) ;
+		this.n_low = Math.max(Math.max(n_u, n_d), n_g) ;
+		
 	}
-	
-	// Next I need to find the Mode Equation
+
+	// Next I need to find the Even mode equation (Y1 + Y2 = 0) 
 	private double getModeEquation(double neff){
-		TransferMatrixTE Q1 = new TransferMatrixTE(inputLambda, n_up, n_core1, neff, 0, 0) ;
-		TransferMatrixTE Q2 = new TransferMatrixTE(inputLambda, n_core1, n_gap, neff, w1_nm, 0) ;
-		TransferMatrixTE Q3 = new TransferMatrixTE(inputLambda, n_gap, n_core2, neff, w1_nm+gap_nm, 0) ;
-		TransferMatrixTE Q4 = new TransferMatrixTE(inputLambda, n_core2, n_down, neff, w1_nm+gap_nm+w2_nm, 0) ;
+		TransferMatrixTM Q1 = new TransferMatrixTM(inputLambda, n_up, n_core1, neff, 0, 0) ;
+		TransferMatrixTM Q2 = new TransferMatrixTM(inputLambda, n_core1, n_gap, neff, w1_nm, 0) ;
+		TransferMatrixTM Q3 = new TransferMatrixTM(inputLambda, n_gap, n_core2, neff, w1_nm+gap_nm, 0) ;
+		TransferMatrixTM Q4 = new TransferMatrixTM(inputLambda, n_core2, n_down, neff, w1_nm+gap_nm+w2_nm, 0) ;
 		ComplexMatrix T1 = Q1.getTransferMatrix() ;
 		ComplexMatrix T2 = Q2.getTransferMatrix() ;
 		ComplexMatrix T3 = Q3.getTransferMatrix() ;
 		ComplexMatrix T4 = Q4.getTransferMatrix() ;
 		ComplexMatrix Ttot = T4.times(T3).times(T2).times(T1) ;
-		return Ttot.getElement(1, 1).re() ;
-	}
+		return Ttot.getElement(1, 1).re() ;	
+	}	
 
 	// mode number starts from 0 --> TE0, TE1, TE2, ...
 	@SuppressWarnings("unused")
@@ -105,15 +103,15 @@ public class ModeCoupledSlabWgTE_fast {
 
 		SlabWg slab1 = new SlabWg(inputLambda, w1_nm, n_gap, n_core1, n_up) ;
 		SlabWg slab2 = new SlabWg(inputLambda, w2_nm, n_down, n_core2, n_gap) ;
-		double neffTE1 = new ModeSlabWgTE(slab1).findSpecificModeIndex(modeNumber) ;
-		double neffTE2 = new ModeSlabWgTE(slab2).findSpecificModeIndex(modeNumber) ;
-		double neffSlabTE_min = Math.min(neffTE1, neffTE2) ;
-		double neffSlabTE_max = Math.max(neffTE1, neffTE2) ;
+		double neffTM1 = new ModeSlabWgTM(slab1).findSpecificModeIndex(modeNumber) ;
+		double neffTM2 = new ModeSlabWgTM(slab2).findSpecificModeIndex(modeNumber) ;
+		double neffSlabTM_min = Math.min(neffTM1, neffTM2) ;
+		double neffSlabTM_max = Math.max(neffTM1, neffTM2) ;
 
-		rootFinder.setEstimate(neffSlabTE_max);
-		return rootFinder.bisect(func, neffSlabTE_max, n_high) ;
+		rootFinder.setEstimate(neffSlabTM_max);
+		return rootFinder.bisect(func, neffSlabTM_max, n_high) ;
 	}
-
+	
 	public double findNeffOdd(int modeNumber){
 		RealRootFunction func = new RealRootFunction() {
 			@Override
@@ -125,21 +123,21 @@ public class ModeCoupledSlabWgTE_fast {
 
 		SlabWg slab1 = new SlabWg(inputLambda, w1_nm, n_gap, n_core1, n_up) ;
 		SlabWg slab2 = new SlabWg(inputLambda, w2_nm, n_down, n_core2, n_gap) ;
-		double neffTE1 = new ModeSlabWgTE(slab1).findSpecificModeIndex(modeNumber) ;
-		double neffTE2 = new ModeSlabWgTE(slab2).findSpecificModeIndex(modeNumber) ;
-		double neffSlabTE_min = Math.min(neffTE1, neffTE2) ;
-		double neffSlabTE_max = Math.max(neffTE1, neffTE2) ;
+		double neffTM1 = new ModeSlabWgTM(slab1).findSpecificModeIndex(modeNumber) ;
+		double neffTM2 = new ModeSlabWgTM(slab2).findSpecificModeIndex(modeNumber) ;
+		double neffSlabTM_min = Math.min(neffTM1, neffTM2) ;
+		double neffSlabTM_max = Math.max(neffTM1, neffTM2) ;
 
 		double r = Double.NaN ;
 		if(w1_nm == w2_nm){
-			rootFinder.setEstimate(2*neffSlabTE_max-findNeffEven(modeNumber));
-			r = rootFinder.bisect(func, 2*neffSlabTE_max-findNeffEven(modeNumber), neffSlabTE_max) ;
+			rootFinder.setEstimate(2*neffSlabTM_max-findNeffEven(modeNumber));
+			r = rootFinder.bisect(func, 2*neffSlabTM_max-findNeffEven(modeNumber), neffSlabTM_max) ;
 		}
 		else{
-			double neffSlabTE_avg = (neffSlabTE_max+neffSlabTE_min)/2 ;
+			double neffSlabTM_avg = (neffSlabTM_max+neffSlabTM_min)/2 ;
 			rootFinder.setmaximumStaticBoundsExtension(500);
-			rootFinder.setEstimate(neffSlabTE_min);
-			r = rootFinder.bisect(func, 2*neffSlabTE_avg-findNeffEven(modeNumber), neffSlabTE_min) ;
+			rootFinder.setEstimate(neffSlabTM_min);
+			r = rootFinder.bisect(func, 2*neffSlabTM_avg-findNeffEven(modeNumber), neffSlabTM_min) ;
 		}
 
 		return r ;
@@ -147,32 +145,29 @@ public class ModeCoupledSlabWgTE_fast {
 
 
 	// ********************* test *********************
-	public static void main(String[] args){
-		double lambda = 1550 ;
-		Wavelength inputLambda = new Wavelength(lambda) ;
-		double[] gaps = MathUtils.Arrays.concat(MathUtils.linspace(50, 300, 100),  MathUtils.linspace(300, 1000, 100)) ;
-		double[] neff_even = {} ;
-		double[] neff_odd = {} ;
-		Timer timer = new Timer() ;
-		timer.start();
-		for(double g : gaps){
-			CoupledSlabWg slabs = new CoupledSlabWg(450, 450, g, 1.444, 3.444, 1.444, 3.444, 1.444) ;
-			ModeCoupledSlabWgTE_fast modeSolver = new ModeCoupledSlabWgTE_fast(inputLambda, slabs) ;
-			neff_even = MathUtils.Arrays.append(neff_even, modeSolver.findNeffEven(1)) ;
-			neff_odd = MathUtils.Arrays.append(neff_odd, modeSolver.findNeffOdd(1)) ;
-		}
-		
-		timer.stop();
-		timer.show();
-		
-		MatlabChart fig = new MatlabChart() ;
-		fig.plot(gaps, neff_even, "b") ;
-		fig.plot(gaps, neff_odd, "r");
-
-		fig.RenderPlot();
-		fig.run(true);
-
-	}
+//	public static void main(String[] args){
+//		double lambda = 1550 ;
+//		Wavelength inputLambda = new Wavelength(lambda) ;
+//		double[] gaps = MoreMath.Arrays.concat(MoreMath.linspace(50, 300, 100),  MoreMath.linspace(300, 1000, 100)) ;
+//		double[] neff_even = {} ;
+//		double[] neff_odd = {} ;
+//
+//		for(double g : gaps){
+//			CoupledSlabWg slabs = new CoupledSlabWg(500, 500, g, 1.444, 3.444, 1.444, 3.444, 1.444) ;
+//			ModeCoupledSlabWgTM_fast modeSolver = new ModeCoupledSlabWgTM_fast(inputLambda, slabs) ;
+//			neff_even = MoreMath.Arrays.append(neff_even, modeSolver.findNeffEven(0)) ;
+//			neff_odd = MoreMath.Arrays.append(neff_odd, modeSolver.findNeffOdd(0)) ;
+//		}
+//
+//		MatlabChart fig = new MatlabChart() ;
+//		fig.plot(gaps, neff_even, "b") ;
+//		fig.plot(gaps, neff_odd, "r");
+//
+//		fig.RenderPlot();
+//		fig.run();
+//
+//	}
+	
 
 
 }
