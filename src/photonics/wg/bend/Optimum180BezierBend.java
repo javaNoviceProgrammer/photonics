@@ -42,7 +42,7 @@ public class Optimum180BezierBend {
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(bb, lossRatio);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.markerON();
 		fig.setFigLineWidth(0, 0f);
 		fig.xlabel("b");

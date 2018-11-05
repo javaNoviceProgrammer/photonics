@@ -180,7 +180,7 @@ public class HeaterPhotoConductance {
 		fig.plot(voltage_V, I_mA, "r");
 		fig.plot(voltage_V, I_mA_2, "g");
 		fig.plot(voltage_V, I_mA_3, "k");
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.xlabel("Heater Voltage (V)");
 		fig.ylabel("Heater Current (mA)");
 		fig.run(true);

@@ -36,7 +36,7 @@ public class Optimum90BezierBend {
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, y);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.markerON();
 		fig.setFigLineWidth(0, 0f);
 		fig.xlabel("X (um)");

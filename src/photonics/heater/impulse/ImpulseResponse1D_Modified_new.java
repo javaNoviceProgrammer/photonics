@@ -188,7 +188,7 @@ public class ImpulseResponse1D_Modified_new extends AbstractImpulseResponse {
 		}
 		MatlabChart fig1 = new MatlabChart() ;
 		fig1.plot(time, Iwg, "r");
-		fig1.RenderPlot();
+		fig1.renderPlot();
 		fig1.xlim(0, 10);
 		fig1.run(true);
 	}

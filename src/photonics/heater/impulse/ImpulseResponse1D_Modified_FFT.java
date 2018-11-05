@@ -213,7 +213,7 @@ public class ImpulseResponse1D_Modified_FFT extends AbstractImpulseResponse {
 		double[] Iwg = impulse.Iwg ;
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(time_usec, Iwg);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.run(true);
 
 	}

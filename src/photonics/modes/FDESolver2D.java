@@ -173,7 +173,7 @@ public class FDESolver2D {
 			indexXCut[i] = indexProfile.getRealIndex(x, yRange[i]) ;
 		}
 		fig.plot(yRange, indexXCut);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.xlabel("Y " + "(" + gridUnit.name() + ")");
 		fig.ylabel("Index");
 		fig.run(true);
@@ -189,7 +189,7 @@ public class FDESolver2D {
 			indexYCut[i] = indexProfile.getRealIndex(xRange[i], y) ;
 		}
 		fig.plot(xRange, indexYCut);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.xlabel("X " + "(" + gridUnit.name() + ")");
 		fig.run(true);
 		fig.markerON();

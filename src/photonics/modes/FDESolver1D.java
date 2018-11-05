@@ -244,7 +244,7 @@ public class FDESolver1D {
 	public void plotIndexProfile() {
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, index);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.xlabel("X " + "(" + gridUnit.name() + ")");
 		fig.ylabel("Index");
 		fig.run(true);
@@ -263,7 +263,7 @@ public class FDESolver1D {
 		}
 		fig.plot(x, fReal, "b-", 2f, "Re("+name+")");
 		fig.plot(x, fImag, "r-", 2f, "Im("+name+")");
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.xlabel("X " + "(" + gridUnit.name() + ")");
 		fig.ylabel(name);
 		fig.run();

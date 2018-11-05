@@ -169,7 +169,7 @@ public class ModeCoupledSlabWgTE {
 		fig.plot(gaps, neff_even, "b") ;
 		fig.plot(gaps, neff_odd, "r");
 
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.run(true);
 
 	}

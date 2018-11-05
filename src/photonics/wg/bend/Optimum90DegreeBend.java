@@ -38,7 +38,7 @@ public class Optimum90DegreeBend {
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, f);
-		fig.RenderPlot();
+		fig.renderPlot();
 		fig.xlabel("x (um)");
 		fig.ylabel("f(x)");
 		fig.run(true);
@@ -60,7 +60,7 @@ public class Optimum90DegreeBend {
 
 		MatlabChart fig1= new MatlabChart() ;
 		fig1.plot(x, y, "r");
-		fig1.RenderPlot();
+		fig1.renderPlot();
 		fig1.xlabel("x (um)");
 		fig1.ylabel("y(x)");
 		fig1.run(true);
@@ -73,7 +73,7 @@ public class Optimum90DegreeBend {
 
 		MatlabChart fig2= new MatlabChart() ;
 		fig2.plot(x, radius, "g");
-		fig2.RenderPlot();
+		fig2.renderPlot();
 		fig2.xlabel("x (um)");
 		fig2.ylabel("radius of curvature (um)");
 		fig2.run(true);
