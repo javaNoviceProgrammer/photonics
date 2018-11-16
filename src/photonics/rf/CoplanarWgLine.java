@@ -51,9 +51,9 @@ public class CoplanarWgLine {
 	}
 	
 	private double getK1() {
-		if(t < 1e-7)
-			return w/(w+2*s) ;
-		double delta = 1.25 * t/w * (1.0 + log(4.0*PI*w/t)) ;
+//		if(t < 1e-7)
+//			return w/(w+2*s) ;
+		double delta = 1.25 * t/PI * (1.0 + log(4.0*PI*w/t)) ;
 		double se = s - delta ;
 		double we = w + delta ;
 		double k1 = we/(we + 2*se) ;
