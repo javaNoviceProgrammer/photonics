@@ -13,13 +13,13 @@ import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
 public class TestCoupledMicrostrips implements Experiment {
 
 	CoupledMicrostripLines line ;
-	
+
 	public TestCoupledMicrostrips(
 			CoupledMicrostripLines line
 			) {
 		this.line = line ;
 	}
-	
+
 	@Override
 	public void run(AbstractResultsManager man, AbstractResultsDisplayer dis) throws WrongExperimentException {
 		DataPoint dp = new DataPoint() ;
@@ -30,7 +30,7 @@ public class TestCoupledMicrostrips implements Experiment {
 		dp.addResultProperty("Zo (static)", line.getImpedanceOddStatic());
 		man.addDataPoint(dp);
 	}
-	
+
 	public static void main(String[] args) {
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 		String packageName = "photonics" ;
