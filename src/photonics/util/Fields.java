@@ -10,6 +10,8 @@ public enum Fields {
 	Hy,
 	Hz,
 	// amplitude or phase
+	normE,
+	normH,
 	Amplitude,
 	Phase
 }
