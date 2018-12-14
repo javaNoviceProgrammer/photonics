@@ -9,7 +9,8 @@ import ch.epfl.general_libraries.clazzes.ParamName;
 
 public class CoplanarWgLine {
 	
-	double w, t, h, epsr, s ;
+	public double w, t, h, epsr ;
+	public double s;
 	
 	public CoplanarWgLine(
 			@ParamName(name="Width of metal (m)") double w,

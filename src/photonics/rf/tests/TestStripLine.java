@@ -1,4 +1,4 @@
-package photonics.rf;
+package photonics.rf.tests;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
@@ -9,13 +9,14 @@ import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
 import ch.epfl.general_libraries.results.AbstractResultsManager;
 import ch.epfl.general_libraries.results.DataPoint;
 import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
+import photonics.rf.StripLine;
 
-public class TestMicrostrip implements Experiment {
+public class TestStripLine implements Experiment {
 
-	MicrostripLine line ;
+	StripLine line ;
 	
-	public TestMicrostrip(
-			MicrostripLine line
+	public TestStripLine(
+			StripLine line
 			) {
 		this.line = line ;
 	}
@@ -33,7 +34,7 @@ public class TestMicrostrip implements Experiment {
 	public static void main(String[] args) {
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 		String packageName = "photonics" ;
-		String className = TestMicrostrip.class.getName() ;
+		String className = TestStripLine.class.getName() ;
 		ExperimentConfigurationCockpit.execute(new String[] {"-p", packageName, "-c", className}, true);
 	}
 
