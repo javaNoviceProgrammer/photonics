@@ -40,6 +40,59 @@ public class DistributedCouplerStripWg {
 		calculateScattParams();
 	}
 
+	public DistributedCouplerStripWg(
+			@ParamName(name="Wavelength (nm)") Wavelength inputLambda,
+			@ParamName(name="Length (um)") double lengthMicron,
+			@ParamName(name="Gap (nm)") double gapNm,
+			@ParamName(name="neff (Even)") double neffEven,
+			@ParamName(name="neff (Odd)") double neffOdd
+			){
+		this.inputLambda = inputLambda ;
+		this.lambdaNm = inputLambda.getWavelengthNm() ;
+		this.lengthMicron = lengthMicron ;
+		this.gapNm = gapNm ;
+		this.neffEven = neffEven ;
+		this.neffOdd = neffOdd ;
+
+		initializePorts();
+		calculateScattParams();
+	}
+
+	public DistributedCouplerStripWg(
+			@ParamName(name="Wavelength (nm)") Wavelength inputLambda,
+			@ParamName(name="Coupler Loss (dB)") double lossdB,
+			@ParamName(name="Length (um)") double lengthMicron,
+			@ParamName(name="Gap (nm)") double gapNm
+			){
+		this.inputLambda = inputLambda ;
+		this.lambdaNm = inputLambda.getWavelengthNm() ;
+		this.lengthMicron = lengthMicron ;
+		this.gapNm = gapNm ;
+//		double length_cm = lengthMicron * 1e-4 ;
+//		double alpha_dBperCm = lossdB/length_cm ;
+
+		initializePorts();
+		calculateScattParams();
+	}
+
+	public DistributedCouplerStripWg(
+			@ParamName(name="Wavelength (nm)") Wavelength inputLambda,
+			@ParamName(name="Waveguide Loss (dB/cm)") double alpha_dBperCm,
+			@ParamName(name="Length (um)") double lengthMicron,
+			@ParamName(name="Gap (nm)") double gapNm,
+			@ParamName(name="neff (Even)") double neffEven,
+			@ParamName(name="neff (Odd)") double neffOdd
+			){
+		this.inputLambda = inputLambda ;
+		this.lambdaNm = inputLambda.getWavelengthNm() ;
+		this.lengthMicron = lengthMicron ;
+		this.gapNm = gapNm ;
+		this.neffEven = neffEven ;
+		this.neffOdd = neffOdd ;
+
+		initializePorts();
+		calculateScattParams();
+	}
 
 	public void initializePorts(){
 		port1 = port2 = port3 = port4 = Complex.ZERO ;

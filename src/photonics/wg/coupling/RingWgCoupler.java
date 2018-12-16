@@ -11,6 +11,10 @@ import photonics.util.Wavelength;
 
 public class RingWgCoupler {
 
+	// step 1: I need to define the non-uniform gap equation
+	// step 2: I need to discretize the coupling region
+	// step 3: I need to use the S-parameters of each small region to find the transfer matrix
+
 	double ZminMicron, ZmaxMicron ;
 	double gapNm, lengthMicron , radiusMicron, widthMicron = 0.45 ;
 	double gapMaxNm = 500 ;
@@ -36,6 +40,47 @@ public class RingWgCoupler {
 		this.radiusMicron = radiusMicron ; // need to modify this later
 		this.ZmaxMicron = Math.sqrt( (gapMaxNm-gapNm)/1000 * (2*radiusMicron-(gapMaxNm-gapNm)/1000) ) ;
 		this.ZminMicron = -this.ZmaxMicron ;
+		this.scattMatrix = getScattMatrix() ;
+	}
+
+	public RingWgCoupler(
+			Wavelength inputLambda,
+			@ParamName(name="Waveguide width (nm)") double widthNm,
+			@ParamName(name="Radius (micron)") double radiusMicron,
+			@ParamName(name="gap size (nm)") double gapNm,
+			@ParamName(name="max coupling gap (nm)") double gapMaxNm,
+			CubicSpline neffEvenGapInterpolator,
+			CubicSpline neffOddGapInterpolator
+			){
+		this.inputLambda = inputLambda ;
+		this.gapNm = gapNm ;
+		this.gapMaxNm = gapMaxNm ;
+		this.widthMicron = widthNm*1e-3 ;
+		this.radiusMicron = radiusMicron ; // need to modify this later
+		this.ZmaxMicron = Math.sqrt( (gapMaxNm-gapNm)/1000 * (2*(radiusMicron+widthMicron/2)-(gapMaxNm-gapNm)/1000) ) ;
+		this.ZminMicron = -this.ZmaxMicron ;
+		this.neffEvenGapInterpolator = neffEvenGapInterpolator ;
+		this.neffOddGapInterpolator = neffOddGapInterpolator ;
+		this.scattMatrix = getScattMatrix() ;
+	}
+
+	public RingWgCoupler(
+			Wavelength inputLambda,
+			@ParamName(name="Waveguide width (nm)") double widthNm,
+			@ParamName(name="Radius (micron)") double radiusMicron,
+			@ParamName(name="gap size (nm)") double gapNm,
+			CubicSpline neffEvenGapInterpolator,
+			CubicSpline neffOddGapInterpolator
+			){
+		this.inputLambda = inputLambda ;
+		this.gapNm = gapNm ;
+		this.gapMaxNm = 500 ;
+		this.widthMicron = widthNm*1e-3 ;
+		this.radiusMicron = radiusMicron ; // need to modify this later
+		this.ZmaxMicron = Math.sqrt( (gapMaxNm-gapNm)/1000 * (2*(radiusMicron+widthMicron/2)-(gapMaxNm-gapNm)/1000) ) ;
+		this.ZminMicron = -this.ZmaxMicron ;
+		this.neffEvenGapInterpolator = neffEvenGapInterpolator ;
+		this.neffOddGapInterpolator = neffOddGapInterpolator ;
 		this.scattMatrix = getScattMatrix() ;
 	}
 
@@ -72,32 +117,60 @@ public class RingWgCoupler {
 	// these methods get the parameters for the small coupling regions
 	private Complex S21(double z, double Dz){
 		DistributedCouplerStripWg DC ;
-		DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z)) ;
+		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
+			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
+		else{
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
 		return DC.S21 ;
 	}
 
 	private Complex S31(double z, double Dz){
 		DistributedCouplerStripWg DC ;
-		DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z)) ;
+		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
+			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
+		else{
+			DC = new DistributedCouplerStripWg(inputLambda,  Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
 		return DC.S31 ;
 	}
 
 	private Complex S24(double z, double Dz){
 		DistributedCouplerStripWg DC ;
-		DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z)) ;
+		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
+			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			DC = new DistributedCouplerStripWg(inputLambda,  Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
+		else{
+			DC = new DistributedCouplerStripWg(inputLambda,  Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
 		return DC.S24 ;
 	}
 
 	private Complex S34(double z, double Dz){
 		DistributedCouplerStripWg DC ;
-		DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z)) ;
+		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
+			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
+			DC = new DistributedCouplerStripWg(inputLambda,  Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
+		else{
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+		}
 		return DC.S34 ;
 	}
 
 	// this method defines the non-uniform gap equation
 	public double getCouplingGapNm(double z){
-		double gMicron = gapNm/1000d + radiusMicron+widthMicron/2 - Math.sqrt((radiusMicron+widthMicron/2)*(radiusMicron+widthMicron/2) - z * z) ;
-		double gNm = gMicron * 1000d ;
+		double gMicron = gapNm/1000 + radiusMicron+widthMicron/2 - Math.sqrt((radiusMicron+widthMicron/2)*(radiusMicron+widthMicron/2) - z * z) ;
+		double gNm = gMicron * 1000 ;
 		return gNm ;
 	}
 	// Now finally calculate the scattering parameters
