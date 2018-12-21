@@ -164,8 +164,8 @@ public class Bend90deg {
 
 		//************* calculating the complete curve
 		CubicSpline interpolateY = new CubicSpline(xtot, ytot) ;
-		RealFunction yprime = t -> Richardson.deriv(z -> interpolateY.interpolate(z), t, 1e-6, 2) ;
-		RealFunction ydoubleprime = t -> Richardson.deriv2(z -> interpolateY.interpolate(z), t, 1e-6, 2) ;
+		RealFunction yprime = t -> Richardson.deriv(z -> interpolateY.interpolate(z), t, 1e-5, 1) ;
+		RealFunction ydoubleprime = t -> Richardson.deriv2(z -> interpolateY.interpolate(z), t, 1e-5, 1) ;
 
 		RealFunction radius = t -> Math.pow(1+yprime.evaluate(t)*yprime.evaluate(t), 1.5)/Math.abs(ydoubleprime.evaluate(t)) ;
 
