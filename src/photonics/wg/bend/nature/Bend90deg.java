@@ -3,14 +3,12 @@ package photonics.wg.bend.nature;
 import static java.lang.Math.sqrt;
 import static mathLib.func.GammaFunc.gamma;
 
-import flanagan.integration.IntegralFunction;
 import flanagan.integration.RungeKutta;
 import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.func.ArrayFunc;
 import mathLib.func.intf.RealFunction;
-import mathLib.integral.Integral1D;
 import mathLib.ode.Richardson;
 import mathLib.ode.intf.DerivnFunction1D;
 import mathLib.plot.MatlabChart;
@@ -21,10 +19,10 @@ public class Bend90deg {
 	public static void main(String[] args) {
 		double b = 2.49 ;
 		double xi = (3.0*b-1.0)/(2.0*b) ;
-		double R0 = 4 ;
+		double R0 = 5 ;
 		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
 		double a2 = 0.73669 ;
-		System.out.println(a1-a2);
+//		System.out.println(a1-a2);
 
 		double[] xx0 = MathUtils.linspace(0, R0, 20) ;
 		double[] yyR = new double[xx0.length] ;
@@ -178,14 +176,14 @@ public class Bend90deg {
 		fig5.plot(xx, C, "g");
 		fig5.renderPlot();
 		fig5.run(true);
-		
+
 		//**************** finding length parameter
-//		double[] x1 = MathUtils.linspace(1e-8, 3.9, 100) ;
-//		x1 = ArrayUtils.concat(x1, MathUtils.linspace(3.91, 4, 20)); 
+//		double[] x1 = MathUtils.linspace(1e-8, 0.99*R0, 100) ;
+//		x1 = ArrayUtils.concat(x1, MathUtils.linspace(0.991*R0, R0, 20));
 //		double[] c1 = ArrayFunc.apply(t -> 1.0/radius.evaluate(t), x1) ;
 //		IntegralFunction funcLength = t -> Math.sqrt(1+yprime.evaluate(t)*yprime.evaluate(t)) ;
 //		double[] s = ArrayFunc.apply(z -> (new Integral1D(funcLength, 1e-8, z)).getIntegral(), x1) ;
-//		
+//
 //		MatlabChart fig6 = new MatlabChart() ;
 //		fig6.plot(s, c1);
 //		fig6.renderPlot();
