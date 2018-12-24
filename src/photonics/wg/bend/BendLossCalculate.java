@@ -2,6 +2,7 @@ package photonics.wg.bend;
 
 import flanagan.integration.IntegralFunction;
 import mathLib.integral.Integral1D;
+import photonics.wg.bend.nature.LossModel;
 
 public class BendLossCalculate {
 
@@ -24,7 +25,9 @@ public class BendLossCalculate {
 		};
 
 		Integral1D integral = new Integral1D(func, tStart, tEnd) ;
-		return integral.getIntegral() ;
+		double modeMismatchLossdB = lossModel.getAlphaM(curveModel.getRadiusOfCurvature(tStart)) +
+									lossModel.getAlphaM(curveModel.getRadiusOfCurvature(tEnd)) ;
+		return integral.getIntegral() + modeMismatchLossdB  ;
 	}
 
 	public double getLossDBperCm(double tStart, double tEnd){

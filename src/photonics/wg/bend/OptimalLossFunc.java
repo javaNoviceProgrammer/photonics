@@ -1,6 +1,9 @@
 package photonics.wg.bend;
 
 import mathLib.fitting.interpol.LinearInterpolation1D;
+import mathLib.func.ArrayFunc;
+import mathLib.plot.MatlabChart;
+import mathLib.util.MathUtils;
 
 public class OptimalLossFunc {
 
@@ -25,5 +28,15 @@ public class OptimalLossFunc {
 
 	public double getValue(double x) {
 		return interpolation.interpolate(x);
+	}
+
+	public static void main(String[] args) {
+		OptimalLossFunc loss = new OptimalLossFunc() ;
+		MatlabChart fig = new MatlabChart() ;
+		double[] b = MathUtils.linspace(1, 10, 100) ;
+		double[] val = ArrayFunc.apply(t -> loss.getValue(t), b) ;
+		fig.plot(b, val);
+		fig.renderPlot();
+		fig.run(true);
 	}
 }

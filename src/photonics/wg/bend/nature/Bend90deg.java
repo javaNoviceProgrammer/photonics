@@ -140,6 +140,11 @@ public class Bend90deg {
 		fig2.renderPlot();
 		fig2.run(true);
 
+		//************* finding the total loss
+		double a = 181.98 ;
+		double lossdB = a*Math.pow(A, b) * 2*(R0-x0)*1e-4 ;
+		System.out.println("Loss (dB) = " + lossdB);
+
 		//************* finding the other half of y(x)
 		double[] ytilde = ArrayFunc.apply(t -> R0 - t, xx) ;
 		double[] xtilde = ArrayFunc.apply(t -> R0 - t, yy) ;
