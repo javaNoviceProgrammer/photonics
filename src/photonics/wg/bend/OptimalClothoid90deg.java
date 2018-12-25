@@ -18,8 +18,8 @@ import mathLib.util.MathUtils;
 public class OptimalClothoid90deg {
 	public static void main(String[] args) {
 		LossModel lossModel = new LossModel() ;
-		double R0 = 2 ;
-		double r = 0.5 ;
+		double R0 = 10 ;
+		double r = 1.0/0.7 ;
 		double theta = PI/2.0 * r/(1+2*r) ;
 
 		//******** solve for sEnd & beta
