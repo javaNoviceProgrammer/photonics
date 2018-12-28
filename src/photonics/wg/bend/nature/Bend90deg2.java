@@ -7,6 +7,7 @@ import flanagan.integration.RungeKutta;
 import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
+import mathLib.fitting.interpol.LinearInterpolation1D;
 import mathLib.func.ArrayFunc;
 import mathLib.func.intf.RealFunction;
 import mathLib.ode.Richardson;
@@ -15,9 +16,9 @@ import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
 
-public class Bend90deg {
+public class Bend90deg2 {
 	public static void main(String[] args) {
-		double b = 2.49 ;
+		double b = 3.3 ;
 		double xi = (3.0*b-1.0)/(2.0*b) ;
 		double R0 = 5 ;
 		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
@@ -101,8 +102,8 @@ public class Bend90deg {
 
 		double A = (a1-a2)/(R0 - x0) ;
 		System.out.println("A = " + A);
-		double[] xx = MathUtils.linspace(x0, R0*0.995, 100) ;
-		xx = ArrayUtils.concat(xx, MathUtils.linspace(0.995*R0, R0, 200)) ;
+		double[] xx = MathUtils.linspace(x0, R0*0.999, 1000) ;
+		xx = ArrayUtils.concat(xx, MathUtils.linspace(0.999*R0, R0, 1000)) ;
 		double[] yy = new double[xx.length] ;
 		double[] yyprime = new double[xx.length] ;
 
@@ -165,37 +166,13 @@ public class Bend90deg {
 		double[] R = ArrayFunc.apply(t -> 1/t, C) ;
 
 		MatlabChart fig4 = new MatlabChart() ;
-		fig4.plot(xx, R, "g");
+//		fig4.plot(xx, C, "g");
+//		fig4.plot(xtilde, C, "r");
+		fig4.plot(xtot, ArrayUtils.concat(C, C));
 		fig4.renderPlot();
+		fig4.markerON();
 		fig4.run(true);
 
-		//************* calculating the complete curve
-		CubicSpline interpolateY = new CubicSpline(xtot, ytot) ;
-		RealFunction yprime = t -> Richardson.deriv(z -> interpolateY.interpolate(z), t, 1e-5, 1) ;
-		RealFunction ydoubleprime = t -> Richardson.deriv2(z -> interpolateY.interpolate(z), t, 1e-5, 1) ;
-
-		RealFunction radius = t -> Math.pow(1+yprime.evaluate(t)*yprime.evaluate(t), 1.5)/Math.abs(ydoubleprime.evaluate(t)) ;
-
-		MatlabChart fig5 = new MatlabChart() ;
-//		fig5.plot(xtot, ArrayFunc.apply(t -> yprime.evaluate(t), xtot), "g");
-//		fig5.plot(xtot, ArrayFunc.apply(t -> ydoubleprime.evaluate(t), xtot), "r");
-		fig5.plot(xtot, ArrayFunc.apply(t->1/radius.evaluate(t), xtot));
-		fig5.plot(xx, C, "g");
-		fig5.renderPlot();
-		fig5.run(true);
-
-		//**************** finding length parameter
-//		double[] x1 = MathUtils.linspace(1e-8, 0.99*R0, 100) ;
-//		x1 = ArrayUtils.concat(x1, MathUtils.linspace(0.991*R0, R0, 20));
-//		double[] c1 = ArrayFunc.apply(t -> 1.0/radius.evaluate(t), x1) ;
-//		IntegralFunction funcLength = t -> Math.sqrt(1+yprime.evaluate(t)*yprime.evaluate(t)) ;
-//		double[] s = ArrayFunc.apply(z -> (new Integral1D(funcLength, 1e-8, z)).getIntegral(), x1) ;
-//
-//		MatlabChart fig6 = new MatlabChart() ;
-//		fig6.plot(s, c1);
-//		fig6.renderPlot();
-//		fig6.markerON();
-//		fig6.run(true);
 
 	}
 
