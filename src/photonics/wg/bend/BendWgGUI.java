@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -51,6 +50,7 @@ public class BendWgGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public BendWgGUI() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 543, 376);
 		contentPane = new JPanel();
@@ -275,13 +275,6 @@ public class BendWgGUI extends JFrame {
 											public void actionPerformed(ActionEvent e) {
 											}
 										});
-
-										JSlider slider = new JSlider();
-										GridBagConstraints gbc_slider = new GridBagConstraints();
-										gbc_slider.insets = new Insets(0, 0, 5, 0);
-										gbc_slider.gridx = 2;
-										gbc_slider.gridy = 0;
-										panel_1.add(slider, gbc_slider);
 										GridBagConstraints gbc_gdsButton = new GridBagConstraints();
 										gbc_gdsButton.fill = GridBagConstraints.HORIZONTAL;
 										gbc_gdsButton.insets = new Insets(0, 0, 0, 5);

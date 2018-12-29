@@ -4,12 +4,9 @@ import static java.lang.Math.sqrt;
 import static mathLib.func.GammaFunc.gamma;
 
 import flanagan.integration.RungeKutta;
-import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.func.ArrayFunc;
-import mathLib.func.intf.RealFunction;
-import mathLib.ode.Richardson;
 import mathLib.ode.intf.DerivnFunction1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
@@ -155,7 +152,7 @@ public class Bend180deg {
 
 		//************* calculating the curvature
 		double[] C = ArrayFunc.apply(t -> A/Math.pow(1+t*t, 1/(2*b)), yyprime) ;
-		double[] R = ArrayFunc.apply(t -> 1/t, C) ;
+//		double[] R = ArrayFunc.apply(t -> 1/t, C) ;
 
 		double[] Ctot = ArrayUtils.concat(C, C) ;
 
