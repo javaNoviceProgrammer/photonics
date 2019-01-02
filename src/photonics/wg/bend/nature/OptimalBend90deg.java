@@ -1,11 +1,17 @@
 package photonics.wg.bend.nature;
 
+import ch.epfl.general_libraries.experiment_aut.Experiment;
+import ch.epfl.general_libraries.experiment_aut.WrongExperimentException;
+import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
+import ch.epfl.general_libraries.results.AbstractResultsManager;
+import ch.epfl.general_libraries.results.DataPoint;
+import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
 import flanagan.integration.RungeKutta;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.ode.intf.DerivnFunction1D;
 
-public class OptimalBend90deg {
+public class OptimalBend90deg implements Experiment {
 
 	double R0, x0, A ;
 	LossModel lossModel ;
@@ -86,10 +92,24 @@ public class OptimalBend90deg {
 
 	// for test
 	public static void main(String[] args) {
-		OptimalBend90deg bend = new OptimalBend90deg(5, new LossModel()) ;
-		System.out.println(bend.getX0());
-		System.out.println(bend.getA());
-		System.out.println(bend.getLossdB());
+//		OptimalBend90deg bend = new OptimalBend90deg(5, new LossModel()) ;
+//		System.out.println(bend.getX0());
+//		System.out.println(bend.getA());
+//		System.out.println(bend.getLossdB());
+		
+		String pkgName = "photonics" ;
+		String className = OptimalBend90deg.class.getName() ;
+		ExperimentConfigurationCockpit.execute(new String[] {"-p", pkgName, "-c", className}, true);
+	}
+
+	@Override
+	public void run(AbstractResultsManager man, AbstractResultsDisplayer dis) throws WrongExperimentException {
+		DataPoint dp = new DataPoint() ;
+		dp.addProperty("R0 (um)", R0);
+		dp.addProperty("b", lossModel.getB());
+		dp.addResultProperty("A", getA());
+		dp.addResultProperty("x0 (um)", getX0());
+		man.addDataPoint(dp);
 	}
 
 }
