@@ -27,7 +27,7 @@ import mathLib.util.MathUtils;
 
 public class Bend90degOptimalGDS {
 	public static void main(String[] args) {
-		double b = 3.3 ;
+		double b = 2.49 ;
 		double xi = (3.0*b-1.0)/(2.0*b) ;
 		double R0 = 5 ;
 		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
