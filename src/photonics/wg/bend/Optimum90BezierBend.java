@@ -11,7 +11,7 @@ public class Optimum90BezierBend {
 	public static void main(String[] args){
 		double R = 5 ; // in micron
 		// sweep B to find minimum loss
-		double[] B = MathUtils.linspace(0.1, 0.8, 1000) ;
+		double[] B = MathUtils.linspace(0.0, 0.5, 1000) ;
 		double[] lossdB = new double[B.length] ;
 
 		LossModel model = new LossModel() ;
@@ -21,6 +21,11 @@ public class Optimum90BezierBend {
 			BendLossCalculate lossCalc = new BendLossCalculate(model, bezier) ;
 			lossdB[i] = lossCalc.getLossDB(0.0, 1.0) ;
 		}
+		
+		MatlabChart fig0 = new MatlabChart() ;
+		fig0.plot(B, lossdB);
+		fig0.renderPlot();
+		fig0.show(true);
 
 		System.out.println("Min Loss (dB) = " + FindMinimum.getValue(lossdB));
 
@@ -33,7 +38,7 @@ public class Optimum90BezierBend {
 		double[] x = ArrayFunc.apply(s -> optBend.getX(s) , t) ;
 		double[] y = ArrayFunc.apply(s -> optBend.getY(s), t) ;
 		double[] curvature = ArrayFunc.apply(s -> 1.0/optBend.getRadiusOfCurvature(s), t) ;
-//		double[] length = ArrayFunc.apply(s -> optBend.getLength(0, s), t) ;
+		double[] length = ArrayFunc.apply(s -> optBend.getLength(0, s), t) ;
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, y);
@@ -45,9 +50,16 @@ public class Optimum90BezierBend {
 		MatlabChart fig1 = new MatlabChart() ;
 		fig1.plot(x, curvature, "r");
 		fig1.renderPlot();
-		fig1.xlabel("S (um)");
+		fig1.xlabel("x (um)");
 		fig1.ylabel("Curvature (um^(-1)");
 		fig1.run(true);
+		
+		MatlabChart fig2 = new MatlabChart() ;
+		fig2.plot(length, curvature, "g");
+		fig2.renderPlot();
+		fig2.xlabel("S (um)");
+		fig2.ylabel("Curvature (um^(-1)");
+		fig2.run(true);
 	}
 
 }
