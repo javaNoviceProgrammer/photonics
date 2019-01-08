@@ -33,4 +33,16 @@ public class SimpleDriver extends AbstractDriver {
 	@Override
 	public double getEnergyPJperBit() {
 		return energyPJperBit;
-	}}
+	}
+
+	@Override
+	public void setVpp(double vpp) {
+		this.vpp = vpp ;
+	}
+
+	@Override
+	public void setEnergyPJperBit(Object... inputs) {
+
+	}
+	
+}
