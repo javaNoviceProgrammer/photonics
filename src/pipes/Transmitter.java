@@ -40,8 +40,8 @@ public class Transmitter implements Experiment {
 			@ParamName(name="Thermal Tuning") ThermalTuning thermal,
 			@ParamName(name="Positioning") Positioning positioning,
 			@ParamName(name="Mode Mux") ModeMux modeMux,
-			@ParamName(name="Driver") AbstractDriver driver
-//			@ParamName(name="SERDES") AbstractSerdes serdes
+			@ParamName(name="Driver") AbstractDriver driver,
+			@ParamName(name="SERDES") AbstractSerdes serdes
 			) {
 		this.linkFormat = linkFormat ;
 		this.combLaser = combLaser ;
@@ -51,7 +51,7 @@ public class Transmitter implements Experiment {
 		this.positioning = positioning ;
 		this.modeMux = modeMux ;
 		this.driver = driver ;
-//		this.serdes = serdes ;
+		this.serdes = serdes ;
 	}
 	
 	public Map<String, String> getAllParameters() {
@@ -64,7 +64,7 @@ public class Transmitter implements Experiment {
 		map.putAll(positioning.getAllParameters());
 		map.putAll(modeMux.getAllParameters());
 		map.putAll(driver.getAllParameters());
-//		map.putAll(serdes.getAllParameters());
+		map.putAll(serdes.getAllParameters());
 		return map ;
 	}
 	
@@ -76,6 +76,10 @@ public class Transmitter implements Experiment {
 		return getTotalTxCouplingLossdB() + modulator.getTotalPenaltydB() + positioning.getTotalPropLossdB() + 
 				modeMux.muxPenaltydB  ;
 	}
+	
+//	public double getTxTotalEnergyPjPerBit() {
+//		return 
+//	}
 
 	@Override
 	public void run(AbstractResultsManager man, AbstractResultsDisplayer dis) throws WrongExperimentException {
