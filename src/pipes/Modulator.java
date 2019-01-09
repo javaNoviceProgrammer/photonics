@@ -1,24 +1,30 @@
 package pipes;
 
+import java.util.Map;
+
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.experiment_aut.Experiment;
 import ch.epfl.general_libraries.experiment_aut.WrongExperimentException;
 import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
 import ch.epfl.general_libraries.results.AbstractResultsManager;
 import ch.epfl.general_libraries.results.DataPoint;
+import ch.epfl.general_libraries.utils.SimpleMap;
 import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
 
 public class Modulator extends AbstractModulator implements Experiment {
 
 
 	double Q_Qi, dl_Dl ;
+	double capfF ;
 
 	public Modulator(
 			@ParamName(name="Q/Qi ratio [< 0.5]") double Q_Qi,
-			@ParamName(name="dlambda/FWHM ratio") double dl_Dl
+			@ParamName(name="dlambda/FWHM ratio") double dl_Dl,
+			@ParamName(name="Modulator Capacitance (fF)") double capfF
 			) {
 		this.Q_Qi = Q_Qi ;
 		this.dl_Dl = dl_Dl ;
+		this.capfF = capfF ;
 	}
 
 	double getTrans(double Q_Qi, double dl_Dl) {
@@ -27,11 +33,11 @@ public class Modulator extends AbstractModulator implements Experiment {
 		return num/denom ;
 	}
 
-	double getILdB() {
+	public double getILdB() {
 		return todB(1.0/getTrans(Q_Qi, 0.0)) ;
 	}
 
-	double getOMAdB() {
+	public double getOMAdB() {
 		double er = getTrans(Q_Qi, 0.0)/getTrans(Q_Qi, dl_Dl) ;
 		return todB(er) ;
 	}
@@ -71,10 +77,41 @@ public class Modulator extends AbstractModulator implements Experiment {
 	}
 
 	public static void main(String[] args) {
-		String pkgName = "photonics" ;
+		String pkgName = "pipes" ;
 		String clsName = Modulator.class.getName() ;
 		String[] arguments = {"-p", pkgName, "-c", clsName} ;
 		ExperimentConfigurationCockpit.execute(arguments, true);
+	}
+
+	@Override
+	public double getOMApenaltydB() {
+		return getOMAPenalty();
+	}
+
+	@Override
+	public double getOOKpenlatydB() {
+		return getOOKPenalty();
+	}
+
+	@Override
+	public double getTotalPenaltydB() {
+		return getTotPenalty();
+	}
+
+	@Override
+	public double getCapfF() {
+		return capfF;
+	}
+
+	@Override
+	public double getEOeff() {
+		throw new IllegalArgumentException("Not implemented") ;
+	}
+
+	@Override
+	public Map<? extends String, ? extends String> getAllParameters() {
+		Map<String, String> map = new SimpleMap<>() ;
+		return map ;
 	}
 
 }
