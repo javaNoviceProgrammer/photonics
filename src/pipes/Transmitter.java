@@ -52,8 +52,6 @@ public class Transmitter implements Experiment {
 		this.modeMux = modeMux ;
 		this.driver = driver ;
 		this.serdes = serdes ;
-		// setup parameters
-		this.driver.setEnergyPJperBit(linkFormat, thermal, modulator);
 	}
 	
 	public Map<String, String> getAllParameters() {

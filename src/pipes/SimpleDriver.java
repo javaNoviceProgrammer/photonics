@@ -21,7 +21,6 @@ public class SimpleDriver extends AbstractDriver {
 	protected Map<? extends String, ? extends String> getAllParameters() {
 		Map<String, String> map = new SimpleMap<>() ;
 		map.put("driver Vpp (V)", vpp+"") ;
-		map.put("driver energy per bit (pJ/bit)", energyPJperBit+"") ;
 		return map ;
 	}
 
@@ -31,18 +30,8 @@ public class SimpleDriver extends AbstractDriver {
 	}
 
 	@Override
-	public double getEnergyPJperBit() {
+	public double getEnergyPJperBit(LinkFormat linkFormat, ThermalTuning thermal, AbstractModulator modulator) {
 		return energyPJperBit;
-	}
-
-	@Override
-	public void setVpp(double vpp) {
-		this.vpp = vpp ;
-	}
-
-	@Override
-	public void setEnergyPJperBit(Object... inputs) {
-
 	}
 	
 }

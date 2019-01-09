@@ -21,8 +21,9 @@ public class OptimisticDriver extends AbstractDriver {
 	}
 
 	@Override
-	public double getEnergyPJperBit() {
-		return 0;
+	public double getEnergyPJperBit(LinkFormat linkFormat, ThermalTuning thermal, AbstractModulator modulator) {
+		this.energyPJperBit = 2.0*(thermal.tuningPowermW/linkFormat.dataRateGbps + 1.0/4.0 * modulator.getCapfF()*1e-3*vpp*vpp) ;
+		return energyPJperBit ;
 	}
 
 	@Override
@@ -30,19 +31,6 @@ public class OptimisticDriver extends AbstractDriver {
 		Map<String, String> map = new SimpleMap<>() ;
 		map.put("driver Vpp (V)", vpp+"") ;
 		return map ;
-	}
-
-	@Override
-	public void setVpp(double vpp) {
-		this.vpp = vpp ;
-	}
-
-	@Override
-	public void setEnergyPJperBit(Object... inputs) {
-		LinkFormat linkFormat = (LinkFormat) inputs[0] ;
-		ThermalTuning thermal = (ThermalTuning) inputs[1] ;
-		AbstractModulator modulator = (AbstractModulator) inputs[2] ;
-		this.energyPJperBit = 2.0*(thermal.tuningPowermW/linkFormat.dataRateGbps + 1.0/4.0 * modulator.getCapfF()*1e-3*vpp*vpp) ;
 	}
 
 }
