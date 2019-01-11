@@ -6,11 +6,11 @@ import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.utils.SimpleMap;
 
 public class ReceiverElectronics {
-	
+
 	double responsivity, elecBW, jitterPenaltydB, polarizationLossdB ;
 	AbstractSensitivity sensitivity ;
 	AbstractTIA tia ;
-	
+
 	public ReceiverElectronics(
 			@ParamName(name="Responsivity (A/W)") double responsivity,
 			@ParamName(name="Electrical Bandwidth (GHz)") double elecBW,
@@ -26,11 +26,11 @@ public class ReceiverElectronics {
 		this.sensitivity = sensitivity ;
 		this.tia = tia ;
 	}
-	
+
 	public double getPenaltydB() {
 		return jitterPenaltydB + polarizationLossdB ;
 	}
-	
+
 	public double getSensitivitydBm(LinkFormat linkFormat) {
 		return sensitivity.getOpticalSensivitydBm(linkFormat.dataRateGbps) ;
 	}
@@ -41,7 +41,8 @@ public class ReceiverElectronics {
 		map.put("Electrical Bandwidth (GHz)", elecBW+"") ;
 		map.put("Jitter Penalty (dB)", jitterPenaltydB+"") ;
 		map.put("Polarization Dependent Loss (dB)", polarizationLossdB+"") ;
+		map.putAll(sensitivity.getAllParameters());
 		return map ;
 	}
-	
+
 }
