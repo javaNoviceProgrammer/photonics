@@ -36,6 +36,7 @@ public class Link implements Experiment {
 												+ linkPenaltydB ;
 		double requiredLaserPowerPerLinedBm = requiredLaserPowerPerModedBm + 10*Math.log10(transmitter.linkFormat.numberOfModes) ;
 		double laserPowerPerLinedBm = 0.0 ;
+		boolean linkFeasible = requiredLaserPowerPerLinedBm <= transmitter.combLaser.getPowerPerLinedBm() ;
 
 		if(requiredLaserPowerPerLinedBm > transmitter.combLaser.getPowerPerLinedBm())
 			laserPowerPerLinedBm = requiredLaserPowerPerLinedBm ;
@@ -85,6 +86,7 @@ public class Link implements Experiment {
 		dp.addResultProperty("Available Laser Power Per Line (dBm)", laserPowerPerLinedBm);
 		dp.addResultProperty("Required Minimum Laser Power Per Line (dBm)", requiredLaserPowerPerLinedBm);
 		dp.addResultProperty("Available Link Budget (dB)", linkBudgetdB);
+		dp.addResultProperty("Link Feasible", linkFeasible);
 
 		man.addDataPoint(dp);
 	}
