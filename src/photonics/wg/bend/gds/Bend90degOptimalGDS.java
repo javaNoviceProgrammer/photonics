@@ -1,4 +1,4 @@
-package photonics.wg.bend.nature;
+package photonics.wg.bend.gds;
 
 import static java.lang.Math.sqrt;
 import static mathLib.func.GammaFunc.gamma;
@@ -13,6 +13,7 @@ import java.io.IOException;
 import JGDS2.GArea;
 import JGDS2.GDSWriter;
 import JGDS2.Lib;
+import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
 import flanagan.integration.RungeKutta;
@@ -24,12 +25,13 @@ import mathLib.ode.intf.DerivnFunction1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
+import photonics.wg.bend.nature.SpecialFunc;
 
 public class Bend90degOptimalGDS {
 	public static void main(String[] args) {
 		double b = 2.49 ;
 		double xi = (3.0*b-1.0)/(2.0*b) ;
-		double R0 = 5 ;
+		double R0 = 10 ;
 		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
 		SpecialFunc specialFunc = new SpecialFunc() ;
 //		double a2 = 0.73669 ;
@@ -104,6 +106,7 @@ public class Bend90degOptimalGDS {
 
 		RealRoot root = new RealRoot() ;
 		double x0 = root.bisect(funcX0, 0, R0) ;
+//		double x0 = root.brent(funcX0, 0, R0) ;
 		System.out.println("x0 = " + x0);
 
 
@@ -153,9 +156,9 @@ public class Bend90degOptimalGDS {
 		fig2.run(true);
 
 		//************* finding the total loss
-		double a = 181.98 ;
-		double lossdB = a*Math.pow(A, b) * 2*(R0-x0)*1e-4 ;
-		System.out.println("Loss (dB) = " + lossdB);
+//		double a = 181.98 ;
+//		double lossdB = a*Math.pow(A, b) * 2*(R0-x0)*1e-4 ;
+//		System.out.println("Loss (dB) = " + lossdB);
 
 		//************* finding the other half of y(x)
 		double[] ytilde = ArrayFunc.apply(t -> R0 - t, xx) ;
@@ -167,25 +170,29 @@ public class Bend90degOptimalGDS {
 		MatlabChart fig3 = new MatlabChart() ;
 		fig3.plot(xtot, ytot, "m");
 		fig3.renderPlot();
+		fig3.xlabel("X (um)");
+		fig3.ylabel("Y (um)");
 		fig3.run(true);
 		fig3.markerON();
 
 		//************* calculating the curvature
 		double[] C = ArrayFunc.apply(t -> A/Math.pow(1+t*t, 1/(2*b)), yyprime) ;
-		double[] R = ArrayFunc.apply(t -> 1/t, C) ;
+//		double[] R = ArrayFunc.apply(t -> 1/t, C) ;
 
 		MatlabChart fig4 = new MatlabChart() ;
 //		fig4.plot(xx, C, "g");
 //		fig4.plot(xtilde, C, "r");
 		fig4.plot(xtot, ArrayUtils.concat(C, C));
 		fig4.renderPlot();
+		fig4.xlabel("x (um)");
+		fig4.ylabel("Curvature (1/um)");
 		fig4.markerON();
 		fig4.run(true);
 
 		//************** create GDS file
         try {
             FileOutputStream fileOUT;
-            File f = new File("bend_"+b+".gds");
+            File f = new File("bend_optimal_"+R0+".gds");
             fileOUT = new FileOutputStream(f);
             DataOutputStream dO = new DataOutputStream(fileOUT);
             GDSWriter g = new GDSWriter(dO);
@@ -193,9 +200,16 @@ public class Bend90degOptimalGDS {
 
             double width = 0.4 ;
 
+            xtot[0] = 0.0 ;
+            xtot[xtot.length-1] = R0 ;
+            ytot[0] = 0.0 ;
+            ytot[ytot.length-1] = R0 ;
+            
             LinearInterpolation1D interpolate = new LinearInterpolation1D(xtot, ytot) ;
-            double[] xPoints = MathUtils.linspace(0, R0, 10000) ;
+            double[] xPoints = MathUtils.linspace(xtot[0], R0, 1000) ;
             double[] yPoints = ArrayFunc.apply(t -> interpolate.interpolate(t), xPoints) ;
+            yPoints[0] = 0.0 ;
+            yPoints[yPoints.length-1] = R0 ;
 
             Path2D.Double path = new Path2D.Double() ; // this is the path of the center
         	path.moveTo(0, 0);
@@ -204,9 +218,15 @@ public class Bend90degOptimalGDS {
         	BasicStroke stroke = new BasicStroke((float) width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL) ;
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
-            Struct curvedWg = new Struct("bend", area) ;
+        	Struct topCell = new Struct("top") ;
+        	Rect wgIn = new Rect(-10, -width/2.0, 2e-3, width/2.0, 1) ;
+        	Rect wgOut = new Rect(R0-width/2.0, R0-2e-3, R0+width/2.0, R0+10, 1) ;
+          
+        	topCell.add(area);
+        	topCell.add(wgIn);
+        	topCell.add(wgOut);
 
-            Ref ref = new Ref(curvedWg, 0, 0, 0, 0) ;
+            Ref ref = new Ref(topCell, 0, 0, 0, 0) ;
             lib.add(ref);
 
             lib.GDSOut(g);

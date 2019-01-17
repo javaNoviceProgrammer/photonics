@@ -1,4 +1,4 @@
-package photonics.wg.bend;
+package photonics.wg.bend.gds;
 
 import java.awt.BasicStroke;
 import java.awt.geom.Path2D;
@@ -10,48 +10,24 @@ import java.io.IOException;
 import JGDS2.GArea;
 import JGDS2.GDSWriter;
 import JGDS2.Lib;
+import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
-import mathLib.fitting.interpol.LinearInterpolation1D;
 import mathLib.func.ArrayFunc;
 import mathLib.plot.MatlabChart;
-import mathLib.util.ArrayUtils.FindMinimum;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.LossModel;
 
-public class Optimum90BezierBendGDS {
+public class Bend90degCircularGDS {
 
 	public static void main(String[] args){
-		double R = 5 ; // in micron
+		double R = 10 ; // in micron
 		// sweep B to find minimum loss
-		double[] B = MathUtils.linspace(0.0, 0.5, 1000) ;
-		double[] lossdB = new double[B.length] ;
-
-		LossModel model = new LossModel() ;
-
-		for(int i=0; i<B.length; i++) {
-			BezierCurve90 bezier = new BezierCurve90(R, B[i]) ;
-			BendLossCalculate lossCalc = new BendLossCalculate(model, bezier) ;
-			lossdB[i] = lossCalc.getLossDB(0.0, 1.0) ;
-		}
 		
-		MatlabChart fig0 = new MatlabChart() ;
-		fig0.plot(B, lossdB);
-		fig0.renderPlot();
-		fig0.show(true);
-
-		System.out.println("Min Loss (dB) = " + FindMinimum.getValue(lossdB));
-
-		int minIndex = FindMinimum.getIndex(lossdB) ;
-		System.out.println("B = " + B[minIndex]);
-
-		double Bopt = B[minIndex] ;
-		BezierCurve90 optBend = new BezierCurve90(R, Bopt) ;
-		double[] t = MathUtils.linspace(0.0, 1.0, 200) ;
-		double[] x = ArrayFunc.apply(s -> optBend.getX(s) , t) ;
-		double[] y = ArrayFunc.apply(s -> optBend.getY(s), t) ;
-		double[] curvature = ArrayFunc.apply(s -> 1.0/optBend.getRadiusOfCurvature(s), t) ;
-		double[] length = ArrayFunc.apply(s -> optBend.getLength(0, s), t) ;
+		double[] t = MathUtils.linspace(-Math.PI/2.0, 0.0, 500) ;
+		double[] x = ArrayFunc.apply(s -> R*Math.cos(s) , t) ;
+		double[] y = ArrayFunc.apply(s -> R + R*Math.sin(s), t) ;
+		double[] curvature = ArrayFunc.apply(s -> 1.0/R, t) ;
+		double[] length = ArrayFunc.apply(s -> R*(s+Math.PI/2.0), t) ;
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, y);
@@ -64,20 +40,20 @@ public class Optimum90BezierBendGDS {
 		fig1.plot(x, curvature, "r");
 		fig1.renderPlot();
 		fig1.xlabel("x (um)");
-		fig1.ylabel("Curvature (um^(-1)");
+		fig1.ylabel("Curvature (1/um)");
 		fig1.run(true);
 		
 		MatlabChart fig2 = new MatlabChart() ;
 		fig2.plot(length, curvature, "g");
 		fig2.renderPlot();
 		fig2.xlabel("S (um)");
-		fig2.ylabel("Curvature (um^(-1)");
+		fig2.ylabel("Curvature (1/um)");
 		fig2.run(true);
 		
 		//************** create GDS file
         try {
             FileOutputStream fileOUT;
-            File f = new File("bend_"+R+".gds");
+            File f = new File("bend_circular_"+R+".gds");
             fileOUT = new FileOutputStream(f);
             DataOutputStream dO = new DataOutputStream(fileOUT);
             GDSWriter g = new GDSWriter(dO);
@@ -85,9 +61,8 @@ public class Optimum90BezierBendGDS {
 
             double width = 0.4 ;
 
-            LinearInterpolation1D interpolate = new LinearInterpolation1D(x, y) ;
-            double[] xPoints = MathUtils.linspace(0, R, 1000) ;
-            double[] yPoints = ArrayFunc.apply(q -> interpolate.interpolate(q), xPoints) ;
+            double[] xPoints = x ;
+            double[] yPoints = y ;
 
             Path2D.Double path = new Path2D.Double() ; // this is the path of the center
         	path.moveTo(0, 0);
@@ -96,9 +71,16 @@ public class Optimum90BezierBendGDS {
         	BasicStroke stroke = new BasicStroke((float) width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL) ;
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
-            Struct curvedWg = new Struct("bend", area) ;
+        	Struct topCell = new Struct("top") ;
+//            Struct curvedWg = new Struct("bend", area) ;
+            Rect wgIn = new Rect(-10, -width/2.0, 0, width/2.0, 1) ;
+            Rect wgOut = new Rect(R-width/2.0, R, R+width/2.0, R+10, 1) ;
+            
+            topCell.add(area);
+            topCell.add(wgIn);
+            topCell.add(wgOut);
 
-            Ref ref = new Ref(curvedWg, 0, 0, 0, 0) ;
+            Ref ref = new Ref(topCell, 0, 0, 0, 0) ;
             lib.add(ref);
 
             lib.GDSOut(g);

@@ -7,6 +7,7 @@ import flanagan.integration.RungeKutta;
 import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
+import mathLib.fitting.SavitzyGolayFilter;
 import mathLib.func.ArrayFunc;
 import mathLib.func.intf.RealFunction;
 import mathLib.ode.Richardson;
@@ -19,7 +20,7 @@ public class Bend90deg {
 	public static void main(String[] args) {
 		double b = 2.49 ;
 		double xi = (3.0*b-1.0)/(2.0*b) ;
-		double R0 = 5 ;
+		double R0 = 2 ;
 		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
 		SpecialFunc specialFunc = new SpecialFunc() ;
 //		double a2 = 0.73669 ;
@@ -175,7 +176,7 @@ public class Bend90deg {
 		RealFunction ydoubleprime = t -> Richardson.deriv2(z -> interpolateY.interpolate(z), t, 1e-5, 1) ;
 
 		RealFunction radius = t -> Math.pow(1+yprime.evaluate(t)*yprime.evaluate(t), 1.5)/Math.abs(ydoubleprime.evaluate(t)) ;
-
+		
 		MatlabChart fig5 = new MatlabChart() ;
 //		fig5.plot(xtot, ArrayFunc.apply(t -> yprime.evaluate(t), xtot), "g");
 //		fig5.plot(xtot, ArrayFunc.apply(t -> ydoubleprime.evaluate(t), xtot), "r");
