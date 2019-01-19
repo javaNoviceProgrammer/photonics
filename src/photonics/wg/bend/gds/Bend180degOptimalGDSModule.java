@@ -127,8 +127,9 @@ public class Bend180degOptimalGDSModule {
 		MatlabChart fig3 = new MatlabChart() ;
 		fig3.plot(xtot, ytot, "b");
 		fig3.renderPlot();
-		fig3.run(true);
-		fig3.markerON();
+		fig3.run(systemExit);
+		fig3.xlabel("X (um)");
+		fig3.ylabel("Y (um)");
 
 		//************* calculating the curvature
 		double[] C = ArrayFunc.apply(t -> A/Math.pow(1+t*t, 1/(2*b)), yyprime) ;
@@ -139,7 +140,9 @@ public class Bend180degOptimalGDSModule {
 		MatlabChart fig4 = new MatlabChart() ;
 		fig4.plot(xtot, Ctot, "r");
 		fig4.renderPlot();
-		fig4.run(true);
+		fig4.run(systemExit);
+		fig4.xlabel("X (um)");
+		fig4.ylabel("Curvature (1/um)");
 
 		//************** create GDS file
         try {
@@ -170,10 +173,10 @@ public class Bend180degOptimalGDSModule {
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
         	Struct topCell = new Struct("top") ;
-//        	Rect wgIn = new Rect(-0.01, -width/2.0, 2e-3, width/2.0, 1) ;
-//        	Rect wgOut = new Rect(-0.01, -width/2.0+2*R, 2e-3, 2*R+width/2.0, 1) ;
+        	Rect wgIn = new Rect(-R-width/2.0, -2e-3, -R+width/2.0, 0.01, 1) ;
+        	Rect wgOut = new Rect(R-width/2.0, -2e-3, R+width/2.0, 0.01, 1) ;
 
-//        	area.or(wgIn).or(wgOut) ;
+        	area.or(wgIn).or(wgOut) ;
 
         	topCell.add(area);
 //        	topCell.add(wgIn);

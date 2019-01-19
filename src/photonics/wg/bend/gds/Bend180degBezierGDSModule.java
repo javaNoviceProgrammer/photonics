@@ -77,9 +77,9 @@ public class Bend180degBezierGDSModule {
 		fig.run(systemExit);
 
 		MatlabChart fig1 = new MatlabChart() ;
-		fig1.plot(x, curvature, "r");
+		fig1.plot(y, curvature, "r");
 		fig1.renderPlot();
-		fig1.xlabel("x (um)");
+		fig1.xlabel("Y (um)");
 		fig1.ylabel("Curvature (1/um)");
 		fig1.run(systemExit);
 

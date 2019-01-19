@@ -21,6 +21,7 @@ import mathLib.util.CustomJFileChooser;
 import mathLib.util.MathUtils;
 import photonics.wg.bend.gds.Bend180degBezierGDSModule;
 import photonics.wg.bend.gds.Bend180degCircularGDSModule;
+import photonics.wg.bend.gds.Bend180degOptimalGDSModule;
 import photonics.wg.bend.gds.Bend90degBezierGDSModule;
 import photonics.wg.bend.gds.Bend90degCircularGDSModule;
 import photonics.wg.bend.gds.Bend90degClothoidGDSModule;
@@ -154,6 +155,7 @@ public class BendWgGUI extends JFrame {
 		panel_2.add(lblA, gbc_lblA);
 
 		aTextField = new JTextField();
+		aTextField.setText("181.98");
 		GridBagConstraints gbc_aTextField = new GridBagConstraints();
 		gbc_aTextField.insets = new Insets(0, 0, 5, 0);
 		gbc_aTextField.fill = GridBagConstraints.HORIZONTAL;
@@ -171,6 +173,7 @@ public class BendWgGUI extends JFrame {
 		panel_2.add(lblB, gbc_lblB);
 
 		bTextField = new JTextField();
+		bTextField.setText("2.49");
 		GridBagConstraints gbc_bTextField = new GridBagConstraints();
 		gbc_bTextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_bTextField.gridx = 1;
@@ -373,6 +376,10 @@ public class BendWgGUI extends JFrame {
 		if (rdbtnBezier180Degree.isSelected()) {
 			Bend180degBezierGDSModule bezier180Deg = new Bend180degBezierGDSModule(a, b, R0);
 			bezier180Deg.createGDS(filePath, false);
+		}
+		if(rdbtnOptimal180Degree.isSelected()) {
+			Bend180degOptimalGDSModule opt180Deg = new Bend180degOptimalGDSModule(a, b, R0) ;
+			opt180Deg.createGDS(filePath, false);
 		}
 	}
 }
