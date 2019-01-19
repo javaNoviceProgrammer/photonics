@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 import mathLib.util.CustomJFileChooser;
 import mathLib.util.MathUtils;
+import photonics.wg.bend.gds.Bend180degBezierGDSModule;
 import photonics.wg.bend.gds.Bend180degCircularGDSModule;
 import photonics.wg.bend.gds.Bend90degBezierGDSModule;
 import photonics.wg.bend.gds.Bend90degCircularGDSModule;
@@ -345,6 +346,10 @@ public class BendWgGUI extends JFrame {
 		if(rdbtnCircular180Degree.isSelected()) {
 			Bend180degCircularGDSModule circ180Deg = new Bend180degCircularGDSModule(a, b, R0) ;
 			circ180Deg.createGDS(filePath, false);
+		}
+		if(rdbtnBezier180Degree.isSelected()){
+			Bend180degBezierGDSModule bezier180Deg = new Bend180degBezierGDSModule(a, b, R0) ;
+			bezier180Deg.createGDS(filePath, false);
 		}
 	}
 }
