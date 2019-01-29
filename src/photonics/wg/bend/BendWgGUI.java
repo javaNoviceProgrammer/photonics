@@ -232,6 +232,7 @@ public class BendWgGUI extends JFrame {
 		gbc_rdbtnCircular180Degree.gridy = 0;
 		panel_3.add(rdbtnCircular180Degree, gbc_rdbtnCircular180Degree);
 
+
 		rdbtnOptimal90Degree = new JRadioButton("Optimal 90 degree");
 		buttonGroup.add(rdbtnOptimal90Degree);
 		GridBagConstraints gbc_rdbtnOptimal90Degree = new GridBagConstraints();
@@ -242,6 +243,7 @@ public class BendWgGUI extends JFrame {
 		panel_3.add(rdbtnOptimal90Degree, gbc_rdbtnOptimal90Degree);
 
 		rdbtnOptimal180Degree = new JRadioButton("Optimal 180 degree");
+		rdbtnOptimal180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnOptimal180Degree);
 		GridBagConstraints gbc_rdbtnOptimal180Degree = new GridBagConstraints();
 		gbc_rdbtnOptimal180Degree.insets = new Insets(0, 0, 5, 5);
@@ -278,6 +280,7 @@ public class BendWgGUI extends JFrame {
 		panel_3.add(rdbtnEuler90Degree, gbc_rdbtnEuler90Degree);
 
 		rdbtnEuler180Degree = new JRadioButton("Euler 180 degree");
+		rdbtnEuler180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnEuler180Degree);
 		GridBagConstraints gbc_rdbtnEuler180Degree = new GridBagConstraints();
 		gbc_rdbtnEuler180Degree.insets = new Insets(0, 0, 5, 5);
@@ -296,6 +299,7 @@ public class BendWgGUI extends JFrame {
 		panel_3.add(rdbtnClothoid90Degree, gbc_rdbtnClothoid90Degree);
 
 		rdbtnClothoid180Degree = new JRadioButton("Clothoid 180 degree");
+		rdbtnClothoid180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnClothoid180Degree);
 		GridBagConstraints gbc_rdbtnClothoid180Degree = new GridBagConstraints();
 		gbc_rdbtnClothoid180Degree.anchor = GridBagConstraints.WEST;
