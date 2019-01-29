@@ -6,16 +6,24 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
+import flanagan.integration.IntegralFunction;
+import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
+import mathLib.func.ArrayFunc;
+import mathLib.func.intf.RealFunction;
 import mathLib.integral.Integral1D;
+import mathLib.ode.Richardson;
+import mathLib.plot.MatlabChart;
+import mathLib.util.ArrayUtils;
+import mathLib.util.MathUtils;
 import photonics.wg.bend.nature.LossModel;
 
 public class OptimalClothoid90deg {
 	public static void main(String[] args) {
 		LossModel lossModel = new LossModel() ;
-		double R0 = 10 ;
-		double r = 1.0/0.7 ;
+		double R0 = 5 ;
+		double r = 1.0/0.65 - 1 ;
 		double theta = PI/2.0 * r/(1+2*r) ;
 
 		//******** solve for sEnd & beta
@@ -47,58 +55,58 @@ public class OptimalClothoid90deg {
 		System.out.println("loss (dB) = " + lossdB);
 
 		//******* finding the bend
-//		double[] s1 = MathUtils.linspace(0.0, sEnd, 100) ;
-//		double[] x1 = ArrayFunc.apply(z -> (new Integral1D(t -> cos(beta*beta*t*t), 0, z)).getIntegral(), s1) ;
-//		double[] y1 = ArrayFunc.apply(z -> (new Integral1D(t -> sin(beta*beta*t*t), 0, z)).getIntegral(), s1) ;
-//
-//		Integral1D xIntegral = new Integral1D(t -> cos(beta*beta*t*t), 0, sEnd) ;
-//		double xEnd = xIntegral.getIntegral() ;
-//		System.out.println("xEnd = " + xEnd);
-//		Integral1D yIntegral = new Integral1D(t -> sin(beta*beta*t*t), 0, sEnd) ;
-//		double yEnd = yIntegral.getIntegral() ;
-//		System.out.println("yEnd = " + yEnd);
-//
-//		double[] angle = MathUtils.linspace(-PI/4.0-theta, -PI/4, 20) ;
-//		double[] x2 = ArrayFunc.apply(t -> xEnd + Rmin*(cos(t)-cos(-PI/4.0-theta)), angle) ;
-//		double[] y2 = ArrayFunc.apply(t -> yEnd + Rmin*(sin(t)-sin(-PI/4.0-theta)), angle) ;
-//
-//		double[] x = ArrayUtils.concat(x1, x2) ;
-//		double[] y = ArrayUtils.concat(y1, y2) ;
-//
-//		double[] xtilde = ArrayFunc.apply(t -> R0-t, y) ;
-//		double[] ytilde = ArrayFunc.apply(t -> R0-t, x) ;
-//		double[] xx = ArrayUtils.concat(x, xtilde) ;
-//		double[] yy = ArrayUtils.concat(y, ytilde) ;
-//
-//		MatlabChart fig = new MatlabChart() ;
-//		fig.plot(xx, yy);
-//		fig.renderPlot();
-//		fig.markerON();
-//		fig.setFigLineWidth(0, 0f);
-//		fig.run(true);
+		double[] s1 = MathUtils.linspace(0.0, sEnd, 100) ;
+		double[] x1 = ArrayFunc.apply(z -> (new Integral1D(t -> cos(beta*beta*t*t), 0, z)).getIntegral(), s1) ;
+		double[] y1 = ArrayFunc.apply(z -> (new Integral1D(t -> sin(beta*beta*t*t), 0, z)).getIntegral(), s1) ;
+
+		Integral1D xIntegral = new Integral1D(t -> cos(beta*beta*t*t), 0, sEnd) ;
+		double xEnd = xIntegral.getIntegral() ;
+		System.out.println("xEnd = " + xEnd);
+		Integral1D yIntegral = new Integral1D(t -> sin(beta*beta*t*t), 0, sEnd) ;
+		double yEnd = yIntegral.getIntegral() ;
+		System.out.println("yEnd = " + yEnd);
+
+		double[] angle = MathUtils.linspace(-PI/4.0-theta, -PI/4, 20) ;
+		double[] x2 = ArrayFunc.apply(t -> xEnd + Rmin*(cos(t)-cos(-PI/4.0-theta)), angle) ;
+		double[] y2 = ArrayFunc.apply(t -> yEnd + Rmin*(sin(t)-sin(-PI/4.0-theta)), angle) ;
+
+		double[] x = ArrayUtils.concat(x1, x2) ;
+		double[] y = ArrayUtils.concat(y1, y2) ;
+
+		double[] xtilde = ArrayFunc.apply(t -> R0-t, y) ;
+		double[] ytilde = ArrayFunc.apply(t -> R0-t, x) ;
+		double[] xx = ArrayUtils.concat(x, xtilde) ;
+		double[] yy = ArrayUtils.concat(y, ytilde) ;
+
+		MatlabChart fig = new MatlabChart() ;
+		fig.plot(xx, yy);
+		fig.renderPlot();
+		fig.markerON();
+		fig.setFigLineWidth(0, 0f);
+		fig.run(true);
 //
 //
 //		//***************** finding the curvature
-//		CubicSpline interpolateY = new CubicSpline(xx, yy) ;
-//		RealFunction yprime = t -> Richardson.deriv(z -> interpolateY.interpolate(z), t, 1e-5, 2) ;
-//		RealFunction ydoubleprime = t -> Richardson.deriv2(z -> interpolateY.interpolate(z), t, 1e-5, 2) ;
-//
-//		RealFunction radius = t -> Math.pow(1+yprime.evaluate(t)*yprime.evaluate(t), 1.5)/Math.abs(ydoubleprime.evaluate(t)) ;
-//
-//		MatlabChart fig2 = new MatlabChart() ;
-//		fig2.plot(xx, ArrayFunc.apply(t->1/radius.evaluate(t), xx), "r");
-//		fig2.renderPlot();
-//		fig2.run(true);
-//
-//		IntegralFunction funcLength = t -> Math.sqrt(1+yprime.evaluate(t)*yprime.evaluate(t)) ;
-//		double[] xtot = MathUtils.linspace(1e-8, R0, 100) ;
-//		double[] ss = ArrayFunc.apply(z -> (new Integral1D(funcLength, 1e-8, z)).getIntegral(), xtot) ;
-//		double[] cc = ArrayFunc.apply(z -> 1/radius.evaluate(z), xtot) ;
-//
-//		MatlabChart fig3 = new MatlabChart() ;
-//		fig3.plot(ss, cc, "k");
-//		fig3.renderPlot();
-//		fig3.run(true);
+		CubicSpline interpolateY = new CubicSpline(xx, yy) ;
+		RealFunction yprime = t -> Richardson.deriv(z -> interpolateY.interpolate(z), t, 1e-5, 2) ;
+		RealFunction ydoubleprime = t -> Richardson.deriv2(z -> interpolateY.interpolate(z), t, 1e-5, 2) ;
+
+		RealFunction radius = t -> Math.pow(1+yprime.evaluate(t)*yprime.evaluate(t), 1.5)/Math.abs(ydoubleprime.evaluate(t)) ;
+
+		MatlabChart fig2 = new MatlabChart() ;
+		fig2.plot(xx, ArrayFunc.apply(t->1/radius.evaluate(t), xx), "r");
+		fig2.renderPlot();
+		fig2.run(true);
+
+		IntegralFunction funcLength = t -> Math.sqrt(1+yprime.evaluate(t)*yprime.evaluate(t)) ;
+		double[] xtot = MathUtils.linspace(1e-8, R0, 100) ;
+		double[] ss = ArrayFunc.apply(z -> (new Integral1D(funcLength, 1e-8, z)).getIntegral(), xtot) ;
+		double[] cc = ArrayFunc.apply(z -> 1/radius.evaluate(z), xtot) ;
+
+		MatlabChart fig3 = new MatlabChart() ;
+		fig3.plot(ss, cc, "k");
+		fig3.renderPlot();
+		fig3.run(true);
 
 	}
 }
