@@ -59,7 +59,7 @@ public class OptimalClothoid90degV2 {
 
 	// test
 	public static void main(String[] args) {
-		double R0 = 3 ;
+		double R0 = 5 ;
 		OptimalClothoid90degV2 bend = new OptimalClothoid90degV2(R0) ;
 		double[] r = MathUtils.linspace(0, 100, 100) ;
 		double[] lossdB = ArrayFunc.apply(t -> bend.getLossdB(t), r) ;

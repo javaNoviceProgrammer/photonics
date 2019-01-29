@@ -47,7 +47,7 @@ public class Bend90degClothoidGDSModule {
 
 		LossModel lossModel = new LossModel(a, b, 0.0) ;
 		double R0 = R ;
-		double r = 1.0/0.7 ;
+		double r = 1.0/0.65 - 1 ;
 		double theta = PI/2.0 * r/(1+2*r) ;
 
 		//******** solve for sEnd & beta

@@ -33,7 +33,7 @@ public class Bend90degClothoidGDS {
 	public static void main(String[] args) {
 		LossModel lossModel = new LossModel() ;
 		double R0 = 10 ;
-		double r = 1.0/0.7 ;
+		double r = 1.0/0.65 - 1 ;
 		double theta = PI/2.0 * r/(1+2*r) ;
 
 		//******** solve for sEnd & beta
