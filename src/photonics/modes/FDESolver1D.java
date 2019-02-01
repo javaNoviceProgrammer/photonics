@@ -287,18 +287,18 @@ public class FDESolver1D {
 	public static void main(String[] args) {
 		FDESolver1D fde = new FDESolver1D() ;
 		fde.setWavelength(1550.0, Units.nm);
-		fde.setGrid(10.0, Units.nm);
+		fde.setGrid(25.0, Units.nm);
 		fde.setDebug(true);
 		fde.setIndexProfile(new IndexProfile1D() {
 
 			@Override
 			public double getUpperBoundary() {
-				return 3500.0;
+				return 5500.0;
 			}
 
 			@Override
 			public double getLowerBoundary() {
-				return -1000.0;
+				return -5000.0;
 			}
 
 			@Override

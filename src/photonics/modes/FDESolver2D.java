@@ -69,10 +69,10 @@ public class FDESolver2D {
 		createMesh() ;
 		this.modes = modes ;
 		switch (modes) {
-		case quasiTE:
+		case quasi_TE:
 			solveQuasiTE();
 			break;
-		case quasiTM:
+		case quasi_TM:
 			solveQuasiTM();
 			break ;
 		default:
@@ -263,7 +263,7 @@ public class FDESolver2D {
 		fde.plotIndexProfile();
 		Timer timer = new Timer() ;
 		timer.start();
-		fde.solve(Modes.quasiTE);
+		fde.solve(Modes.quasi_TE);
 		timer.stop();
 		System.out.println(timer);
 	}
