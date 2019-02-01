@@ -3,8 +3,8 @@ package photonics.util;
 public enum Modes {
 	TE,
 	TM,
-	quasiTE,
-	quasiTM,
-	hybridEH,
-	hybridHE
+	quasi_TE,
+	quasi_TM,
+	hybrid_EH,
+	hybrid_HE
 }

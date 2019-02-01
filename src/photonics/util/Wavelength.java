@@ -6,7 +6,7 @@ public class Wavelength {
 
 	double lambdaNm ;
 	double freqHz ;
-	final double speedOfLight = PhysicalConstants.getSpeedOfLightVacuum() ;
+	final double speedOfLight = PhysicalConstants.SpeedOfLightVacuum() ;
 
 	public Wavelength(
 			double lambdaNm

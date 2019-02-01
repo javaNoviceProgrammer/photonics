@@ -9,9 +9,15 @@ public enum Fields {
 	Hx,
 	Hy,
 	Hz,
-	// amplitude or phase
+	// S field components (Poynting vector)
+	Sx,
+	Sy,
+	Sz,
+	// norm of vectors
 	normE,
 	normH,
+	normS,
+	// amplitude or phase
 	Amplitude,
 	Phase
 }
