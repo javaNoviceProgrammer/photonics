@@ -1,4 +1,4 @@
-package edu.lrl.interconnectSFG.elements.basics;
+package photonics.interconnect.elements;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,12 +9,13 @@ import edu.lrl.interconnectSFG.elements.AbstractElement;
 import edu.lrl.interconnectSFG.util.PlasmaDispersionModel;
 import edu.lrl.interconnectSFG.util.Wavelength;
 import edu.lrl.interconnectSFG.util.WgProperties;
+import photonics.interconnect.elements.edu;
 
 public class PhaseShifterEO extends AbstractElement {
 
 	Wavelength inputLambda = null ;
 	WgProperties wgProp = null ;
-	edu.lrl.interconnectSFG.util.StraightWg wg ;
+	edu.lrl.photonics.interconnect.elements.passive.StraightWg wg ;
 	PlasmaDispersionModel plasmaEffect ;
 	double lengthMicron ;
 	

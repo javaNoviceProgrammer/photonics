@@ -1,4 +1,4 @@
-package edu.lrl.interconnectSFG.elements.basics;
+package photonics.interconnect.elements;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class CompactCoupler extends AbstractElement {
 
 	Wavelength inputLambda = null ;
 	WgProperties wgProp = null ;
-	edu.lrl.interconnectSFG.util.CompactCoupler coupler ;
+	edu.lrl.photonics.interconnect.elements.CompactCoupler coupler ;
 	double k, t ;
 	
 	public CompactCoupler(
