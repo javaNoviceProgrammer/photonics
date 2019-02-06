@@ -1,4 +1,4 @@
-package photonics.interconnect.elements;
+package photonics.interconnect.elements.active;
 
 import java.util.ArrayList;
 import java.util.Map;

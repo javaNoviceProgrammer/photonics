@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.general_libraries.clazzes.ParamName;
 import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
@@ -19,7 +20,8 @@ public class StraightWg extends AbstractElement {
 
 	double lengthMicron, alphaDbPerCm ;
 	RealFunction neff ;
-	Complex s11, s12, s21, s22 ;
+	
+	public Complex s11, s12, s21, s22 ;
 
 	public StraightWg(
 			String name
@@ -28,7 +30,7 @@ public class StraightWg extends AbstractElement {
 	}
 
 	public StraightWg(
-			String name,
+			@ParamName(name="Element Name") String name,
 			RealFunction neff,
 			double alphaDbPerCm,
 			double lengthMicron

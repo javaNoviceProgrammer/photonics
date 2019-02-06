@@ -71,7 +71,7 @@ public class Interconnect implements Experiment {
 	}
 
 	public static void main(String[] args){
-		String pacakgeString = "photonics" ;
+		String pacakgeString = "photonics;" ;
 		String classString = Interconnect.class.getName() ;
 		ExperimentConfigurationCockpit.execute(new String[]{"-p", pacakgeString, "-c", classString}, true);
 	}
