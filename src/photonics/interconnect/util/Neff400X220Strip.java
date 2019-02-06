@@ -7,7 +7,7 @@ public class Neff400X220Strip implements RealFunction {
 	@Override
 	public double evaluate(double lambdaNm) {
 		// ToDo complete this
-		return 0;
+		return 2.23 ;
 	}
 
 }

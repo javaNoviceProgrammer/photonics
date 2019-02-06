@@ -7,19 +7,16 @@ import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
 import ch.epfl.general_libraries.results.AbstractResultsManager;
 import ch.epfl.general_libraries.results.DataPoint;
 import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
-import complexSFG.edu.lrl.math.Complex;
-import complexSFG.edu.lrl.math.MoreMath;
-import complexSFG.edu.lrl.solver.SFG;
-import edu.lrl.interconnectSFG.assemble.Connection;
-import edu.lrl.interconnectSFG.assemble.Transfer;
-import edu.lrl.interconnectSFG.elements.AbstractElement;
-import edu.lrl.interconnectSFG.util.Wavelength;
-import edu.lrl.interconnectSFG.util.WgProperties;
+import mathLib.sfg.numeric.SFG;
+import mathLib.util.MathUtils;
+import photonics.interconnect.elements.AbstractElement;
+import photonics.util.Wavelength;
+
+import static mathLib.numbers.Complex.*;
 
 public class Interconnect implements Experiment {
 
 	Wavelength inputLambda ;
-	WgProperties wgProp ;
 	AbstractElement[] elements ;
 	int numElements ;
 	SFG globalSFG = new SFG(null) ;
@@ -28,13 +25,11 @@ public class Interconnect implements Experiment {
 
 	public Interconnect(
 			@ParamName(name="Wavelength (nm)") Wavelength inputLambda,
-			@ParamName(name="Waveguide Properties") WgProperties wgProp,
 			@ParamName(name="Photonic Elements") AbstractElement[] elements,
 			@ParamName(name="Connections") Connection[] connections,
 			@ParamName(name="Transfer Functions") Transfer[] transfers
 			) {
 		this.inputLambda = inputLambda ;
-		this.wgProp = wgProp ;
 		this.elements = elements ;
 		this.numElements = elements.length ;
 		this.connections = connections ;
@@ -45,14 +40,13 @@ public class Interconnect implements Experiment {
 	private void buildCircuit(){
 		for(int i=0; i<numElements; i++){
 			elements[i].setWavelength(inputLambda);
-			elements[i].setWgProperties(wgProp);
 			elements[i].buildElement();
 			globalSFG.append(elements[i].getSFG());
 		}
 		try {
 			for(int i=0; i<connections.length; i++){
-				globalSFG.addArrow(connections[i].getStartPort()+".out", connections[i].getEndPort()+".in", Complex.ONE);
-				globalSFG.addArrow(connections[i].getEndPort()+".out", connections[i].getStartPort()+".in", Complex.ONE);
+				globalSFG.addArrow(connections[i].getStartPort()+".out", connections[i].getEndPort()+".in", ONE);
+				globalSFG.addArrow(connections[i].getEndPort()+".out", connections[i].getStartPort()+".in", ONE);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -65,11 +59,11 @@ public class Interconnect implements Experiment {
 		dp.addProperty("wavelength (nm)", inputLambda.getWavelengthNm());
 		for(int i=0; i<transfers.length; i++){
 			dp.addResultProperty(transfers[i].getStartPort()+"->"+transfers[i].getEndPort()+" (dB)",
-									MoreMath.Conversions.todB(globalSFG.getGain(transfers[i].getStartPort()+".in", transfers[i].getEndPort()+".out").absSquared()));
+									MathUtils.Conversions.todB(globalSFG.getGain(transfers[i].getStartPort()+".in", transfers[i].getEndPort()+".out").absSquared()));
 			dp.addResultProperty(transfers[i].getStartPort()+"->"+transfers[i].getEndPort()+" (rad)",
 									globalSFG.getGain(transfers[i].getStartPort()+".in", transfers[i].getEndPort()+".out").phase());
 		}
-		dp.addProperties(wgProp.getAllParameters());
+
 		for(int i=0; i<numElements; i++){
 			dp.addProperties(elements[i].getAllParameters());
 		}
@@ -77,9 +71,9 @@ public class Interconnect implements Experiment {
 	}
 
 	public static void main(String[] args){
-		String pacakgeString = "edu.lrl.interconnectSFG" ;
-		String classString = "edu.lrl.interconnectSFG.Interconnect" ;
-		ExperimentConfigurationCockpit.main(new String[]{"-p", pacakgeString, "-c", classString});
+		String pacakgeString = "photonics" ;
+		String classString = Interconnect.class.getName() ;
+		ExperimentConfigurationCockpit.execute(new String[]{"-p", pacakgeString, "-c", classString}, true);
 	}
 
 }

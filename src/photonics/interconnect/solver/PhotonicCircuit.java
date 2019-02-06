@@ -38,18 +38,9 @@ public class PhotonicCircuit {
 	}
 
 	public void connectPorts(String startPort, String endPort){
-		globalSFG.addArrow(startPort+".in", endPort+".out", ONE);
-		globalSFG.addArrow(endPort+".in", startPort+".out", ONE);
+		globalSFG.addArrow(startPort+".out", endPort+".in", ONE);
+		globalSFG.addArrow(endPort+".out", startPort+".in", ONE);
 	}
-
-//	public void buildCircuit(){
-//		int numElements = elements.size() ;
-//		for(int i=0; i<numElements; i++){
-//			elements[i].setWavelength(lambda);
-//			elements[i].buildElement();
-//			globalSFG.append(elements[i].getSFG());
-//		}
-//	}
 
 	public Complex getTransfer(String startPort, String endPort) {
 		return globalSFG.getGain(startPort + ".in", endPort + ".out") ;

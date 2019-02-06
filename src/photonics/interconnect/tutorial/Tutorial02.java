@@ -33,8 +33,6 @@ public class Tutorial02 {
 
 			transfer[i] = pc.getTransfer("wg1.port1", "wg2.port2") ;
 
-			if(i==0)
-				System.out.println(pc.getCircuit().printForwardPaths_noGains());
 		}
 
 		MatlabChart fig = new MatlabChart() ;

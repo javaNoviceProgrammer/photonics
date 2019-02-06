@@ -11,14 +11,14 @@ import edu.lrl.interconnectSFG.util.Wavelength;
 import edu.lrl.interconnectSFG.util.WgProperties;
 import photonics.interconnect.elements.edu;
 
-public class PhaseShifterEO extends AbstractElement {
+public class PhaseShifterEO  {
 
 	Wavelength inputLambda = null ;
 	WgProperties wgProp = null ;
 	edu.lrl.photonics.interconnect.elements.passive.StraightWg wg ;
 	PlasmaDispersionModel plasmaEffect ;
 	double lengthMicron ;
-	
+
 	public PhaseShifterEO(
 			@ParamName(name="Element Name") String name,
 			@ParamName(name="length (um)") double lengthMicron,
@@ -28,7 +28,7 @@ public class PhaseShifterEO extends AbstractElement {
 		this.lengthMicron = lengthMicron ;
 		this.plasmaEffect = plasmaEffect ;
 	}
-	
+
 	@Override
 	public void buildElement() {
 		wg = new edu.lrl.interconnectSFG.util.StraightWg(inputLambda, wgProp, lengthMicron, true, plasmaEffect, false, null) ;
@@ -50,7 +50,7 @@ public class PhaseShifterEO extends AbstractElement {
 
 	@Override
 	public void setWavelength(Wavelength inputLambda) {
-		this.inputLambda = inputLambda ;	
+		this.inputLambda = inputLambda ;
 	}
 
 	@Override
