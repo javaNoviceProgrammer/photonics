@@ -24,12 +24,6 @@ public class StraightWg extends AbstractElement {
 	public Complex s11, s12, s21, s22 ;
 
 	public StraightWg(
-			String name
-			) {
-		this.name = name ;
-	}
-
-	public StraightWg(
 			@ParamName(name="Element Name") String name,
 			RealFunction neff,
 			double alphaDbPerCm,
@@ -37,6 +31,18 @@ public class StraightWg extends AbstractElement {
 			) {
 		this.name = name ;
 		this.neff = neff ;
+		this.alphaDbPerCm = alphaDbPerCm ;
+		this.lengthMicron = lengthMicron ;
+	}
+	
+	public StraightWg(
+			@ParamName(name="Element Name") String name,
+			double neff,
+			double alphaDbPerCm,
+			double lengthMicron
+			) {
+		this.name = name ;
+		this.neff = s -> neff ;
 		this.alphaDbPerCm = alphaDbPerCm ;
 		this.lengthMicron = lengthMicron ;
 	}
