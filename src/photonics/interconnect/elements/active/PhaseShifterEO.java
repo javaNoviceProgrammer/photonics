@@ -4,18 +4,14 @@ import java.util.ArrayList;
 import java.util.Map;
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.utils.SimpleMap;
-import complexSFG.edu.lrl.solver.SFG;
-import edu.lrl.interconnectSFG.elements.AbstractElement;
-import edu.lrl.interconnectSFG.util.PlasmaDispersionModel;
-import edu.lrl.interconnectSFG.util.Wavelength;
-import edu.lrl.interconnectSFG.util.WgProperties;
-import photonics.interconnect.elements.edu;
+import mathLib.sfg.numeric.SFG;
+import photonics.interconnect.elements.AbstractElement;
+import photonics.pnjunc.PlasmaDispersionModel;
+import photonics.util.Wavelength;
 
-public class PhaseShifterEO  {
+public class PhaseShifterEO extends AbstractElement  {
 
 	Wavelength inputLambda = null ;
-	WgProperties wgProp = null ;
-	edu.lrl.photonics.interconnect.elements.passive.StraightWg wg ;
 	PlasmaDispersionModel plasmaEffect ;
 	double lengthMicron ;
 
@@ -31,7 +27,7 @@ public class PhaseShifterEO  {
 
 	@Override
 	public void buildElement() {
-		wg = new edu.lrl.interconnectSFG.util.StraightWg(inputLambda, wgProp, lengthMicron, true, plasmaEffect, false, null) ;
+
 		nodes = new ArrayList<>() ;
 		String port1_in = name+".port1.in" ;
 		String port1_out = name+".port1.out" ;
@@ -42,20 +38,15 @@ public class PhaseShifterEO  {
 		nodes.add(port2_in) ;
 		nodes.add(port2_out) ;
 		sfgElement = new SFG(nodes) ;
-		sfgElement.addArrow(port1_in, port1_out, wg.S11.re(), wg.S11.im());
-		sfgElement.addArrow(port1_in, port2_out, wg.S21.re(), wg.S21.im());
-		sfgElement.addArrow(port2_in, port1_out, wg.S12.re(), wg.S12.im());
-		sfgElement.addArrow(port2_in, port2_out, wg.S22.re(), wg.S22.im());
+		sfgElement.addArrow(port1_in, port1_out, null);
+		sfgElement.addArrow(port1_in, port2_out, null);
+		sfgElement.addArrow(port2_in, port1_out, null);
+		sfgElement.addArrow(port2_in, port2_out, null);
 	}
 
 	@Override
 	public void setWavelength(Wavelength inputLambda) {
 		this.inputLambda = inputLambda ;
-	}
-
-	@Override
-	public void setWgProperties(WgProperties wgProp) {
-		this.wgProp = wgProp ;
 	}
 
 	@Override
