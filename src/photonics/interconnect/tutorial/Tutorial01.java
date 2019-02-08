@@ -20,13 +20,13 @@ public class Tutorial01 {
 		// perform wavelength sweep
 		for(int i=0; i<lambdaNm.length; i++) {
 			Wavelength lambda = new Wavelength(lambdaNm[i]) ;
-			// create circuit elements
-			StraightWg wg1 = new StraightWg("wg1", s -> 2.23, 20, 100) ;
 			// create the circuit
 			PhotonicCircuit pc = new PhotonicCircuit() ;
-			pc.addElement(wg1);
 			pc.setWavelength(lambda) ;
-
+			// create circuit elements
+			StraightWg wg1 = new StraightWg("wg1", s -> 2.23, 20, 100) ;
+			pc.addElement(wg1);
+			// calculate transfer
 			transfer[i] = pc.getTransfer("wg1.port1", "wg1.port2") ;
 		}
 
@@ -36,7 +36,5 @@ public class Tutorial01 {
 		fig.xlabel("Wavelength (nm)");
 		fig.ylabel("Transfer");
 		fig.run(true);
-
 	}
-
 }
