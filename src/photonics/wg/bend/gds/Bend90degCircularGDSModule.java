@@ -19,7 +19,8 @@ import mathLib.util.MathUtils;
 
 public class Bend90degCircularGDSModule {
 
-	double a, b, R, width ;
+	double a, b, R ;
+	double width = 0.4 ; // default
 
 	public Bend90degCircularGDSModule(
 			double a,
