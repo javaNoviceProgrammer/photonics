@@ -19,7 +19,7 @@ import mathLib.util.MathUtils;
 
 public class Bend90degCircularGDSModule {
 
-	double a, b, R ;
+	double a, b, R, width ;
 
 	public Bend90degCircularGDSModule(
 			double a,
@@ -29,6 +29,10 @@ public class Bend90degCircularGDSModule {
 		this.a = a ;
 		this.b = b ;
 		this.R = R ;
+	}
+	
+	public void setWidth(double width) {
+		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
@@ -76,7 +80,7 @@ public class Bend90degCircularGDSModule {
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
 
-            double width = 0.4 ;
+//            double width = 0.4 ;
 
             double[] xPoints = x ;
             double[] yPoints = y ;
@@ -110,7 +114,8 @@ public class Bend90degCircularGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degCircularGDSModule bend = new Bend90degCircularGDSModule(100, 2.49, 5) ;
+		Bend90degCircularGDSModule bend = new Bend90degCircularGDSModule(100, 2.49, 8) ;
+		bend.setWidth(0.5);
 		bend.createGDS(null, true);
 	}
 
