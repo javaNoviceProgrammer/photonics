@@ -1,5 +1,11 @@
 package weights;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.log10;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.experiment_aut.Experiment;
 import ch.epfl.general_libraries.experiment_aut.WrongExperimentException;
@@ -7,10 +13,6 @@ import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
 import ch.epfl.general_libraries.results.AbstractResultsManager;
 import ch.epfl.general_libraries.results.DataPoint;
 import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
-
-import static java.lang.Math.* ;
-
-import java.lang.reflect.Executable;
 
 public class WeightMapping implements Experiment {
 
@@ -27,6 +29,21 @@ public class WeightMapping implements Experiment {
 		this.k1 = k1 ;
 		this.k2 = k2 ;
 		this.L = L ;
+		this.phiRad = phiRad ;
+	}
+	
+	public WeightMapping(
+			@ParamName(name="k2") double k2,
+			@ParamName(name="L") double L,
+			@ParamName(name="phi (rad)") double phiRad
+			) {
+		this.k2 = k2 ;
+		this.t2 = sqrt(1-k2*k2) ;
+		this.L = L ;
+		this.t1 = this.t2*sqrt(L) ;
+		this.k1 = sqrt(1-t1*t1) ;
+		
+
 		this.phiRad = phiRad ;
 	}
 	
