@@ -30,6 +30,7 @@ import photonics.wg.bend.nature.SpecialFunc;
 public class Bend90degOptimalGDSModule {
 
 	double a, b, R ;
+	double width = 0.4 ; // default
 
 	public Bend90degOptimalGDSModule(
 			double a,
@@ -39,6 +40,10 @@ public class Bend90degOptimalGDSModule {
 		this.a = a ;
 		this.b = b ;
 		this.R = R ;
+	}
+	
+	public void setWidth(double width) {
+		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
@@ -162,7 +167,7 @@ public class Bend90degOptimalGDSModule {
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
 
-            double width = 0.4 ;
+//            double width = 0.4 ;
 
             xtot[0] = 0.0 ;
             xtot[xtot.length-1] = R0 ;
@@ -204,7 +209,8 @@ public class Bend90degOptimalGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 5) ;
+		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 8) ;
+		bend.setWidth(0.5);
 		bend.createGDS(null, true);
 	}
 
