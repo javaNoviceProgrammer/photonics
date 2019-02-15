@@ -44,6 +44,11 @@ public class Tutorial04 {
 			// find the transfer function
 			transfer[i] = pc.getTransfer("dc1.port1", "dc1.port2") ;
 			transferdB[i] = MathUtils.Conversions.todB(ComplexMath.absSquared(transfer[i])) ;
+			
+//			if(i==0) {
+//				System.out.println(pc.getCircuit().printForwardPaths_noGains());
+//				System.out.println(pc.getCircuit().printAllLoops_compactForm());
+//			}
 
 		}
 
