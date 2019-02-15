@@ -21,7 +21,7 @@ public class Tutorial04 {
 	public static void main(String[] args) {
 		double radiusMicron = 10 ;
 		double kappa = 0.2 ;
-		double[] lambdaNm = MathUtils.linspace(1540, 1548, 5000) ;
+		double[] lambdaNm = MathUtils.linspace(1543, 1544.5, 8000) ;
 		Complex[] transfer = new Complex[lambdaNm.length] ; // thru port
 		double[] transferdB = new double[lambdaNm.length] ; // thru port (dB)
 		for(int i=0; i<lambdaNm.length; i++) {
@@ -31,9 +31,9 @@ public class Tutorial04 {
 			PhotonicCircuit pc = new PhotonicCircuit() ;
 			pc.setWavelength(lambda) ;
 			// create photonics elements
-			StraightWg cwg1 = new StraightWg("cwg1", new Neff450X220Strip(), 5, 2*PI*radiusMicron) ;
+			StraightWg cwg1 = new StraightWg("cwg1", new Neff450X220Strip(), 10, 2*PI*radiusMicron) ;
 			CompactCoupler dc1 = new CompactCoupler("dc1", kappa) ;
-			Reflector lr1 = new Reflector("lr1", 0.05) ;
+			Reflector lr1 = new Reflector("lr1", 0.03) ;
 			// connect photonics elements
 			pc.addElement(cwg1);
 			pc.addElement(dc1);
