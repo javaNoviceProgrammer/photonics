@@ -15,7 +15,7 @@ import photonics.util.Wavelength;
 public class CompactCoupler extends AbstractElement {
 
 	Wavelength inputLambda = null ;
-	double kappa, t ;
+	public double kappa, t ;
 	
 	public Complex s11, s12, s13, s14 ;
 	public Complex s21, s22, s23, s24 ;
@@ -65,6 +65,11 @@ public class CompactCoupler extends AbstractElement {
 		
 		s21 = s12 = s34 = s43 = t ;
 		s31 = s13 = s24 = s42 = -j*kappa ;
+//		s11 = s22 = s33 = s44 = null ;
+//		s41 = s14 = s23 = s32 = null ;
+		
+		if(inputLambda == null)
+			throw new NullPointerException("wavelength is not set for " + name) ;
 
 		sfgElement.addArrow(port1_in, port1_out, s11);
 		sfgElement.addArrow(port1_in, port2_out, s21);
@@ -93,6 +98,7 @@ public class CompactCoupler extends AbstractElement {
 	public Map<String, String> getAllParameters() {
 		Map<String, String> map = new SimpleMap<String, String>() ;
 		map.put(name+".kappa", kappa+"") ;
+		map.put(name+".t", t+"") ;
 		return map ;
 	}
 

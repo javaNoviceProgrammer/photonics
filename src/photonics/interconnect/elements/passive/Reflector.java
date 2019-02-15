@@ -5,46 +5,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
-import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
 
-import static mathLib.numbers.Complex.* ;
-import static mathLib.numbers.ComplexMath.*;
-
-public class StraightWg extends AbstractElement {
+public class Reflector extends AbstractElement {
 
 	Wavelength lambda = null ;
 
-	double lengthMicron, alphaDbPerCm ;
-	RealFunction neff ;
+	public double r, t ;
 	
 	public Complex s11, s12, s21, s22 ;
 
-	public StraightWg(
+	public Reflector(
 			@ParamName(name="Element Name") String name,
-			RealFunction neff,
-			double alphaDbPerCm,
-			double lengthMicron
+			@ParamName(name="Field Reflectance") double r
 			) {
 		this.name = name ;
-		this.neff = neff ;
-		this.alphaDbPerCm = alphaDbPerCm ;
-		this.lengthMicron = lengthMicron ;
-	}
-	
-	public StraightWg(
-			@ParamName(name="Element Name") String name,
-			double neff,
-			double alphaDbPerCm,
-			double lengthMicron
-			) {
-		this.name = name ;
-		this.neff = s -> neff ;
-		this.alphaDbPerCm = alphaDbPerCm ;
-		this.lengthMicron = lengthMicron ;
+		this.r = r ;
+		this.t = Math.sqrt(1-r*r) ;
 	}
 
 	// setters and getters
@@ -55,26 +35,6 @@ public class StraightWg extends AbstractElement {
 
 	public void setWavelength(Wavelength lambda) {
 		this.lambda = lambda ;
-	}
-
-	public void setNeff(RealFunction neff) {
-		this.neff = neff ;
-	}
-
-	public void setLength(double lengthMicron) {
-		this.lengthMicron = lengthMicron ;
-	}
-
-	public void setLossDbPerCm(double alphaDbPerCm) {
-		this.alphaDbPerCm = alphaDbPerCm ;
-	}
-
-	public void setS11(Complex s11) {
-		this.s11 = s11;
-	}
-
-	public void setS22(Complex s22) {
-		this.s22 = s22;
 	}
 
 	@Override
@@ -92,14 +52,13 @@ public class StraightWg extends AbstractElement {
 
 		sfgElement = new SFG(nodes) ;
 
-//		s11 = null ;
-//		s22 = null ;
 		if(lambda == null)
 			throw new NullPointerException("wavelength is not set for " + name) ;
 
-		Complex beta = 2*PI/(lambda.getWavelengthNm()*1e-9) * neff.evaluate(lambda.getWavelengthNm()) - j * alphaDbPerCm*23.0/2.0 ;
-		s21 = exp(-j*beta*lengthMicron*1e-6) ;
-		s12 = s21 ;
+		s21 = t ;
+		s12 = s21.conjugate() ;
+		s11 = r ;
+		s22 = -s11 ;
 
 		sfgElement.addArrow(port1_in, port1_out, s11);
 		sfgElement.addArrow(port2_in, port2_out, s22);
@@ -111,11 +70,9 @@ public class StraightWg extends AbstractElement {
 	@Override
 	public Map<String, String> getAllParameters() {
 		Map<String, String> map = new HashMap<String, String>() ;
-		map.put(name+".length (um)", lengthMicron+"") ;
-		map.put(name+".neff", neff+"") ;
-		map.put(name+".loss (dB/cm)", alphaDbPerCm+"") ;
+		map.put(name+".r", r+"") ;
 		return map ;
 	}
 
-
+	
 }
