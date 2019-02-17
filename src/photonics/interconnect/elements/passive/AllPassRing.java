@@ -34,7 +34,7 @@ public class AllPassRing extends AbstractElement {
 	
 	@Override
 	public void buildElement() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
