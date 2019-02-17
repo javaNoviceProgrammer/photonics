@@ -1,4 +1,4 @@
-package photonics.interconnect.elements.passive;
+package photonics.interconnect.elements.passive.uni;
 
 import static mathLib.numbers.Complex.j;
 import static mathLib.numbers.ComplexMath.PI;
@@ -16,7 +16,7 @@ import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
 import static mathLib.numbers.ComplexMath.*;
 
-public class AddDropRing extends AbstractElement {
+public class AddDropRingUnidirectional extends AbstractElement {
 
 	Wavelength lambda = null ;
 
@@ -28,7 +28,7 @@ public class AddDropRing extends AbstractElement {
 	public Complex s31, s32, s33, s34 ;
 	public Complex s41, s42, s43, s44 ;
 	
-	public AddDropRing(
+	public AddDropRingUnidirectional(
 			@ParamName(name="Element Name") String name ,
 			@ParamName(name="Waveguide Mode") RealFunction neff ,
 			@ParamName(name="Radius (um)") double radius ,
@@ -50,20 +50,12 @@ public class AddDropRing extends AbstractElement {
 	public void buildElement() {
 		nodes = new ArrayList<>() ;
 		String port1_in = name+".port1.in" ;
-		String port1_out = name+".port1.out" ;
-		String port2_in = name+".port2.in" ;
 		String port2_out = name+".port2.out" ;
-		String port3_in = name+".port3.in" ;
 		String port3_out = name+".port3.out" ;
-		String port4_in = name+".port4.in" ;
 		String port4_out = name+".port4.out" ;
 		nodes.add(port1_in) ;
-		nodes.add(port1_out) ;
-		nodes.add(port2_in) ;
 		nodes.add(port2_out) ;
-		nodes.add(port3_in) ;
 		nodes.add(port3_out) ;
-		nodes.add(port4_in) ;
 		nodes.add(port4_out) ;
 
 		sfgElement = new SFG(nodes) ;
@@ -78,26 +70,9 @@ public class AddDropRing extends AbstractElement {
 		s41 = (-kappa1*kappa2*sqrt(a)*exp(-j*phi/2.0))/(1-t1*a*t2*exp(-j*phi)) ;
 		s14 = s23 = s34 = s41 ;
 		
-		sfgElement.addArrow(port1_in, port1_out, s11);
 		sfgElement.addArrow(port1_in, port2_out, s21);
 		sfgElement.addArrow(port1_in, port3_out, s31);
-		sfgElement.addArrow(port1_in, port4_out, s41);
-
-		sfgElement.addArrow(port2_in, port1_out, s12);
-		sfgElement.addArrow(port2_in, port2_out, s22);
-		sfgElement.addArrow(port2_in, port3_out, s32);
-		sfgElement.addArrow(port2_in, port4_out, s42);
-
-		sfgElement.addArrow(port3_in, port1_out, s13);
-		sfgElement.addArrow(port3_in, port2_out, s23);
-		sfgElement.addArrow(port3_in, port3_out, s33);
-		sfgElement.addArrow(port3_in, port4_out, s43);
-
-		sfgElement.addArrow(port4_in, port1_out, s14);
-		sfgElement.addArrow(port4_in, port2_out, s24);
-		sfgElement.addArrow(port4_in, port3_out, s34);
-		sfgElement.addArrow(port4_in, port4_out, s44);
-		
+		sfgElement.addArrow(port1_in, port4_out, s41);		
 	}
 
 	@Override

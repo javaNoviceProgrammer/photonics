@@ -1,4 +1,4 @@
-package photonics.interconnect.elements.passive;
+package photonics.interconnect.elements.passive.uni;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import photonics.util.Wavelength;
 import static mathLib.numbers.ComplexMath.*;
 import static mathLib.numbers.Complex.*;
 
-public class AllPassRing extends AbstractElement {
+public class AllPassRingUnidirectional extends AbstractElement {
 
 	Wavelength lambda = null ;
 
@@ -23,7 +23,7 @@ public class AllPassRing extends AbstractElement {
 	public Complex s11, s12 ; 
 	public Complex s21, s22 ;
 	
-	public AllPassRing(
+	public AllPassRingUnidirectional(
 			@ParamName(name="Element Name") String name ,
 			@ParamName(name="Waveguide Mode") RealFunction neff ,
 			@ParamName(name="Radius (um)") double radius ,
@@ -42,12 +42,8 @@ public class AllPassRing extends AbstractElement {
 	public void buildElement() {
 		nodes = new ArrayList<>() ;
 		String port1_in = name+".port1.in" ;
-		String port1_out = name+".port1.out" ;
-		String port2_in = name+".port2.in" ;
 		String port2_out = name+".port2.out" ;
 		nodes.add(port1_in) ;
-		nodes.add(port1_out) ;
-		nodes.add(port2_in) ;
 		nodes.add(port2_out) ;
 
 		sfgElement = new SFG(nodes) ;
@@ -59,12 +55,8 @@ public class AllPassRing extends AbstractElement {
 		Complex phi = 2*PI/lambda.getWavelengthMeter() * neff.evaluate(lambda.getWavelengthNm())*2*PI*radiusMicron*1e-6 ;
 		s21 = (t - a*exp(-j*phi))/(1-t*a*exp(-j*phi)) ;
 		s12 = s21 ;
-		
-		sfgElement.addArrow(port1_in, port1_out, s11);
-		sfgElement.addArrow(port2_in, port2_out, s22);
 
 		sfgElement.addArrow(port1_in, port2_out, s21);
-		sfgElement.addArrow(port2_in, port1_out, s12);
 		
 	}
 
