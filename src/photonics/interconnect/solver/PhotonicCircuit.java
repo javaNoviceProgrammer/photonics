@@ -41,6 +41,14 @@ public class PhotonicCircuit {
 		globalSFG.addArrow(startPort+".out", endPort+".in", ONE);
 		globalSFG.addArrow(endPort+".out", startPort+".in", ONE);
 	}
+	
+	public void connectPortsUnidirectional(String startPort, String endPort){
+		try {
+			globalSFG.addArrow(startPort+".out", endPort+".in", ONE);
+		} catch (Exception e) {
+			globalSFG.addArrow(endPort+".out", startPort+".in", ONE);
+		}
+	}
 
 	public Complex getTransfer(String startPort, String endPort) {
 		return globalSFG.getGain(startPort + ".in", endPort + ".out") ;
