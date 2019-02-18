@@ -1,19 +1,18 @@
 package photonics.wg.bend;
 
-import photonics.wg.bend.nature.LossModel;
-import static java.lang.Math.* ;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
-import flanagan.integration.IntegralFunction;
-import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.func.ArrayFunc;
-import mathLib.func.intf.RealFunction;
 import mathLib.integral.Integral1D;
-import mathLib.ode.Richardson;
 import mathLib.plot.MatlabChart;
-import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
+import photonics.wg.bend.nature.LossModel;
 
 public class OptimalClothoid90degV2 {
 
@@ -48,7 +47,7 @@ public class OptimalClothoid90degV2 {
 		double sEnd = rootSend.bisect(funcSend, 1e-2, 2*R0) ;
 
 		double beta = sqrt((PI/4.0)/(1+2.0*r))/sEnd ;
-		double Rmin = sEnd * 2.0/PI * (1+2*r) ;
+//		double Rmin = sEnd * 2.0/PI * (1+2*r) ;
 
 		//******* finding the loss
 		double a = lossModel.getA() ;
@@ -66,7 +65,7 @@ public class OptimalClothoid90degV2 {
 		LossModel lossModel = new LossModel() ;
 		double lossCircular = lossModel.getAlpha(5)*PI*R0*1e-4/2.0 + lossModel.getAlphaM(R0)*2 ;
 		double[] lossConst = ArrayFunc.apply(t -> lossCircular, r) ;
-		double[] lossRatio = ArrayFunc.apply(t->t/lossCircular, lossdB) ;
+//		double[] lossRatio = ArrayFunc.apply(t->t/lossCircular, lossdB) ;
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(r, lossdB, "b");

@@ -7,7 +7,6 @@ import flanagan.integration.RungeKutta;
 import flanagan.interpolation.CubicSpline;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
-import mathLib.fitting.SavitzyGolayFilter;
 import mathLib.func.ArrayFunc;
 import mathLib.func.intf.RealFunction;
 import mathLib.ode.Richardson;

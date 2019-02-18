@@ -1,18 +1,15 @@
 package photonics.wg.bend;
 
-import flanagan.integration.IntegralFunction;
-import flanagan.interpolation.CubicSpline;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
-import mathLib.func.ArrayFunc;
-import mathLib.func.intf.RealFunction;
 import mathLib.integral.Integral1D;
-import mathLib.ode.Richardson;
-import mathLib.plot.MatlabChart;
-import mathLib.util.ArrayUtils;
-import mathLib.util.MathUtils;
 import photonics.wg.bend.nature.LossModel;
-import static java.lang.Math.* ;
 
 public class OptimalEuler90deg {
 	public static void main(String[] args) {
