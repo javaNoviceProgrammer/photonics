@@ -4,6 +4,7 @@ import mathLib.numbers.Complex;
 import mathLib.numbers.ComplexMath;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
+import mathLib.util.Timer;
 import photonics.interconnect.elements.passive.CompactCoupler;
 import photonics.interconnect.elements.passive.Reflector;
 import photonics.interconnect.elements.passive.StraightWg;
@@ -21,7 +22,7 @@ public class Tutorial04 {
 	public static void main(String[] args) {
 		double radiusMicron = 10 ;
 		double kappa = 0.2 ;
-		double[] lambdaNm = MathUtils.linspace(1543, 1544.5, 8000) ;
+		double[] lambdaNm = MathUtils.linspace(1543, 1544.5, 10000) ;
 		Complex[] transfer = new Complex[lambdaNm.length] ; // thru port
 		double[] transferdB = new double[lambdaNm.length] ; // thru port (dB)
 		for(int i=0; i<lambdaNm.length; i++) {
@@ -44,14 +45,9 @@ public class Tutorial04 {
 			// find the transfer function
 			transfer[i] = pc.getTransfer("dc1.port1", "dc1.port2") ;
 			transferdB[i] = MathUtils.Conversions.todB(ComplexMath.absSquared(transfer[i])) ;
-			
-//			if(i==0) {
-//				System.out.println(pc.getCircuit().printForwardPaths_noGains());
-//				System.out.println(pc.getCircuit().printAllLoops_compactForm());
-//			}
 
 		}
-
+		
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(lambdaNm, transferdB);
 		fig.renderPlot();
