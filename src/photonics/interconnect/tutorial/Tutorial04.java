@@ -1,17 +1,17 @@
 package photonics.interconnect.tutorial;
 
+import static java.lang.Math.PI;
+
 import mathLib.numbers.Complex;
 import mathLib.numbers.ComplexMath;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
-import mathLib.util.Timer;
 import photonics.interconnect.elements.passive.CompactCoupler;
 import photonics.interconnect.elements.passive.Reflector;
 import photonics.interconnect.elements.passive.StraightWg;
 import photonics.interconnect.solver.PhotonicCircuit;
 import photonics.interconnect.util.Neff450X220Strip;
 import photonics.util.Wavelength;
-import static java.lang.Math.*;
 
 public class Tutorial04 {
 
