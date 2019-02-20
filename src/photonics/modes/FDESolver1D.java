@@ -119,6 +119,9 @@ public class FDESolver1D {
 			Ey = new ArrayList<>() ;
 			Hx = new ArrayList<>() ;
 			Hz = new ArrayList<>() ;
+			Ex = new ArrayList<>() ;
+			Ez = new ArrayList<>() ;
+			Hy = new ArrayList<>() ;
 		}
 		coeffEy = new double[numPoints][numPoints] ;
 		double var1 = (2*Math.PI*dx/lambda)*scale ;
@@ -191,6 +194,9 @@ public class FDESolver1D {
 			Hy = new ArrayList<>() ;
 			Ex = new ArrayList<>() ;
 			Ez = new ArrayList<>() ;
+			Ey = new ArrayList<>() ;
+			Hx = new ArrayList<>() ;
+			Hz = new ArrayList<>() ;
 		}
 		coeffHy = new double[numPoints][numPoints] ;
 		coeffHy = assembleTM();
@@ -212,7 +218,7 @@ public class FDESolver1D {
 					double[][] vec = eigDecomp.getV().getArray() ;
 					Complex[] hy = new Complex[numPoints] ;
 					for(int j=0;j<numPoints; j++){
-						hy[j] = new Complex(Math.abs(vec[j][i]), 0.0) ;
+						hy[j] = new Complex(vec[j][i], 0.0) ;
 					}
 					Hy.add(hy) ;
 				}
@@ -267,13 +273,16 @@ public class FDESolver1D {
 		fig.xlabel("X " + "(" + gridUnit.name() + ")");
 		fig.ylabel(name);
 		fig.run();
+		fig.legendON();
 //		fig.markerON();
 
 	}
 
 	public void plotField(Fields field, int modeNum){
 		switch (field) {
+		case Ex: { plotComponent(x, Ex.get(modeNum-1), Fields.Ex.name()); break; }
 		case Ey: { plotComponent(x, Ey.get(modeNum-1), Fields.Ey.name()); break; }
+		case Ez: { plotComponent(x, Ez.get(modeNum-1), Fields.Ez.name()); break; }
 		case Hx: { plotComponent(x, Hx.get(modeNum-1), Fields.Hx.name()); break; }
 		case Hz: { plotComponent(x, Hz.get(modeNum-1), Fields.Hz.name()); break; }
 		case Hy: { plotComponent(x, Hy.get(modeNum-1), Fields.Hy.name()); break; }
@@ -306,8 +315,9 @@ public class FDESolver1D {
 				if(x<0) return 1.444 ;
 				else if(x < 450.0) return 3.477 ;
 				else if(x < 450.0 + 250.0) return 1.444 ;
-				else if(x < 450.0 + 250.0 + 450.0) return 3.477;
-				else return 1.444 ;
+//				else if(x < 450.0 + 250.0 + 1150.0) return 3.477;
+//				else if(x < 450.0 + 250.0 + 1150.0 + 600) return 2;
+				else return 2 ;
 			}
 
 			@Override
@@ -318,23 +328,18 @@ public class FDESolver1D {
 		// time benchmarking
 		Timer timer = new Timer() ;
 		timer.start();
-		fde.solve(Modes.TE);
+		fde.solve(Modes.TM);
 		timer.stop();
 		timer.show();
+
 		fde.plotIndexProfile();
-		fde.plotField(Fields.Ey, 1);
-//		fde.plotField(Fields.Hx, 1);
-//		fde.plotField(Fields.Hz, 1);
-//		fde.plotField(Fields.Hy, 3);
-		fde.plotField(Fields.Ey, 2);
-		fde.plotField(Fields.Ey, 3);
-		fde.plotField(Fields.Ey, 4);
+		fde.plotField(Fields.Hy, 1);
+		fde.plotField(Fields.Hy, 2);
+		fde.plotField(Fields.Hy, 3);
+		fde.plotField(Fields.Hy, 4);
+		fde.plotField(Fields.Hy, 5);
+		fde.plotField(Fields.Hy, 6);
 //		fde.plotField(Fields.Ey, 7);
-//		fde.plotField(Fields.Ey, 8);
-//		fde.plotField(Fields.Ey, 9);
-//		fde.plotField(Fields.Ey, 10);
-
-
 	}
 
 }
