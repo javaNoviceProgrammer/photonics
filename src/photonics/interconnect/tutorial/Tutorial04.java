@@ -9,8 +9,8 @@ import mathLib.util.MathUtils;
 import photonics.interconnect.elements.passive.CompactCoupler;
 import photonics.interconnect.elements.passive.Reflector;
 import photonics.interconnect.elements.passive.StraightWg;
+import photonics.interconnect.modes.Neff450X220Strip;
 import photonics.interconnect.solver.PhotonicCircuit;
-import photonics.interconnect.util.Neff450X220Strip;
 import photonics.util.Wavelength;
 
 public class Tutorial04 {

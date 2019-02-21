@@ -4,8 +4,8 @@ import mathLib.numbers.Complex;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 import photonics.interconnect.elements.passive.uni.AddDropRingUnidirectional;
+import photonics.interconnect.modes.Neff450X220Strip;
 import photonics.interconnect.solver.PhotonicCircuit;
-import photonics.interconnect.util.Neff450X220Strip;
 import photonics.util.Wavelength;
 
 public class TestAddDropRing {

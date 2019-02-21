@@ -7,8 +7,8 @@ import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 import photonics.interconnect.elements.passive.uni.CompactCouplerUnidirectional;
 import photonics.interconnect.elements.passive.uni.StraightWgUnidirectional;
+import photonics.interconnect.modes.Neff450X220Strip;
 import photonics.interconnect.solver.PhotonicCircuit;
-import photonics.interconnect.util.Neff450X220Strip;
 import photonics.util.Wavelength;
 
 public class Tutorial05 {

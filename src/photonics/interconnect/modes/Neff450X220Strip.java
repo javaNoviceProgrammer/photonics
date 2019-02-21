@@ -1,4 +1,4 @@
-package photonics.interconnect.util;
+package photonics.interconnect.modes;
 
 import mathLib.func.intf.RealFunction;
 

@@ -4,8 +4,8 @@ import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 import photonics.interconnect.elements.passive.StraightWg;
 import photonics.interconnect.elements.passive.Yjunction;
+import photonics.interconnect.modes.Neff450X220Strip;
 import photonics.interconnect.solver.PhotonicCircuit;
-import photonics.interconnect.util.Neff450X220Strip;
 import photonics.interconnect.util.Utils;
 import photonics.util.Wavelength;
 
