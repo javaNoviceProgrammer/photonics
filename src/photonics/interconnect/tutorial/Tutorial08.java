@@ -19,7 +19,7 @@ public class Tutorial08 {
 		double L1 = 100 ;
 		double L2 = 120 ;
 		double[] LambdaNm = MathUtils.linspace(1500, 1600, 10000) ;
-		double delta = 0.1 ;
+		double delta = 0 ;
 		double[] transfer = new double[LambdaNm.length] ;
 		for(int i=0; i<LambdaNm.length; i++) {
 			Wavelength lambda = new Wavelength(LambdaNm[i]) ;
@@ -38,6 +38,9 @@ public class Tutorial08 {
 			pc.connectPorts("y2.port2", "wg1.port2");
 			pc.connectPorts("y2.port3", "wg2.port2");
 			transfer[i] = Utils.todB(pc.getTransfer("y1.port1", "y2.port1").absSquared()) ;
+			
+			if(i==0)
+				System.out.println(pc.getCircuit().printAllLoops_compactForm());
 		}
 
 		MatlabChart fig = new MatlabChart() ;

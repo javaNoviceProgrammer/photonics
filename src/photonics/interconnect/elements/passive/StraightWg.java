@@ -92,8 +92,6 @@ public class StraightWg extends AbstractElement {
 
 		sfgElement = new SFG(nodes) ;
 
-//		s11 = null ;
-//		s22 = null ;
 		if(lambda == null)
 			throw new NullPointerException("wavelength is not set for " + name) ;
 
