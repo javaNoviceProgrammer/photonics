@@ -39,6 +39,14 @@ public class Neff450X220CoupledStrip {
 		}
 		return neff ;
 	}
+	
+	public double[] getNeffEven(double lambdaNm[], double gapNm){
+		double[] neff = new double[lambdaNm.length] ;
+		for(int i=0; i<neff.length; i++){
+			neff[i] = getNeffEven(lambdaNm[i], gapNm) ;
+		}
+		return neff ;
+	}
 
 	public double getNeffOdd(double lambdaNm, double gapNm){
 		double neffEven = Double.NaN ;
@@ -66,6 +74,14 @@ public class Neff450X220CoupledStrip {
 		double[] neff = new double[gapNm.length] ;
 		for(int i=0; i<neff.length; i++){
 			neff[i] = getNeffOdd(lambdaNm, gapNm[i]) ;
+		}
+		return neff ;
+	}
+	
+	public double[] getNeffOdd(double[] lambdaNm, double gapNm){
+		double[] neff = new double[lambdaNm.length] ;
+		for(int i=0; i<neff.length; i++){
+			neff[i] = getNeffOdd(lambdaNm[i], gapNm) ;
 		}
 		return neff ;
 	}
@@ -370,8 +386,9 @@ public class Neff450X220CoupledStrip {
 	public static void main(String[] args){
 		double[] g = MathUtils.linspace(50, 1000, 1000) ;
 		Neff450X220CoupledStrip db = new Neff450X220CoupledStrip();
-		double[] nEven = db.getNeffEven(1600, g) ;
-		double[] nOdd = db.getNeffOdd(1600, g) ;
+		double[] nEven = db.getNeffEven(1550, g) ;
+		double[] nOdd = db.getNeffOdd(1550, g) ;
+		
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(g, nEven, "b", 2f, "Even");
 		fig.plot(g,  nOdd, "r", 2f, "Odd");
@@ -380,6 +397,19 @@ public class Neff450X220CoupledStrip {
 		fig.ylabel("Effective Index");
 		fig.legendON();
 		fig.run(true);
+		
+		double[] lambdaNm = MathUtils.linspace(1500, 1600, 1000) ;
+		double[] nEven1 = db.getNeffEven(lambdaNm, 100) ;
+		double[] nOdd1 = db.getNeffOdd(lambdaNm, 100) ;
+		
+		MatlabChart fig1 = new MatlabChart() ;
+		fig1.plot(lambdaNm, nEven1, "b", 2f, "Even");
+		fig1.plot(lambdaNm,  nOdd1, "r", 2f, "Odd");
+		fig1.renderPlot();
+		fig1.xlabel("Wavelength (nm)");
+		fig1.ylabel("Effective Index");
+		fig1.legendON();
+		fig1.run(true);
 	}
 
 
