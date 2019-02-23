@@ -4,12 +4,12 @@ import flanagan.interpolation.CubicSpline;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 
-public class Neff450X220CoupledStrip {
+public class Neff450X220CoupledStrip implements NeffCoupled {
 
 	final static double LAMBDA_MIN = 1500 ;
 	final static double LAMBDA_MAX = 1600 ;
 
-
+	@Override
 	public double getNeffEven(double lambdaNm, double gapNm){
 		double neffEven = Double.NaN ;
 		double[] lambda_nm = MathUtils.linspace(LAMBDA_MIN, LAMBDA_MAX, 2.5) ;
@@ -48,6 +48,7 @@ public class Neff450X220CoupledStrip {
 		return neff ;
 	}
 
+	@Override
 	public double getNeffOdd(double lambdaNm, double gapNm){
 		double neffEven = Double.NaN ;
 		double[] lambda_nm = MathUtils.linspace(LAMBDA_MIN, LAMBDA_MAX, 2.5) ;
