@@ -8,7 +8,7 @@ import photonics.interconnect.modes.Neff450X220Strip;
 import photonics.interconnect.solver.PhotonicCircuit;
 import photonics.util.Wavelength;
 
-public class TestAllPassRing {
+public class Tutorial11 {
 	
 	public static void main(String[] args) {
 		double radiusMicron = 10 ;

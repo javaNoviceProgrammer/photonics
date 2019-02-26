@@ -8,7 +8,7 @@ import photonics.interconnect.modes.Neff450X220Strip;
 import photonics.interconnect.solver.PhotonicCircuit;
 import photonics.util.Wavelength;
 
-public class TestAddDropRing {
+public class Tutorial10 {
 	
 	public static void main(String[] args) {
 		double radiusMicron = 10 ;
@@ -16,7 +16,8 @@ public class TestAddDropRing {
 		double loss = 10 ; // dB per cm
 		double[] lambdaNm = MathUtils.linspace(1540, 1560, 5000) ;
 		Complex[] transfer = new Complex[lambdaNm.length] ; // thru port
-		double[] transferdB = new double[lambdaNm.length] ; // thru port (dB)
+		double[] transferThrudB = new double[lambdaNm.length] ; // thru port (dB)
+		double[] transferDropdB = new double[lambdaNm.length] ; // drop port (dB)
 		for(int i=0; i<lambdaNm.length; i++) {
 			// set the wavelength
 			Wavelength lambda = new Wavelength(lambdaNm[i]) ;
@@ -29,14 +30,17 @@ public class TestAddDropRing {
 			pc.addElement(ring1);
 			// find the transfer function
 			transfer[i] = pc.getTransfer("ring1.port1", "ring1.port2") ;
-			transferdB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
+			transferThrudB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
+			transferDropdB[i] = MathUtils.Conversions.todB(pc.getTransfer("ring1.port1", "ring1.port4").absSquared()) ;
 		}
 
 		MatlabChart fig = new MatlabChart() ;
-		fig.plot(lambdaNm, transferdB);
+		fig.plot(lambdaNm, transferThrudB, "b", 2f, "Thru (dB)");
+		fig.plot(lambdaNm, transferDropdB, "r", 2f, "Drop (dB)");
 		fig.renderPlot();
 		fig.xlabel("Wavelength (nm)");
 		fig.ylabel("Thru (dB)");
+		fig.legendON();
 		fig.run(true);
 	}
 
