@@ -39,8 +39,10 @@ public class Tutorial08 {
 			pc.connectPorts("y2.port3", "wg2.port2");
 			transfer[i] = Utils.todB(pc.getTransfer("y1.port1", "y2.port1").absSquared()) ;
 			
-			if(i==0)
+			if(i==0) {
 				System.out.println(pc.getCircuit().printAllLoops_compactForm());
+				System.out.println(pc.getCircuit().printForwardPaths_noGains());
+			}		
 		}
 
 		MatlabChart fig = new MatlabChart() ;
