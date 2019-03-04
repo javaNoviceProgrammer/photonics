@@ -1,8 +1,6 @@
 package photonics.interconnect.modes;
 
-import mathLib.func.intf.RealFunction;
-
-public class Neff450X220Strip implements RealFunction {
+public class Neff450X220Strip implements Neff {
 
 	double A2 = -2.6821e-7,
 		   A1 = -0.00048639,

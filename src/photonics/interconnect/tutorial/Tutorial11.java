@@ -14,7 +14,7 @@ public class Tutorial11 {
 		double radiusMicron = 10 ;
 		double kappa = 0.2 ;
 		double loss = 10 ; // dB per cm
-		double[] lambdaNm = MathUtils.linspace(1540, 1560, 5000) ;
+		double[] lambdaNm = MathUtils.linspace(1540, 1560, 10000) ;
 		Complex[] transfer = new Complex[lambdaNm.length] ; // thru port
 		double[] transferdB = new double[lambdaNm.length] ; // thru port (dB)
 		for(int i=0; i<lambdaNm.length; i++) {
