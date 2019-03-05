@@ -36,6 +36,15 @@ public class PhotonicCircuit {
 		elements.add(elem) ;
 		globalSFG.append(elem.getSFG());
 	}
+	
+	public void addElements(AbstractElement... elems) {
+		for(AbstractElement elem: elems) {
+			elem.setWavelength(lambda);
+			elem.buildElement();
+			elements.add(elem) ;
+			globalSFG.append(elem.getSFG());
+		}
+	}
 
 //	public void connectPorts(String startPort, String endPort){
 //		globalSFG.addArrow(startPort+".out", endPort+".in", ONE);
