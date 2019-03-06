@@ -1,6 +1,7 @@
 package photonics.interconnect.modes;
 
 import flanagan.interpolation.CubicSpline;
+import mathLib.func.ArrayFunc;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 
@@ -385,7 +386,7 @@ public class Neff450X220CoupledStrip implements NeffCoupled {
 
 	// for test *******
 	public static void main(String[] args){
-		double[] g = MathUtils.linspace(50, 1000, 1000) ;
+		double[] g = MathUtils.linspace(100, 1000, 1000) ;
 		Neff450X220CoupledStrip db = new Neff450X220CoupledStrip();
 		double[] nEven = db.getNeffEven(1550, g) ;
 		double[] nOdd = db.getNeffOdd(1550, g) ;
@@ -411,6 +412,13 @@ public class Neff450X220CoupledStrip implements NeffCoupled {
 		fig1.ylabel("Effective Index");
 		fig1.legendON();
 		fig1.run(true);
+		
+		MatlabChart fig2 = new MatlabChart() ;
+		fig2.plot(g,  ArrayFunc.apply(s -> (db.getNeffEven(1550, s)+db.getNeffOdd(1550, s))/2.0, g));
+		fig2.renderPlot();
+		fig2.xlabel("gap (nm)");
+		fig2.ylabel("Effective Index");
+		fig2.run(true);
 	}
 
 
