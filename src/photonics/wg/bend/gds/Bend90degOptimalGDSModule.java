@@ -187,7 +187,7 @@ public class Bend90degOptimalGDSModule {
         	BasicStroke stroke = new BasicStroke((float) width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL) ;
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
-        	Struct topCell = new Struct("top") ;
+        	Struct topCell = new Struct("bend90_optimal_"+R) ;
         	Rect wgIn = new Rect(-0.01, -width/2.0, 2e-3, width/2.0, 1) ;
         	Rect wgOut = new Rect(R-width/2.0, R-3e-3, R+width/2.0, R+0.01, 1) ;
 
@@ -209,8 +209,8 @@ public class Bend90degOptimalGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 8) ;
-		bend.setWidth(0.5);
+		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 10) ;
+		bend.setWidth(0.45);
 		bend.createGDS(null, true);
 	}
 

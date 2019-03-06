@@ -32,6 +32,7 @@ import JGDS2.Struct;
 public class Bend90degEulerGDSdegModule {
 
 	double a, b, R ;
+	double width = 0.4 ; // default
 
 	public Bend90degEulerGDSdegModule(
 			double a,
@@ -41,6 +42,10 @@ public class Bend90degEulerGDSdegModule {
 		this.a = a ;
 		this.b = b ;
 		this.R = R ;
+	}
+	
+	public void setWidth(double width) {
+		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
@@ -139,7 +144,7 @@ public class Bend90degEulerGDSdegModule {
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
 
-            double width = 0.4 ;
+//            double width = 0.4 ;
 
             LinearInterpolation1D interpolation1d = new LinearInterpolation1D(xx, yy) ;
             double[] xPoints = MathUtils.linspace(0, R0, 1000) ;
@@ -174,7 +179,8 @@ public class Bend90degEulerGDSdegModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degEulerGDSdegModule bend = new Bend90degEulerGDSdegModule(100, 2.49, 5) ;
+		Bend90degEulerGDSdegModule bend = new Bend90degEulerGDSdegModule(100, 2.49, 10) ;
+		bend.setWidth(0.45);
 		bend.createGDS(null, true);
 	}
 }
