@@ -38,6 +38,12 @@ public class Yjunction extends AbstractElement {
 
 	@Override
 	public void buildElement() {
+		
+		if(inputLambda == null)
+			throw new NullPointerException("wavelength is not set for " + name) ;
+		
+		s12 = s21 = Math.sqrt((1+delta)/2.0) ;
+		s13 = s31 = Math.sqrt((1-delta)/2.0) ;
 
 		String port1_in = name+".port1.in" ;
 		String port1_out = name+".port1.out" ;
@@ -56,12 +62,6 @@ public class Yjunction extends AbstractElement {
 
 		sfgElement = new SFG(nodes) ;
 		
-		s12 = s21 = Math.sqrt((1+delta)/2.0) ;
-		s13 = s31 = Math.sqrt((1-delta)/2.0) ;
-		
-		if(inputLambda == null)
-			throw new NullPointerException("wavelength is not set for " + name) ;
-
 		sfgElement.addArrow(port1_in, port1_out, s11);
 		sfgElement.addArrow(port1_in, port2_out, s21);
 		sfgElement.addArrow(port1_in, port3_out, s31);
