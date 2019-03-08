@@ -35,7 +35,7 @@ public class BasicPhaseShifter extends AbstractElement {
 		if(lambda == null)
 			throw new NullPointerException("wavelength is not set for " + name) ;
 		
-		double lossFactor = Math.pow(10.0, excessLossdB/10.0) ;
+		double lossFactor = Math.pow(10.0, -excessLossdB/10.0) ;
 		s21 = exp(-j*deltaPhi)*lossFactor ;
 		s12 = s21 ;
 		

@@ -13,9 +13,9 @@ import photonics.util.Wavelength;
 public class Tutorial16 {
 	
 	public static void main(String[] args) {
-		double excessLossdB = 0 ; // dB 
+		double excessLossdB = 5 ; // dB 
 		double lambdaNm = 1550 ;
-		double[] phaseShift = MathUtils.linspace(0, 2*PI, 1000) ;
+		double[] phaseShift = MathUtils.linspace(0, 2*PI, 10000) ;
 		double[] transfer = new double[phaseShift.length] ; 
 		for(int i=0; i<phaseShift.length; i++) {
 			Wavelength lambda = new Wavelength(lambdaNm) ;
@@ -23,7 +23,7 @@ public class Tutorial16 {
 			pc.setWavelength(lambda) ;
 			Yjunction y1 = new Yjunction("y1", 0) ;
 			Yjunction y2 = new Yjunction("y2", 0) ;
-			BasicPhaseShifter ps1 = new BasicPhaseShifter("ps1", 0, 0) ;
+			BasicPhaseShifter ps1 = new BasicPhaseShifter("ps1", 0, excessLossdB) ;
 			BasicPhaseShifter ps2 = new BasicPhaseShifter("ps2", phaseShift[i], excessLossdB) ;
 			pc.addElements(y1, y2, ps1, ps2);
 			pc.connectPorts("y1.port2", "ps1.port1");
