@@ -1,27 +1,17 @@
 package photonics.wg.coupling;
 
-import PhotonicElements.DirectionalCoupler.DistributedCoupler.DistributedCouplerStripWg;
-import PhotonicElements.Utilities.MathLibraries.Complex;
-import PhotonicElements.Utilities.MathLibraries.ComplexMatrix;
-import PhotonicElements.Utilities.Wavelength;
-import PhotonicElements.Waveguides.WaveguideProperties.WgProperties;
 import ch.epfl.general_libraries.clazzes.ParamName;
 import flanagan.interpolation.CubicSpline;
-
-
-// This class is for 450nmX220nm Strip Waveguides
+import mathLib.matrix.ComplexMatrix;
+import mathLib.numbers.Complex;
+import photonics.util.Wavelength;
 
 public class RaceTrackCoupler {
 
-	// step 1: I need to define the non-uniform gap equation
-	// step 2: I need to discretize the coupling region
-	// step 3: I need to use the S-parameters of each small region to find the transfer matrix
-
 	double ZminMicron, ZmaxMicron ;
 	double gapNm, lengthMicron , radiusMicron, widthMicron = 0.45 ;
-	double gapMaxNm = 500 ;
+	double gapMaxNm = 1000 ;
 	public Wavelength inputLambda ;
-	public WgProperties wgProp ;
 
 	public int numIntervals = 100 ;
 
@@ -31,20 +21,18 @@ public class RaceTrackCoupler {
 
 	ComplexMatrix scattMatrix = new ComplexMatrix(2,2) ;
 	Complex zero = new Complex(0,0) , one = new Complex(1,0) ;
-	// constructor to initialize the class
+
 	public RaceTrackCoupler(
 			Wavelength inputLambda,
-			WgProperties wgProp,
 			@ParamName(name="Radius (micron)") double radiusMicron,
 			@ParamName(name="gap size (nm)") double gapNm,
 			@ParamName(name="coupling length (um)") double lengthMicron
 			){
 		this.inputLambda = inputLambda ;
-		this.wgProp = wgProp ;
 		this.gapNm = gapNm ;
 		this.lengthMicron = lengthMicron ;
 		this.gapMaxNm = 500 ;
-		this.radiusMicron = radiusMicron ; // need to modify this later
+		this.radiusMicron = radiusMicron ;
 		this.ZmaxMicron = Math.sqrt( (gapMaxNm-gapNm)/1000 * (2*radiusMicron-(gapMaxNm-gapNm)/1000)) + lengthMicron/2d ;
 		this.ZminMicron = -this.ZmaxMicron ;
 		this.scattMatrix = getScattMatrix() ;
@@ -52,7 +40,6 @@ public class RaceTrackCoupler {
 
 	public RaceTrackCoupler(
 			Wavelength inputLambda,
-			WgProperties wgProp,
 			@ParamName(name="Waveguide width (nm)") double widthNm,
 			@ParamName(name="Radius (micron)") double radiusMicron,
 			@ParamName(name="gap size (nm)") double gapNm,
@@ -62,12 +49,11 @@ public class RaceTrackCoupler {
 			CubicSpline neffOddGapInterpolator
 			){
 		this.inputLambda = inputLambda ;
-		this.wgProp = wgProp ;
 		this.gapNm = gapNm ;
 		this.gapMaxNm = gapMaxNm ;
 		this.lengthMicron = lengthMicron ;
 		this.widthMicron = widthNm*1e-3 ;
-		this.radiusMicron = radiusMicron ; // need to modify this later
+		this.radiusMicron = radiusMicron ;
 		this.ZmaxMicron = Math.sqrt( (gapMaxNm-gapNm)/1000 * (2*(radiusMicron+widthMicron/2)-(gapMaxNm-gapNm)/1000)) + lengthMicron/2d ;
 		this.ZminMicron = -this.ZmaxMicron ;
 		this.neffEvenGapInterpolator = neffEvenGapInterpolator ;
@@ -77,7 +63,6 @@ public class RaceTrackCoupler {
 
 	public RaceTrackCoupler(
 			Wavelength inputLambda,
-			WgProperties wgProp,
 			@ParamName(name="Waveguide width (nm)") double widthNm,
 			@ParamName(name="Radius (micron)") double radiusMicron,
 			@ParamName(name="gap size (nm)") double gapNm,
@@ -86,7 +71,6 @@ public class RaceTrackCoupler {
 			CubicSpline neffOddGapInterpolator
 			){
 		this.inputLambda = inputLambda ;
-		this.wgProp = wgProp ;
 		this.gapNm = gapNm ;
 		this.lengthMicron = lengthMicron ;
 		this.gapMaxNm = 500 ;
@@ -102,7 +86,7 @@ public class RaceTrackCoupler {
 	public double getRadiusMicron(){
 		return radiusMicron ;
 	}
-	
+
 	public double getLengthMicron(){
 		return lengthMicron ;
 	}
@@ -132,17 +116,15 @@ public class RaceTrackCoupler {
 		this.scattMatrix = getScattMatrix() ;
 	}
 
-
-	// these methods get the parameters for the small coupling regions
 	private Complex S21(double z, double Dz){
 		DistributedCouplerStripWg DC ;
 		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
 			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
 			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		else{
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		return DC.S21 ;
 	}
@@ -152,10 +134,10 @@ public class RaceTrackCoupler {
 		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
 			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
 			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		else{
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		return DC.S31 ;
 	}
@@ -165,10 +147,10 @@ public class RaceTrackCoupler {
 		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
 			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
 			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		else{
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		return DC.S24 ;
 	}
@@ -178,17 +160,17 @@ public class RaceTrackCoupler {
 		if(neffEvenGapInterpolator != null && neffOddGapInterpolator != null){
 			neffEven = neffEvenGapInterpolator.interpolate(getCouplingGapNm(z)) ;
 			neffOdd = neffOddGapInterpolator.interpolate(getCouplingGapNm(z)) ;
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		else{
-			DC = new DistributedCouplerStripWg(inputLambda, wgProp, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
+			DC = new DistributedCouplerStripWg(inputLambda, Dz, getCouplingGapNm(z), neffEven, neffOdd) ;
 		}
 		return DC.S34 ;
 	}
 
 	// this method defines the non-uniform gap equation
 	public double getCouplingGapNm(double z){
-		if(Math.abs(z) <= lengthMicron/2d){
+		if(Math.abs(z) <= lengthMicron/2.0){
 			return gapNm ;
 		}
 		else{
