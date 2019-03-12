@@ -20,7 +20,7 @@ public class Tutorial05 {
 	public static void main(String[] args) {
 		double radiusMicron = 10 ;
 		double kappa = 0.2 ;
-		double[] lambdaNm = MathUtils.linspace(1540, 1560, 10000) ;
+		double[] lambdaNm = MathUtils.linspace(1540, 1560, 1000) ;
 		Complex[] transfer = new Complex[lambdaNm.length] ; // thru port
 		double[] transferdB = new double[lambdaNm.length] ; // thru port (dB)
 		for(int i=0; i<lambdaNm.length; i++) {
@@ -40,9 +40,11 @@ public class Tutorial05 {
 			// find the transfer function
 			transfer[i] = pc.getTransfer("dc1.port1", "dc1.port2") ;
 			transferdB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
-			
+
 			if(i==0) {
-				System.out.println(pc.getCircuit().printAllNodes());
+				System.out.println(pc.getCircuit().printForwardPaths_noGains());
+				System.out.println(pc.getCircuit().printCofactors());
+				System.out.println(pc.getCircuit().printAllLoops_compactForm());
 			}
 		}
 
