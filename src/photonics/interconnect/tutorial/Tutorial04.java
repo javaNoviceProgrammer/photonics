@@ -48,7 +48,6 @@ public class Tutorial04 {
 
 			if(i==0) {
 				System.out.println(pc.getCircuit().printForwardPaths_noGains());
-				System.out.println(pc.getCircuit().printCofactors());
 				System.out.println(pc.getCircuit().printAllLoops_compactForm());
 			}
 
