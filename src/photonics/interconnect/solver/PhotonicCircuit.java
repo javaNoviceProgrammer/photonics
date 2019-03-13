@@ -1,13 +1,14 @@
 package photonics.interconnect.solver;
 
+import static mathLib.numbers.Complex.ONE;
+
 import java.util.ArrayList;
 
+import flanagan.io.FileOutput;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
-
-import static mathLib.numbers.Complex.*;
 
 public class PhotonicCircuit {
 
@@ -79,6 +80,64 @@ public class PhotonicCircuit {
 
 	public SFG getCircuit() {
 		return globalSFG ;
+	}
+	
+	public void printAllDetails() {
+		System.out.println(getCircuit().printForwardPaths_noGains());
+		System.out.print(getCircuit().printAllLoops_compactForm());
+		System.out.println(getCircuit().printDelta_compactForm());
+	}
+	
+	public void printDetails() {
+		String st0 = getCircuit().printForwardPaths_noGains() ;
+		String[] st1 = st0.split("\\n") ;
+		for(String s: st1)
+			if(s != null && !s.equals(""))
+				System.out.println(SparamParser.parse(s));
+		
+		String st2 = getCircuit().printAllLoops_compactForm() ;
+		String[] st3 = st2.split("\\n") ;
+		for(String s: st3)
+			if(s != null && !s.equals(""))
+				System.out.println(SparamParser.parse(s));
+		
+		System.out.println(getCircuit().printDelta_compactForm());
+	}
+	
+	public ArrayList<String> getAllDetails() {
+		ArrayList<String> details = new ArrayList<>() ;
+		
+		String st0 = getCircuit().printForwardPaths_noGains() ;
+		String[] st1 = st0.split("\\n") ;
+		for(String s: st1)
+			if(s != null && !s.equals(""))
+				details.add(SparamParser.parse(s)) ;
+		
+		String st2 = getCircuit().printAllLoops_compactForm() ;
+		String[] st3 = st2.split("\\n") ;
+		for(String s: st3)
+			if(s != null && !s.equals(""))
+				details.add(SparamParser.parse(s)) ;
+		
+		String st4 = getCircuit().printDelta_compactForm() ;
+		String[] st5 = st4.split("\\n") ;
+		for(String s: st5)
+			if(s != null && !s.equals(""))
+				details.add(SparamParser.parse(s)) ;
+		
+		return details ;
+	}
+	
+	public void saveToFile(String filePath) {
+		ArrayList<String> details = getAllDetails() ;
+		String[] lines = new String[details.size()] ;
+		for(int i=0; i<lines.length; i++)
+			lines[i] = details.get(i) ;
+		
+		FileOutput fo = new FileOutput(filePath, 'w') ;
+		fo.println(lines);
+		fo.close();
+		System.gc();
 	}
 
 }
