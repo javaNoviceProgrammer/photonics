@@ -42,8 +42,7 @@ public class Tutorial05 {
 			transferdB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
 
 			if(i==0) {
-				System.out.println(pc.getCircuit().printForwardPaths_noGains());
-				System.out.println(pc.getCircuit().printAllLoops_compactForm());
+				pc.printDetails();
 			}
 		}
 

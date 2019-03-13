@@ -40,6 +40,9 @@ public class Tutorial07 {
 			pc.connectPorts("y2.port3", "wg2.port2");
 			transfer[i] = Utils.todB(pc.getTransfer("y1.port1", "y2.port1").absSquared()) ;
 			deltaL[i] = L2[i]-L1 ;
+			
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

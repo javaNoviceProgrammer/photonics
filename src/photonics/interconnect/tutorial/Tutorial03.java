@@ -41,9 +41,9 @@ public class Tutorial03 {
 			transfer[i] = pc.getTransfer("dc1.port1", "dc1.port2") ;
 			transferdB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
 			
-//			if(i==0) {
-//				System.out.println(pc.getCircuit().printAllLoops_compactForm());
-//			}
+			if(i==0) {
+				pc.printDetails();
+			}
 		}
 
 		MatlabChart fig = new MatlabChart() ;
