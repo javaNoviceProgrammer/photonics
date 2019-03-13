@@ -64,13 +64,13 @@ public class PhotonicCircuit {
 		try {
 			globalSFG.addArrow(startPort+".out", endPort+".in", ONE);
 		} catch (Exception e) {
-			
+			// ADD LATER
 		}
 		
 		try {
 			globalSFG.addArrow(endPort+".out", startPort+".in", ONE);
 		} catch (Exception e) {
-			
+			// ADD LATER
 		}
 	}
 
@@ -89,6 +89,23 @@ public class PhotonicCircuit {
 	}
 	
 	public void printDetails() {
+		String st0 = getCircuit().printForwardPaths_noGains() ;
+		String[] st1 = st0.split("\\n") ;
+		for(String s: st1)
+			if(s != null && !s.equals(""))
+				System.out.println(SparamParser.parse(s));
+		
+		String st2 = getCircuit().printAllLoops_compactForm() ;
+		String[] st3 = st2.split("\\n") ;
+		for(String s: st3)
+			if(s != null && !s.equals(""))
+				System.out.println(SparamParser.parse(s));
+		
+		System.out.println(getCircuit().printDelta_compactForm());
+	}
+	
+	public void printDetails(String startPort, String endPort) {
+		globalSFG.getGain(startPort + ".in", endPort + ".out") ;
 		String st0 = getCircuit().printForwardPaths_noGains() ;
 		String[] st1 = st0.split("\\n") ;
 		for(String s: st1)
