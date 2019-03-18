@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import flanagan.io.FileOutput;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
+import mathLib.util.CustomJFileChooser;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
 
@@ -152,6 +153,22 @@ public class PhotonicCircuit {
 			lines[i] = details.get(i) ;
 		
 		FileOutput fo = new FileOutput(filePath, 'w') ;
+		fo.println(lines);
+		fo.close();
+		System.gc();
+	}
+	
+	public void saveToFile() {
+		CustomJFileChooser fc = new CustomJFileChooser() ;
+		fc.setFileExtension("txt");
+		fc.openFile();
+		
+		ArrayList<String> details = getAllDetails() ;
+		String[] lines = new String[details.size()] ;
+		for(int i=0; i<lines.length; i++)
+			lines[i] = details.get(i) ;
+		
+		FileOutput fo = new FileOutput(fc.getSelectedFile().getAbsolutePath(), 'w') ;
 		fo.println(lines);
 		fo.close();
 		System.gc();
