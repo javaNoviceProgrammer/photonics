@@ -9,6 +9,7 @@ import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
 import photonics.interconnect.elements.AbstractElement;
+import photonics.interconnect.modes.Neff;
 import photonics.util.Wavelength;
 
 import static mathLib.numbers.Complex.* ;
@@ -25,7 +26,7 @@ public class StraightWg extends AbstractElement {
 
 	public StraightWg(
 			@ParamName(name="Element Name") String name,
-			RealFunction neff,
+			Neff neff,
 			double alphaDbPerCm,
 			double lengthMicron
 			) {
