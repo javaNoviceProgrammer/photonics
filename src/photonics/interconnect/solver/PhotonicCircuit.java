@@ -87,6 +87,7 @@ public class PhotonicCircuit {
 		System.out.println(getCircuit().printForwardPaths_noGains());
 		System.out.print(getCircuit().printAllLoops_compactForm());
 		System.out.println(getCircuit().printDelta_compactForm());
+		System.out.println(getCircuit().printCofactors());
 	}
 	
 	public void printDetails() {
@@ -103,6 +104,7 @@ public class PhotonicCircuit {
 				System.out.println(SparamParser.parse(s));
 		
 		System.out.println(getCircuit().printDelta_compactForm());
+		System.out.println(getCircuit().printCofactors());
 	}
 	
 	public void printDetails(String startPort, String endPort) {
@@ -120,6 +122,7 @@ public class PhotonicCircuit {
 				System.out.println(SparamParser.parse(s));
 		
 		System.out.println(getCircuit().printDelta_compactForm());
+		System.out.println(getCircuit().printCofactors());
 	}
 	
 	public ArrayList<String> getAllDetails() {
@@ -140,6 +143,12 @@ public class PhotonicCircuit {
 		String st4 = getCircuit().printDelta_compactForm() ;
 		String[] st5 = st4.split("\\n") ;
 		for(String s: st5)
+			if(s != null && !s.equals(""))
+				details.add(SparamParser.parse(s)) ;
+		
+		String st6 = getCircuit().printCofactors() ;
+		String[] st7 = st6.split("\\n") ;
+		for(String s: st7)
 			if(s != null && !s.equals(""))
 				details.add(SparamParser.parse(s)) ;
 		
