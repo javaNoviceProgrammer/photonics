@@ -32,6 +32,8 @@ public class Tutorial10 {
 			transfer[i] = pc.getTransfer("ring1.port1", "ring1.port2") ;
 			transferThrudB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
 			transferDropdB[i] = MathUtils.Conversions.todB(pc.getTransfer("ring1.port1", "ring1.port4").absSquared()) ;
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

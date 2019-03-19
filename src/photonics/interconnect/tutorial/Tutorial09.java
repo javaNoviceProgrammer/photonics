@@ -27,7 +27,7 @@ public class Tutorial09 {
 			transfer[i] = pc.getTransfer("dc1.port1", "dc1.port3").abs() ;
 			
 			if(i==0)
-				System.out.println(pc.getCircuit().printAllLoops_compactForm());
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;
