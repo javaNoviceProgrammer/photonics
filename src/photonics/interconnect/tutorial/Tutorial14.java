@@ -30,6 +30,8 @@ public class Tutorial14 {
 			pc.connectPorts("dc1.port2", "wg1.port1");
 			pc.connectPorts("wg1.port2", "dc1.port3");
 			reflection[i] = Utils.todB(pc.getTransfer("dc1.port1", "dc1.port1").absSquared()) ;
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

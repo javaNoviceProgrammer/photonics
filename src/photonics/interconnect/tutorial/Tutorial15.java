@@ -20,7 +20,7 @@ public class Tutorial15 {
 		double Lwg = 30 ; // um
 		double gap = 200e-3 ; // um
 		double loss = 0 ; // dB per cm
-		double[] lambdaNm = MathUtils.linspace(1545, 1555, 10000) ;
+		double[] lambdaNm = MathUtils.linspace(1545, 1555, 1000) ;
 		double[] transfer = new double[lambdaNm.length] ; 
 		for(int i=0; i<lambdaNm.length; i++) {
 			Wavelength lambda = new Wavelength(lambdaNm[i]) ;
@@ -40,6 +40,8 @@ public class Tutorial15 {
 			pc.connectPorts("dc1.port4", "wg3.port1");
 			pc.connectPorts("dc2.port1", "wg3.port2");
 			transfer[i] = Utils.todB(pc.getTransfer("dc1.port1", "dc2.port4").absSquared()) ;
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

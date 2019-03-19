@@ -31,6 +31,8 @@ public class Tutorial16 {
 			pc.connectPorts("y2.port2", "ps1.port2");
 			pc.connectPorts("y2.port3", "ps2.port2");
 			transfer[i] = Utils.todB(pc.getTransfer("y1.port1", "y2.port1").absSquared()) ;
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;
