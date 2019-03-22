@@ -30,6 +30,9 @@ public class Tutorial06 {
 			Complex t1 = pc.getTransfer("y1.port2", "y1.port1") ;
 			Complex t2 = pc.getTransfer("y1.port3", "y1.port1") ;
 			outPowerRatio[i] = (t1+t2*exp(-j*phi[i])).absSquared()/2.0 ;
+			
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

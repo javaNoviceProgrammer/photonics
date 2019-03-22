@@ -28,6 +28,9 @@ public class Tutorial01 {
 			pc.addElement(wg1);
 			// calculate transfer
 			transfer[i] = pc.getTransfer("wg1.port1", "wg1.port2") ;
+			
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

@@ -30,6 +30,9 @@ public class Tutorial02 {
 			pc.connectPorts("wg1.port2", "wg2.port1");
 
 			transfer[i] = pc.getTransfer("wg1.port1", "wg2.port2") ;
+			
+			if(i==0)
+				pc.printDetails();
 
 		}
 

@@ -30,6 +30,9 @@ public class Tutorial11 {
 			// find the transfer function
 			transfer[i] = pc.getTransfer("ring1.port1", "ring1.port2") ;
 			transferdB[i] = MathUtils.Conversions.todB(transfer[i].absSquared()) ;
+			
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;

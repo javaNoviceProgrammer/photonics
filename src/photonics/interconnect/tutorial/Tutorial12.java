@@ -24,6 +24,9 @@ public class Tutorial12 {
 			pc.addElement(dc1);
 			thru[i] = pc.getTransfer("dc1.port1", "dc1.port2").absSquared() ;
 			cross[i] = pc.getTransfer("dc1.port1", "dc1.port3").absSquared() ;
+			
+			if(i==0)
+				pc.printDetails();
 		}
 
 		MatlabChart fig = new MatlabChart() ;
