@@ -23,7 +23,7 @@ public class Tutorial17 {
 		double radiusMicron = 5 ;
 		double kappa = 0.1 ;
 		Neff450X220Strip modeTE00 = new Neff450X220Strip() ;
-		double[] lambdaNm = MathUtils.linspace(1541, 1547, 1000) ;
+		double[] lambdaNm = MathUtils.linspace(1541, 1547, 10000) ;
 		Complex[] transfer = new Complex[lambdaNm.length] ; // thru port
 		double[] transferdB = new double[lambdaNm.length] ; // thru port (dB)
 		for(int i=0; i<lambdaNm.length; i++) {
@@ -37,7 +37,7 @@ public class Tutorial17 {
 			StraightWg cwg2 = new StraightWg("cwg2", modeTE00, 5, PI*radiusMicron) ;
 			CompactCoupler dc1 = new CompactCoupler("dc1", kappa) ;
 			CompactCoupler dc2 = new CompactCoupler("dc2", kappa) ;
-			Reflector lr = new Reflector("lr", 0.02) ;
+			Reflector lr = new Reflector("lr", 0.01) ;
 			// connect photonics elements
 			pc.addElements(cwg1, cwg2, dc1, dc2, lr);
 			pc.connectPorts("dc1.port3", "lr.port1");
