@@ -115,8 +115,8 @@ public class Bend90degCircularGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degCircularGDSModule bend = new Bend90degCircularGDSModule(100, 2.49, 20) ;
-		bend.setWidth(0.4);
+		Bend90degCircularGDSModule bend = new Bend90degCircularGDSModule(100, 2.49, 25) ;
+		bend.setWidth(0.45);
 		bend.createGDS(null, true);
 	}
 
