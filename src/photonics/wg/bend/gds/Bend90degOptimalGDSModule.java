@@ -209,8 +209,8 @@ public class Bend90degOptimalGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 10) ;
-		bend.setWidth(0.45);
+		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 4) ;
+		bend.setWidth(0.4);
 		bend.createGDS(null, true);
 	}
 
