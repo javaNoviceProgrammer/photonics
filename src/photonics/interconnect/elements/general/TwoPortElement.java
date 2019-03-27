@@ -1,0 +1,54 @@
+package photonics.interconnect.elements.general;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import ch.epfl.general_libraries.clazzes.ParamName;
+import ch.epfl.general_libraries.utils.SimpleMap;
+import mathLib.sfg.numeric.SFG;
+import photonics.interconnect.elements.AbstractElement;
+import photonics.util.Wavelength;
+import static mathLib.numbers.Complex.*;
+
+public class TwoPortElement extends AbstractElement {
+	
+	public TwoPortElement(
+			@ParamName(name="Element Name") String name
+			) {
+		this.name = name ;
+	}
+
+	@Override
+	public void setWavelength(Wavelength inputLambda) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void buildElement() {
+		String port1_in = name+".port1.in" ;
+		String port1_out = name+".port1.out" ;
+		String port2_in = name+".port2.in" ;
+		String port2_out = name+".port2.out" ;
+
+		nodes = new ArrayList<>() ;
+		nodes.add(port1_in) ;
+		nodes.add(port1_out) ;
+		nodes.add(port2_in) ;
+		nodes.add(port2_out) ;
+
+		sfgElement = new SFG(nodes) ;
+		
+		sfgElement.addArrow(port1_in, port1_out, ONE);
+		sfgElement.addArrow(port1_in, port2_out, ONE);
+
+		sfgElement.addArrow(port2_in, port1_out, ONE);
+		sfgElement.addArrow(port2_in, port2_out, ONE);
+	}
+
+	@Override
+	public Map<String, String> getAllParameters() {
+		Map<String, String> map = new SimpleMap<String, String>() ;
+		return map ;
+	}
+
+}
