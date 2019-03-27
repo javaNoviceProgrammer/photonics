@@ -64,14 +64,15 @@ public class Interconnect implements Experiment {
 									globalSFG.getGain(transfers[i].getStartPort()+".in", transfers[i].getEndPort()+".out").phase());
 		}
 
-		for(int i=0; i<numElements; i++){
-			dp.addProperties(elements[i].getAllParameters());
-		}
+//		for(int i=0; i<numElements; i++){
+//			if(elements[i] != null)
+//				dp.addProperties(elements[i].getAllParameters());
+//		}
 		man.addDataPoint(dp);
 	}
 
 	public static void main(String[] args){
-		String pacakgeString = "photonics;" ;
+		String pacakgeString = "photonics" ;
 		String classString = Interconnect.class.getName() ;
 		ExperimentConfigurationCockpit.execute(new String[]{"-p", pacakgeString, "-c", classString}, true);
 	}

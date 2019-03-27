@@ -3,25 +3,25 @@ package photonics.interconnect.elements.passive;
 import static mathLib.numbers.Complex.j;
 import static mathLib.numbers.ComplexMath.PI;
 import static mathLib.numbers.ComplexMath.exp;
+import static mathLib.numbers.ComplexMath.sqrt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
-import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
 import photonics.interconnect.elements.AbstractElement;
+import photonics.interconnect.modes.Neff;
 import photonics.util.Wavelength;
-import static mathLib.numbers.ComplexMath.*;
 
 public class AddDropRing extends AbstractElement {
 
 	Wavelength lambda = null ;
 
 	double radiusMicron, kappa1, t1, kappa2, t2, alphaDbPerCm ;
-	RealFunction neff ;
+	Neff neff ;
 	
 	public Complex s11, s12, s13, s14 ; 
 	public Complex s21, s22, s23, s24 ;
@@ -30,7 +30,7 @@ public class AddDropRing extends AbstractElement {
 	
 	public AddDropRing(
 			@ParamName(name="Element Name") String name ,
-			@ParamName(name="Waveguide Mode") RealFunction neff ,
+			@ParamName(name="Waveguide Mode") Neff neff ,
 			@ParamName(name="Radius (um)") double radius ,
 			@ParamName(name="Loss (dB/cm)") double alphaDbPerCm ,
 			@ParamName(name="kappa 1 (input)") double kappa1,
