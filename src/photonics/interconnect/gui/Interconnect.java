@@ -64,10 +64,10 @@ public class Interconnect implements Experiment {
 									globalSFG.getGain(transfers[i].getStartPort()+".in", transfers[i].getEndPort()+".out").phase());
 		}
 
-//		for(int i=0; i<numElements; i++){
-//			if(elements[i] != null)
-//				dp.addProperties(elements[i].getAllParameters());
-//		}
+		for(int i=0; i<numElements; i++){
+			if(elements[i] != null)
+				dp.addProperties(elements[i].getAllParameters());
+		}
 		man.addDataPoint(dp);
 	}
 

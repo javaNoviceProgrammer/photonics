@@ -114,7 +114,7 @@ public class AddDropRing extends AbstractElement {
 		map.put(name+".t1", t1+"") ;
 		map.put(name+".kappa2", kappa2+"") ;
 		map.put(name+".t2", t2+"") ;
-		return null;
+		return map;
 	}
 
 }

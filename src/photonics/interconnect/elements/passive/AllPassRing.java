@@ -80,7 +80,7 @@ public class AllPassRing extends AbstractElement {
 		map.put(name+".radius (um)", radiusMicron+"") ;
 		map.put(name+".kappa", kappa+"") ;
 		map.put(name+".t", t+"") ;
-		return null;
+		return map;
 	}
 
 }
