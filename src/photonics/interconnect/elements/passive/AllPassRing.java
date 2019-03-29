@@ -1,31 +1,33 @@
 package photonics.interconnect.elements.passive;
 
+import static mathLib.numbers.Complex.j;
+import static mathLib.numbers.ComplexMath.PI;
+import static mathLib.numbers.ComplexMath.exp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
-import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
 import photonics.interconnect.elements.AbstractElement;
+import photonics.interconnect.modes.Neff;
 import photonics.util.Wavelength;
-import static mathLib.numbers.ComplexMath.*;
-import static mathLib.numbers.Complex.*;
 
 public class AllPassRing extends AbstractElement {
 
 	Wavelength lambda = null ;
 
 	double radiusMicron, kappa, t, alphaDbPerCm ;
-	RealFunction neff ;
+	Neff neff ;
 	
 	public Complex s11, s12 ; 
 	public Complex s21, s22 ;
 	
 	public AllPassRing(
 			@ParamName(name="Element Name") String name ,
-			@ParamName(name="Waveguide Mode") RealFunction neff ,
+			@ParamName(name="Waveguide Mode") Neff neff ,
 			@ParamName(name="Radius (um)") double radius ,
 			@ParamName(name="Loss (dB/cm)") double alphaDbPerCm ,
 			@ParamName(name="kappa") double kappa 

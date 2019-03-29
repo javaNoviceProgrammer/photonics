@@ -1,26 +1,26 @@
 package photonics.interconnect.elements.passive;
 
+import static mathLib.numbers.Complex.j;
+import static mathLib.numbers.ComplexMath.PI;
+import static mathLib.numbers.ComplexMath.exp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
-import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
 import mathLib.sfg.numeric.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.interconnect.modes.Neff;
 import photonics.util.Wavelength;
 
-import static mathLib.numbers.Complex.* ;
-import static mathLib.numbers.ComplexMath.*;
-
 public class StraightWg extends AbstractElement {
 
 	Wavelength lambda = null ;
 
 	double lengthMicron, alphaDbPerCm ;
-	RealFunction neff ;
+	Neff neff ;
 	
 	public Complex s11, s12, s21, s22 ;
 
@@ -58,7 +58,7 @@ public class StraightWg extends AbstractElement {
 		this.lambda = lambda ;
 	}
 
-	public void setNeff(RealFunction neff) {
+	public void setNeff(Neff neff) {
 		this.neff = neff ;
 	}
 
