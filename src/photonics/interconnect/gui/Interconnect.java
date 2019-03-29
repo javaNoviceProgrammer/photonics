@@ -65,8 +65,7 @@ public class Interconnect implements Experiment {
 		}
 
 		for(int i=0; i<numElements; i++){
-			if(elements[i] != null)
-				dp.addProperties(elements[i].getAllParameters());
+			dp.addProperties(elements[i].getAllParameters());
 		}
 		man.addDataPoint(dp);
 	}
