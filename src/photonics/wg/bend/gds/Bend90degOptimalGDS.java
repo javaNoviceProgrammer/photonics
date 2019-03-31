@@ -31,7 +31,7 @@ public class Bend90degOptimalGDS {
 	public static void main(String[] args) {
 		double b = 2.49 ;
 		double xi = (3.0*b-1.0)/(2.0*b) ;
-		double R0 = 10 ;
+		double R0 = 5 ;
 		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
 		SpecialFunc specialFunc = new SpecialFunc() ;
 //		double a2 = 0.73669 ;
@@ -204,7 +204,7 @@ public class Bend90degOptimalGDS {
             xtot[xtot.length-1] = R0 ;
             ytot[0] = 0.0 ;
             ytot[ytot.length-1] = R0 ;
-            
+
             LinearInterpolation1D interpolate = new LinearInterpolation1D(xtot, ytot) ;
             double[] xPoints = MathUtils.linspace(xtot[0], R0, 1000) ;
             double[] yPoints = ArrayFunc.apply(t -> interpolate.interpolate(t), xPoints) ;
@@ -221,7 +221,7 @@ public class Bend90degOptimalGDS {
         	Struct topCell = new Struct("top") ;
         	Rect wgIn = new Rect(-10, -width/2.0, 2e-3, width/2.0, 1) ;
         	Rect wgOut = new Rect(R0-width/2.0, R0-2e-3, R0+width/2.0, R0+10, 1) ;
-          
+
         	topCell.add(area);
         	topCell.add(wgIn);
         	topCell.add(wgOut);
