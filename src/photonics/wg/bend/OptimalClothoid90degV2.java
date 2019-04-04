@@ -12,7 +12,6 @@ import mathLib.func.ArrayFunc;
 import mathLib.integral.Integral1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.LossModel;
 
 public class OptimalClothoid90degV2 {
 

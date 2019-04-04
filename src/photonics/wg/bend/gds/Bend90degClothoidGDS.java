@@ -1,6 +1,5 @@
 package photonics.wg.bend.gds;
 
-import photonics.wg.bend.nature.LossModel;
 import static java.lang.Math.* ;
 
 import java.awt.BasicStroke;
@@ -28,6 +27,7 @@ import mathLib.ode.Richardson;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
+import photonics.wg.bend.LossModel;
 
 public class Bend90degClothoidGDS {
 	public static void main(String[] args) {

@@ -12,7 +12,8 @@ import mathLib.ode.Richardson;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.LossModel;
+import photonics.wg.bend.LossModel;
+
 import static java.lang.Math.* ;
 
 import java.awt.BasicStroke;

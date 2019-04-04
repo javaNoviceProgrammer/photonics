@@ -27,7 +27,7 @@ import mathLib.integral.Integral1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.LossModel;
+import photonics.wg.bend.LossModel;
 
 public class Bend90degClothoidGDSModule {
 

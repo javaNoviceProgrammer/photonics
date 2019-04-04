@@ -25,7 +25,7 @@ import mathLib.ode.intf.DerivnFunction1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.SpecialFunc;
+import photonics.wg.bend.SpecialFunc;
 
 public class Bend90degOptimalGDSModule {
 

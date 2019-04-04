@@ -1,4 +1,4 @@
-package photonics.wg.bend.nature;
+package photonics.wg.bend;
 
 import static java.lang.Math.pow;
 

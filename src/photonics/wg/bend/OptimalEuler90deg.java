@@ -9,7 +9,6 @@ import static java.lang.Math.sqrt;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.integral.Integral1D;
-import photonics.wg.bend.nature.LossModel;
 
 public class OptimalEuler90deg {
 	public static void main(String[] args) {

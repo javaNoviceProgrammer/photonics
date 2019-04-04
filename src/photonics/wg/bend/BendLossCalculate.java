@@ -2,7 +2,6 @@ package photonics.wg.bend;
 
 import flanagan.integration.IntegralFunction;
 import mathLib.integral.Integral1D;
-import photonics.wg.bend.nature.LossModel;
 
 public class BendLossCalculate {
 

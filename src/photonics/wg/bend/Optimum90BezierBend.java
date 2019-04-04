@@ -4,7 +4,6 @@ import mathLib.func.ArrayFunc;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils.FindMinimum;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.LossModel;
 
 public class Optimum90BezierBend {
 

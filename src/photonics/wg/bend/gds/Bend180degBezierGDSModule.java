@@ -19,7 +19,7 @@ import mathLib.util.ArrayUtils.FindMinimum;
 import mathLib.util.MathUtils;
 import photonics.wg.bend.BendLossCalculate;
 import photonics.wg.bend.BezierCurve180;
-import photonics.wg.bend.nature.LossModel;
+import photonics.wg.bend.LossModel;
 
 public class Bend180degBezierGDSModule {
 

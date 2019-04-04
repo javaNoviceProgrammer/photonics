@@ -17,7 +17,6 @@ import mathLib.ode.Richardson;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.nature.LossModel;
 
 public class OptimalClothoid90deg {
 	public static void main(String[] args) {
