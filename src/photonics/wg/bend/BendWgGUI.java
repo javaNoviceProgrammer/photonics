@@ -58,6 +58,8 @@ public class BendWgGUI extends JFrame {
 	private JRadioButton rdbtnClothoid180Degree;
 	private JLabel lblWum;
 	private JTextField wTextField;
+	private JLabel lblPoints;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -322,9 +324,9 @@ public class BendWgGUI extends JFrame {
 		contentPane.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 0, 0, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 36, 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 30, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
 		lblWum = new JLabel("W (um) : ");
@@ -370,12 +372,30 @@ public class BendWgGUI extends JFrame {
 				gdsButtonActionPerformed(e);
 			}
 		});
+		
+		lblPoints = new JLabel("Points: ");
+		GridBagConstraints gbc_lblPoints = new GridBagConstraints();
+		gbc_lblPoints.anchor = GridBagConstraints.EAST;
+		gbc_lblPoints.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPoints.gridx = 0;
+		gbc_lblPoints.gridy = 2;
+		panel_1.add(lblPoints, gbc_lblPoints);
+		
+		textField = new JTextField();
+		textField.setText("1000");
+		textField.setColumns(10);
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 1;
+		gbc_textField.gridy = 2;
+		panel_1.add(textField, gbc_textField);
 
 		GridBagConstraints gbc_gdsButton = new GridBagConstraints();
 		gbc_gdsButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_gdsButton.insets = new Insets(0, 0, 0, 5);
 		gbc_gdsButton.gridx = 1;
-		gbc_gdsButton.gridy = 2;
+		gbc_gdsButton.gridy = 3;
 		panel_1.add(gdsButton, gbc_gdsButton);
 	}
 
