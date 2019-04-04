@@ -20,6 +20,7 @@ import mathLib.util.MathUtils;
 public class Bend180degCircularGDSModule {
 
 	double a, b, R ;
+	double width = 0.4 ; // default
 
 	public Bend180degCircularGDSModule(
 			double a,
@@ -29,6 +30,10 @@ public class Bend180degCircularGDSModule {
 		this.a = a ;
 		this.b = b ;
 		this.R = R ;
+	}
+
+	public void setWidth(double width) {
+		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
@@ -77,8 +82,6 @@ public class Bend180degCircularGDSModule {
             DataOutputStream dO = new DataOutputStream(fileOUT);
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
-
-            double width = 0.4 ;
 
             double[] xPoints = x ;
             double[] yPoints = y ;

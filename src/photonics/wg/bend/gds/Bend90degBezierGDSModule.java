@@ -36,6 +36,12 @@ public class Bend90degBezierGDSModule {
 		this.R = R ;
 	}
 
+	double width = 0.4 ; // default
+
+	public void setWidth(double width) {
+		this.width = width ;
+	}
+
 	public void createGDS(String filePath, boolean systemExit){
 //		double R = 10 ; // in micron
 		// sweep B to find minimum loss
@@ -104,8 +110,6 @@ public class Bend90degBezierGDSModule {
             DataOutputStream dO = new DataOutputStream(fileOUT);
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
-
-            double width = 0.4 ;
 
             LinearInterpolation1D interpolate = new LinearInterpolation1D(x, y) ;
             double[] xPoints = MathUtils.linspace(0, R, 1000) ;

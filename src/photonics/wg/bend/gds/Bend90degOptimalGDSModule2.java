@@ -1,5 +1,8 @@
 package photonics.wg.bend.gds;
 
+import static java.lang.Math.sqrt;
+import static mathLib.func.GammaFunc.gamma;
+
 import java.awt.BasicStroke;
 import java.awt.geom.Path2D;
 import java.io.DataOutputStream;
@@ -13,21 +16,23 @@ import JGDS2.Lib;
 import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
-import flanagan.integration.IntegralFunction;
+import flanagan.integration.RungeKutta;
+import flanagan.roots.RealRoot;
+import flanagan.roots.RealRootFunction;
 import mathLib.fitting.interpol.LinearInterpolation1D;
 import mathLib.func.ArrayFunc;
-import mathLib.func.intf.RealFunction;
-import mathLib.integral.Integral1D;
+import mathLib.ode.intf.DerivnFunction1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
+import photonics.wg.bend.SpecialFunc;
 
-public class Bend90degOptimalGDSModule {
+public class Bend90degOptimalGDSModule2 {
 
 	double a, b, R ;
 	double width = 0.4 ; // default
 
-	public Bend90degOptimalGDSModule(
+	public Bend90degOptimalGDSModule2(
 			double a,
 			double b,
 			double R
@@ -36,49 +41,92 @@ public class Bend90degOptimalGDSModule {
 		this.b = b ;
 		this.R = R ;
 	}
-
+	
 	public void setWidth(double width) {
 		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
 
+		double xi = (3.0*b-1.0)/(2.0*b) ;
 		double R0 = R ;
+		double a1 = sqrt(Math.PI)/2.0 * gamma(xi-0.5)/gamma(xi) ;
+		SpecialFunc specialFunc = new SpecialFunc() ;
+		double a2 = specialFunc.getValueAtMinusOne(b) ;
 
 		//********************* solving for x0
-		IntegralFunction funcX = new IntegralFunction() {
+
+		RealRootFunction funcX0 = new RealRootFunction() {
+
 			@Override
-			public double function(double theta) {
-				return Math.pow(Math.cos(theta), 1.0-1/b) ;
+			public double function(double x) {
+				double A = (a1-a2)/(R0 - x) ;
+
+				RungeKutta rk = new RungeKutta() ;
+				DerivnFunction1D func = new DerivnFunction1D() {
+
+					@Override
+					public double[] derivn(double x, double[] yy) {
+						// z = y'
+//						double y = yy[0] ;
+						double z = yy[1] ;
+						double yprime = z ;
+						double zprime = A * Math.pow(1+z*z, xi) ;
+						return new double[] {yprime, zprime};
+					}
+				};
+
+				rk.setStepSize(1e-4);
+				rk.setInitialValueOfX(x);
+				rk.setFinalValueOfX(R0);
+				rk.setInitialValueOfY(new double[] {R0-x, 1});
+				double[] yz = rk.fourthOrder(func) ;
+				return yz[0]-R0 ;
 			}
 		};
 
-		Integral1D integralX = new Integral1D(funcX, Math.PI/4.0, Math.PI/2.0) ;
-		double factorX = integralX.getIntegral() ;
-		System.out.println(factorX);
-
-		double factorY = b/(b-1.0) * Math.pow(Math.sqrt(2.0), (1.0-b)/b) ;
-
-		System.out.println(factorY);
-
-		double x0 = R0*factorY/(factorX+factorY) ;
+		RealRoot root = new RealRoot() ;
+		double x0 = root.bisect(funcX0, 0, R0) ;
 		System.out.println("x0 = " + x0);
-		double A = factorY/x0 ;
-		System.out.println("A = " + A);
+
 
 		//************ now calculating the bend
 
-		double[] theta = MathUtils.linspace(Math.PI/4.0, Math.PI/2.0, 500) ;
-		double[] xx = ArrayFunc.apply(new RealFunction() {
+		double A = (a1-a2)/(R0 - x0) ;
+		System.out.println("A = " + A);
+		double[] xx = MathUtils.linspace(x0, R0*0.999, 1000) ;
+		xx = ArrayUtils.concat(xx, MathUtils.linspace(0.999*R0, R0, 1000)) ;
+		double[] yy = new double[xx.length] ;
+		double[] yyprime = new double[xx.length] ;
 
-			@Override
-			public double evaluate(double arg) {
-				Integral1D in = new Integral1D(s -> 1.0/A * funcX.function(s), Math.PI/4.0, arg) ;
-				return x0 + in.getIntegral() ;
-			}
-		}, theta) ;
+		for(int i=0; i<xx.length; i++) {
 
-		double[] yy = ArrayFunc.apply(s -> R0-x0 + 1.0/A * (factorY- b/(b-1.0) * Math.pow(Math.cos(s), (b-1)/b)) , theta) ;
+			RungeKutta rk = new RungeKutta() ;
+			DerivnFunction1D func = new DerivnFunction1D() {
+
+				@Override
+				public double[] derivn(double x, double[] yy) {
+					// z = y'
+//					double y = yy[0] ;
+					double z = yy[1] ;
+					double yprime = z ;
+					double zprime = A * Math.pow(1+z*z, xi) ;
+					return new double[] {yprime, zprime};
+				}
+			};
+
+			rk.setStepSize(1e-4);
+			rk.setInitialValueOfX(x0);
+			rk.setFinalValueOfX(xx[i]);
+			rk.setInitialValueOfY(new double[] {R0-x0, 1});
+			double[] yz = rk.fourthOrder(func) ;
+			yy[i] = yz[0] ;
+			yyprime[i] = yz[1] ;
+		}
+
+		//************* finding the total loss
+		double lossdB = a*Math.pow(A, b) * 2*(R0-x0)*1e-4 ;
+		System.out.println("Loss (dB) = " + lossdB);
 
 		//************* finding the other half of y(x)
 		double[] ytilde = ArrayFunc.apply(t -> R0 - t, xx) ;
@@ -88,24 +136,20 @@ public class Bend90degOptimalGDSModule {
 		double[] ytot = ArrayUtils.concat(ytilde, yy) ;
 
 		MatlabChart fig3 = new MatlabChart() ;
-		fig3.plot(xtot, ytot, "m");
+		fig3.plot(xtot, ytot, "b");
 		fig3.renderPlot();
 		fig3.xlabel("X (um)");
 		fig3.ylabel("Y (um)");
 		fig3.run(systemExit);
-//		fig3.markerON();
 
 		//************* calculating the curvature
-		double[] C = ArrayFunc.apply(t -> A*Math.pow(Math.cos(t), 1.0/b) , theta) ;
-//		double[] R = ArrayFunc.apply(t -> 1/t, C) ;
+		double[] C = ArrayFunc.apply(t -> A/Math.pow(1+t*t, 1/(2*b)), yyprime) ;
 
 		MatlabChart fig4 = new MatlabChart() ;
-
-		fig4.plot(xtot, ArrayUtils.concat(C, C));
+		fig4.plot(xtot, ArrayUtils.concat(C, C), "r");
 		fig4.renderPlot();
 		fig4.xlabel("x (um)");
 		fig4.ylabel("Curvature (1/um)");
-//		fig4.markerON();
 		fig4.run(systemExit);
 
 		//************** create GDS file
@@ -145,7 +189,7 @@ public class Bend90degOptimalGDSModule {
 
         	Struct topCell = new Struct("bend90_optimal_"+R) ;
         	Rect wgIn = new Rect(-0.01, -width/2.0, 2e-3, width/2.0, 1) ;
-        	Rect wgOut = new Rect(R-width/2.0, R-6e-3, R+width/2.0, R+0.01, 1) ;
+        	Rect wgOut = new Rect(R-width/2.0, R-3e-3, R+width/2.0, R+0.01, 1) ;
 
         	area.or(wgIn).or(wgOut) ;
 
@@ -165,7 +209,7 @@ public class Bend90degOptimalGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 4) ;
+		Bend90degOptimalGDSModule2 bend = new Bend90degOptimalGDSModule2(100, 2.49, 4) ;
 		bend.setWidth(0.4);
 		bend.createGDS(null, true);
 	}

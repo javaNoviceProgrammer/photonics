@@ -43,7 +43,7 @@ public class BendWgGUI extends JFrame {
 	private JTextField R0TextField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
-	double a, b, R0;
+	double a, b, R0, width ;
 	String filePath;
 	private JRadioButton rdbtnBezier90Degree;
 	private JRadioButton rdbtnClothoid90Degree;
@@ -55,6 +55,8 @@ public class BendWgGUI extends JFrame {
 	private JRadioButton rdbtnEuler180Degree;
 	private JRadioButton rdbtnCircular180Degree;
 	private JRadioButton rdbtnClothoid180Degree;
+	private JLabel lblWum;
+	private JTextField wTextField;
 
 	/**
 	 * Launch the application.
@@ -94,7 +96,7 @@ public class BendWgGUI extends JFrame {
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 421, 431);
+		setBounds(100, 100, 421, 462);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -289,7 +291,7 @@ public class BendWgGUI extends JFrame {
 		gbc_rdbtnEuler180Degree.gridy = 3;
 		panel_3.add(rdbtnEuler180Degree, gbc_rdbtnEuler180Degree);
 
-		rdbtnClothoid90Degree = new JRadioButton("Clothoid 90 degree");
+		rdbtnClothoid90Degree = new JRadioButton("Hybrid 90 degree");
 		buttonGroup.add(rdbtnClothoid90Degree);
 		GridBagConstraints gbc_rdbtnClothoid90Degree = new GridBagConstraints();
 		gbc_rdbtnClothoid90Degree.anchor = GridBagConstraints.WEST;
@@ -298,7 +300,7 @@ public class BendWgGUI extends JFrame {
 		gbc_rdbtnClothoid90Degree.gridy = 4;
 		panel_3.add(rdbtnClothoid90Degree, gbc_rdbtnClothoid90Degree);
 
-		rdbtnClothoid180Degree = new JRadioButton("Clothoid 180 degree");
+		rdbtnClothoid180Degree = new JRadioButton("Hybrid 180 degree");
 		rdbtnClothoid180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnClothoid180Degree);
 		GridBagConstraints gbc_rdbtnClothoid180Degree = new GridBagConstraints();
@@ -317,17 +319,37 @@ public class BendWgGUI extends JFrame {
 		contentPane.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 0, 0, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 36, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
+
+		lblWum = new JLabel("W (um) : ");
+		GridBagConstraints gbc_lblWum = new GridBagConstraints();
+		gbc_lblWum.fill = GridBagConstraints.VERTICAL;
+		gbc_lblWum.anchor = GridBagConstraints.EAST;
+		gbc_lblWum.insets = new Insets(0, 0, 5, 5);
+		gbc_lblWum.gridx = 0;
+		gbc_lblWum.gridy = 0;
+		panel_1.add(lblWum, gbc_lblWum);
+
+		wTextField = new JTextField();
+		wTextField.setText("0.4");
+		wTextField.setColumns(10);
+		GridBagConstraints gbc_wTextField = new GridBagConstraints();
+		gbc_wTextField.anchor = GridBagConstraints.SOUTH;
+		gbc_wTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_wTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_wTextField.gridx = 1;
+		gbc_wTextField.gridy = 0;
+		panel_1.add(wTextField, gbc_wTextField);
 
 		JLabel lblR = new JLabel("R0 (um) : ");
 		GridBagConstraints gbc_lblR = new GridBagConstraints();
 		gbc_lblR.insets = new Insets(0, 0, 5, 5);
 		gbc_lblR.anchor = GridBagConstraints.EAST;
 		gbc_lblR.gridx = 0;
-		gbc_lblR.gridy = 0;
+		gbc_lblR.gridy = 1;
 		panel_1.add(lblR, gbc_lblR);
 
 		R0TextField = new JTextField();
@@ -335,7 +357,7 @@ public class BendWgGUI extends JFrame {
 		gbc_R0TextField.insets = new Insets(0, 0, 5, 5);
 		gbc_R0TextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_R0TextField.gridx = 1;
-		gbc_R0TextField.gridy = 0;
+		gbc_R0TextField.gridy = 1;
 		panel_1.add(R0TextField, gbc_R0TextField);
 		R0TextField.setColumns(10);
 
@@ -350,7 +372,7 @@ public class BendWgGUI extends JFrame {
 		gbc_gdsButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_gdsButton.insets = new Insets(0, 0, 0, 5);
 		gbc_gdsButton.gridx = 1;
-		gbc_gdsButton.gridy = 1;
+		gbc_gdsButton.gridy = 2;
 		panel_1.add(gdsButton, gbc_gdsButton);
 	}
 
@@ -370,37 +392,46 @@ public class BendWgGUI extends JFrame {
 		a = MathUtils.evaluate(aTextField.getText());
 		b = MathUtils.evaluate(bTextField.getText());
 		R0 = MathUtils.evaluate(R0TextField.getText());
+		width = MathUtils.evaluate(wTextField.getText()) ;
 		if (rdbtnCircular90Degree.isSelected()) {
 			Bend90degCircularGDSModule circ90Deg = new Bend90degCircularGDSModule(a, b, R0);
+			circ90Deg.setWidth(width);
 			circ90Deg.createGDS(filePath, false);
 		}
 		if (rdbtnOptimal90Degree.isSelected()) {
 			Bend90degOptimalGDSModule opt90Deg = new Bend90degOptimalGDSModule(a, b, R0);
+			opt90Deg.setWidth(width);
 			opt90Deg.createGDS(filePath, false);
 
 		}
 		if(rdbtnEuler90Degree.isSelected()) {
 			Bend90degEulerGDSdegModule euler90Deg = new Bend90degEulerGDSdegModule(a, b, R0) ;
+			euler90Deg.setWidth(width);
 			euler90Deg.createGDS(filePath, false);
 		}
 		if (rdbtnClothoid90Degree.isSelected()) {
 			Bend90degClothoidGDSModule clothoid90Deg = new Bend90degClothoidGDSModule(a, b, R0) ;
+			clothoid90Deg.setWidth(width);
 			clothoid90Deg.createGDS(filePath, false);
 		}
 		if (rdbtnBezier90Degree.isSelected()) {
 			Bend90degBezierGDSModule bezier90Deg = new Bend90degBezierGDSModule(a, b, R0);
+			bezier90Deg.setWidth(width);
 			bezier90Deg.createGDS(filePath, false);
 		}
 		if (rdbtnCircular180Degree.isSelected()) {
 			Bend180degCircularGDSModule circ180Deg = new Bend180degCircularGDSModule(a, b, R0);
+			circ180Deg.setWidth(width);
 			circ180Deg.createGDS(filePath, false);
 		}
 		if (rdbtnBezier180Degree.isSelected()) {
 			Bend180degBezierGDSModule bezier180Deg = new Bend180degBezierGDSModule(a, b, R0);
+			bezier180Deg.setWidth(width);
 			bezier180Deg.createGDS(filePath, false);
 		}
 		if(rdbtnOptimal180Degree.isSelected()) {
 			Bend180degOptimalGDSModule opt180Deg = new Bend180degOptimalGDSModule(a, b, R0) ;
+			opt180Deg.setWidth(width);
 			opt180Deg.createGDS(filePath, false);
 		}
 	}

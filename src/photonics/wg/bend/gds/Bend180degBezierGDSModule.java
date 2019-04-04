@@ -24,6 +24,7 @@ import photonics.wg.bend.LossModel;
 public class Bend180degBezierGDSModule {
 
 	double a, b, R ;
+	double width = 0.4 ; // default
 
 	public Bend180degBezierGDSModule(
 			double a,
@@ -33,6 +34,10 @@ public class Bend180degBezierGDSModule {
 		this.a = a ;
 		this.b = b ;
 		this.R = R ;
+	}
+
+	public void setWidth(double width) {
+		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
@@ -105,8 +110,6 @@ public class Bend180degBezierGDSModule {
             DataOutputStream dO = new DataOutputStream(fileOUT);
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
-
-            double width = 0.4 ;
 
             double[] xPoints = x ;
             double[] yPoints = y ;

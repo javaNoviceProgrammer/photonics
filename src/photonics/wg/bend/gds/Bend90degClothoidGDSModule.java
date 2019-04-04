@@ -32,6 +32,7 @@ import photonics.wg.bend.LossModel;
 public class Bend90degClothoidGDSModule {
 
 	double a, b, R ;
+	double width = 0.4 ; // default
 
 	public Bend90degClothoidGDSModule(
 			double a,
@@ -41,6 +42,10 @@ public class Bend90degClothoidGDSModule {
 		this.a = a ;
 		this.b = b ;
 		this.R = R ;
+	}
+
+	public void setWidth(double width) {
+		this.width = width ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
@@ -150,8 +155,6 @@ public class Bend90degClothoidGDSModule {
             DataOutputStream dO = new DataOutputStream(fileOUT);
             GDSWriter g = new GDSWriter(dO);
             Lib lib = new Lib();
-
-            double width = 0.4 ;
 
             LinearInterpolation1D interpolate = new LinearInterpolation1D(xx, yy) ;
             double[] xPoints = MathUtils.linspace(0, R0, 1000) ;
