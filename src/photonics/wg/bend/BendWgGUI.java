@@ -29,6 +29,7 @@ import photonics.wg.bend.gds.Bend90degCircularGDSModule;
 import photonics.wg.bend.gds.Bend90degClothoidGDSModule;
 import photonics.wg.bend.gds.Bend90degEulerGDSdegModule;
 import photonics.wg.bend.gds.Bend90degOptimalGDSModule;
+import java.awt.Toolkit;
 
 public class BendWgGUI extends JFrame {
 
@@ -78,6 +79,8 @@ public class BendWgGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public BendWgGUI() {
+		setTitle("Bend Creator V1.0");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(BendWgGUI.class.getResource("/com/sun/javafx/scene/control/skin/modena/HTMLEditor-Paste-Black.png")));
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e1) {
