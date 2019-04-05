@@ -1,5 +1,9 @@
 package photonics.wg.bend.gds2;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 import java.awt.BasicStroke;
 import java.awt.geom.Path2D;
 import java.io.DataOutputStream;
@@ -10,7 +14,6 @@ import java.io.IOException;
 import JGDS2.GArea;
 import JGDS2.GDSWriter;
 import JGDS2.Lib;
-import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
 import flanagan.integration.IntegralFunction;
@@ -18,16 +21,14 @@ import mathLib.func.ArrayFunc;
 import mathLib.integral.Integral1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
-import static java.lang.Math.*;
 
-public class Bend90degEulerGDSModule {
+public class Bend180degCircularGDSModule {
 
 	double a, b, R ;
 	double width = 0.4 ; // default
 	int numPoints = 500 ;
-	double beta = 0.0 ;
 
-	public Bend90degEulerGDSModule(
+	public Bend180degCircularGDSModule(
 			double a,
 			double b,
 			double R
@@ -45,24 +46,11 @@ public class Bend90degEulerGDSModule {
 		this.numPoints = n ;
 	}
 
-	public double getAuxiliaryC(double theta) {
-		if(0<= theta && theta <= PI/4.0)
-			return 2*sqrt(theta) ;
-		else
-			return getAuxiliaryC(PI/2.0-theta) ;
-	}
-
 	public double getCurvature(double theta) {
-		if(beta==0.0) {
-			IntegralFunction func = var -> cos(var)/getAuxiliaryC(var) ;
-			Integral1D integral = new Integral1D(func, 0, PI/2.0) ;
-			beta = 1.0/R * integral.getIntegral() ;
-		}
-
-		if(0<= theta && theta <= PI/4.0)
-			return beta*getAuxiliaryC(theta) ;
+		if(0<= theta && theta <= PI/2.0)
+			return 1.0/R ;
 		else
-			return getCurvature(PI/2.0-theta) ;
+			return getCurvature(PI-theta) ;
 	}
 
 	public double getX(double theta) {
@@ -85,23 +73,23 @@ public class Bend90degEulerGDSModule {
 
 	public void createGDS(String filePath, boolean systemExit){
 
-		double[] theta = MathUtils.linspace(0.0, PI/2.0, numPoints) ;
+		double[] theta = MathUtils.linspace(0.0, PI, numPoints) ;
 		double[] x = ArrayFunc.apply(s -> getX(s) , theta) ;
 		double[] y = ArrayFunc.apply(s -> getY(s), theta) ;
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 		double[] length = ArrayFunc.apply(s -> getS(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
-		fig.plot(x, y);
+		fig.plot(y, x);
 		fig.renderPlot();
-		fig.xlabel("X (um)");
-		fig.ylabel("Y (um)");
+		fig.xlabel("Y (um)");
+		fig.ylabel("X (um)");
 		fig.run(systemExit);
 
 		MatlabChart fig1 = new MatlabChart() ;
 		fig1.plot(x, curvature, "r");
 		fig1.renderPlot();
-		fig1.xlabel("x (um)");
+		fig1.xlabel("y (um)");
 		fig1.ylabel("Curvature (1/um)");
 		fig1.run(systemExit);
 
@@ -117,10 +105,10 @@ public class Bend90degEulerGDSModule {
             FileOutputStream fileOUT;
             File f ;
             if(filePath == null){
-            	f = new File("bend90_euler_"+R+".gds");
+            	f = new File("bend180_circular_"+R+".gds");
             }
             else{
-            	f = new File(filePath + File.separator + "bend90_euler_"+R+".gds");
+            	f = new File(filePath + File.separator + "bend180_circular_"+R+".gds");
             }
 
             fileOUT = new FileOutputStream(f);
@@ -138,11 +126,7 @@ public class Bend90degEulerGDSModule {
         	BasicStroke stroke = new BasicStroke((float) width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL) ;
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
-        	Struct topCell = new Struct("bend90_euler_"+R) ;
-        	Rect wgIn = new Rect(-0.01, -width/2.0, 2e-3, width/2.0, 1) ;
-        	Rect wgOut = new Rect(R-width/2.0, R-3e-3, R+width/2.0, R+0.01, 1) ;
-
-        	area.or(wgIn).or(wgOut) ;
+        	Struct topCell = new Struct("bend180_circular_"+R) ;
 
         	topCell.add(area);
 
@@ -158,7 +142,7 @@ public class Bend90degEulerGDSModule {
 	}
 
 	public static void main(String[] args) {
-		Bend90degEulerGDSModule bend = new Bend90degEulerGDSModule(100, 2.49, 5) ;
+		Bend180degCircularGDSModule bend = new Bend180degCircularGDSModule(100, 2.49, 5) ;
 		bend.setWidth(0.4);
 		bend.setNumPoints(100);
 		bend.createGDS(null, true);
