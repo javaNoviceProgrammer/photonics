@@ -39,7 +39,7 @@ public class Bend180degBezierGDSModule {
 	public void setWidth(double width) {
 		this.width = width ;
 	}
-	
+
 	public void setNumPoints(int n) {
 		this.numPoints = n ;
 	}
@@ -57,12 +57,12 @@ public class Bend180degBezierGDSModule {
 			BendLossCalculate lossCalc = new BendLossCalculate(model, bezier) ;
 			lossdB[i] = lossCalc.getLossDB(0.0, 1.0) ;
 		}
-		
+
 		int minIndex = FindMinimum.getIndex(lossdB) ;
 
 		double Bopt = B[minIndex] ;
 		BezierCurve180 optBend = new BezierCurve180(R, Bopt) ;
-		
+
 		double[] t = MathUtils.linspace(0.0, 1.0, numPoints) ;
 		double[] x = ArrayFunc.apply(s -> optBend.getX(s) , t) ;
 		double[] y = ArrayFunc.apply(s -> optBend.getY(s), t) ;

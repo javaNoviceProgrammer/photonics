@@ -142,10 +142,6 @@ public class Bend180degEulerGDSModule {
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
         	Struct topCell = new Struct("bend180_euler_"+R) ;
-//        	Rect wgIn = new Rect(-0.01, -width/2.0, 2e-3, width/2.0, 1) ;
-//        	Rect wgOut = new Rect(R-width/2.0, R-3e-3, R+width/2.0, R+0.01, 1) ;
-//
-//        	area.or(wgIn).or(wgOut) ;
 
         	topCell.add(area);
 

@@ -1,5 +1,10 @@
 package photonics.wg.bend.gds2;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 import java.awt.BasicStroke;
 import java.awt.geom.Path2D;
 import java.io.DataOutputStream;
@@ -10,7 +15,6 @@ import java.io.IOException;
 import JGDS2.GArea;
 import JGDS2.GDSWriter;
 import JGDS2.Lib;
-import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
 import flanagan.integration.IntegralFunction;
@@ -18,7 +22,6 @@ import mathLib.func.ArrayFunc;
 import mathLib.integral.Integral1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
-import static java.lang.Math.*;
 
 public class Bend90degEulerGDSModule {
 
@@ -139,10 +142,6 @@ public class Bend90degEulerGDSModule {
         	GArea area = new GArea(stroke.createStrokedShape(path), 1) ;
 
         	Struct topCell = new Struct("bend90_euler_"+R) ;
-        	Rect wgIn = new Rect(-0.01, -width/2.0, 2e-3, width/2.0, 1) ;
-        	Rect wgOut = new Rect(R-width/2.0, R-3e-3, R+width/2.0, R+0.01, 1) ;
-
-        	area.or(wgIn).or(wgOut) ;
 
         	topCell.add(area);
 
