@@ -47,8 +47,10 @@ public class Bend180degOptimalGDSModule {
 	public void setNumPoints(int n) {
 		this.numPoints = n ;
 	}
-	
+
 	public double getAuxiliaryC(double theta) {
+		if(-PI/2.0 <= theta && theta < 0)
+			return getAuxiliaryC(-theta) ;
 		if(PI/4.0 <= theta && theta <= PI/2.0)
 			return pow(cos(theta), 1.0/b) ;
 		else
@@ -57,58 +59,65 @@ public class Bend180degOptimalGDSModule {
 
 	public double getCurvature(double theta) {
 		if(A == 0.0) {
-			IntegralFunction func = var -> sin(var)/getAuxiliaryC(var) ;
+			IntegralFunction func = var -> cos(var)/getAuxiliaryC(var) ;
 			Integral1D integral = new Integral1D(func, 0, PI/2.0) ;
-			A = 1.0/(1*R) * integral.getIntegral() ;
+			A = 1.0/R * integral.getIntegral() ;
 		}
-		
+
+		if(-PI/2.0 <= theta && theta < 0)
+			return getCurvature(-theta) ;
+
 		if(PI/4.0 <= theta && theta <= PI/2.0)
 			return A*getAuxiliaryC(theta) ;
-		else if (PI/2.0 <= theta && theta <= PI)
-			return getCurvature(PI - theta) ;
 		else
 			return getCurvature(PI/2.0-theta) ;
 	}
 
 	public double getX(double theta) {
-
+		if(-PI/2.0 <= theta && theta < 0)
+			return -getX(-theta) ;
 		IntegralFunction func = var -> cos(var)/getCurvature(var) ;
 		Integral1D integral = new Integral1D(func, 0, theta) ;
 		return integral.getIntegral() ;
 	}
 
 	public double getY(double theta) {
-
+		if(-PI/2.0 <= theta && theta < 0)
+			return getY(-theta) ;
 		IntegralFunction func = var -> sin(var)/getCurvature(var) ;
 		Integral1D integral = new Integral1D(func, 0, theta) ;
 		return integral.getIntegral() ;
 	}
 
 	public double getS(double theta) {
+		if(0 < theta && theta <= PI/2.0)
+			return getS(0.0)+getS(theta-PI/2.0) ;
 		IntegralFunction func = var -> 1.0/getCurvature(var) ;
-		Integral1D integral = new Integral1D(func, 0, theta) ;
+		Integral1D integral = new Integral1D(func, -PI/2.0, theta) ;
 		return integral.getIntegral() ;
 	}
 
 	public void createGDS(String filePath, boolean systemExit){
 
-		double[] theta = MathUtils.linspace(0.0, PI, numPoints) ;
+		double[] theta1 = MathUtils.linspace(-PI/2.0, 0.0, (int) numPoints/2) ;
+		double[] theta2 = MathUtils.linspace(1e-3, PI/2.0, (int) numPoints/2) ;
+		double[] theta = MathUtils.Arrays.concat(theta1, theta2) ;
 		double[] x = ArrayFunc.apply(s -> getX(s) , theta) ;
 		double[] y = ArrayFunc.apply(s -> getY(s), theta) ;
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 		double[] length = ArrayFunc.apply(s -> getS(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
-		fig.plot(y, x);
+		fig.plot(x, y);
 		fig.renderPlot();
-		fig.xlabel("Y (um)");
-		fig.ylabel("X (um)");
+		fig.xlabel("X (um)");
+		fig.ylabel("Y (um)");
 		fig.run(systemExit);
 
 		MatlabChart fig1 = new MatlabChart() ;
-		fig1.plot(y, curvature, "r");
+		fig1.plot(x, curvature, "r");
 		fig1.renderPlot();
-		fig1.xlabel("y (um)");
+		fig1.xlabel("x (um)");
 		fig1.ylabel("Curvature (1/um)");
 		fig1.run(systemExit);
 
@@ -139,7 +148,7 @@ public class Bend180degOptimalGDSModule {
             double[] yPoints = y ;
 
             Path2D.Double path = new Path2D.Double() ; // this is the path of the center
-        	path.moveTo(0, 0);
+        	path.moveTo(x[0], y[0]);
         	for(int i=1; i<xPoints.length; i++)
         		path.lineTo(xPoints[i], yPoints[i]);
         	BasicStroke stroke = new BasicStroke((float) width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL) ;
@@ -161,7 +170,7 @@ public class Bend180degOptimalGDSModule {
 	public static void main(String[] args) {
 		Bend180degOptimalGDSModule bend = new Bend180degOptimalGDSModule(100, 2.49, 5) ;
 		bend.setWidth(0.4);
-		bend.setNumPoints(200);
+		bend.setNumPoints(100);
 		bend.createGDS(null, true);
 	}
 

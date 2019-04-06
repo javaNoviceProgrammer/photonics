@@ -21,14 +21,15 @@ import javax.swing.border.TitledBorder;
 
 import mathLib.util.CustomJFileChooser;
 import mathLib.util.MathUtils;
-import photonics.wg.bend.gds.Bend180degBezierGDSModule;
-import photonics.wg.bend.gds.Bend180degCircularGDSModule;
-import photonics.wg.bend.gds.Bend180degOptimalGDSModule;
-import photonics.wg.bend.gds.Bend90degBezierGDSModule;
-import photonics.wg.bend.gds.Bend90degCircularGDSModule;
-import photonics.wg.bend.gds.Bend90degClothoidGDSModule;
-import photonics.wg.bend.gds.Bend90degEulerGDSdegModule;
-import photonics.wg.bend.gds.Bend90degOptimalGDSModule;
+import photonics.wg.bend.gds2.Bend180degBezierGDSModule;
+import photonics.wg.bend.gds2.Bend180degCircularGDSModule;
+import photonics.wg.bend.gds2.Bend180degEulerGDSModule;
+import photonics.wg.bend.gds2.Bend180degOptimalGDSModule;
+import photonics.wg.bend.gds2.Bend90degBezierGDSModule;
+import photonics.wg.bend.gds2.Bend90degCircularGDSModule;
+import photonics.wg.bend.gds2.Bend90degEulerGDSModule;
+import photonics.wg.bend.gds2.Bend90degOptimalGDSModule;
+
 import java.awt.Toolkit;
 
 public class BendWgGUI extends JFrame {
@@ -45,6 +46,7 @@ public class BendWgGUI extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	double a, b, R0, width ;
+	int numPoints ;
 	String filePath;
 	private JRadioButton rdbtnBezier90Degree;
 	private JRadioButton rdbtnClothoid90Degree;
@@ -59,7 +61,7 @@ public class BendWgGUI extends JFrame {
 	private JLabel lblWum;
 	private JTextField wTextField;
 	private JLabel lblPoints;
-	private JTextField textField;
+	private JTextField pointsTextField;
 
 	/**
 	 * Launch the application.
@@ -101,13 +103,13 @@ public class BendWgGUI extends JFrame {
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 421, 462);
+		setBounds(100, 100, 421, 483);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 168, 0 };
 		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
@@ -250,7 +252,6 @@ public class BendWgGUI extends JFrame {
 		panel_3.add(rdbtnOptimal90Degree, gbc_rdbtnOptimal90Degree);
 
 		rdbtnOptimal180Degree = new JRadioButton("Optimal 180 degree");
-		rdbtnOptimal180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnOptimal180Degree);
 		GridBagConstraints gbc_rdbtnOptimal180Degree = new GridBagConstraints();
 		gbc_rdbtnOptimal180Degree.insets = new Insets(0, 0, 5, 5);
@@ -287,7 +288,6 @@ public class BendWgGUI extends JFrame {
 		panel_3.add(rdbtnEuler90Degree, gbc_rdbtnEuler90Degree);
 
 		rdbtnEuler180Degree = new JRadioButton("Euler 180 degree");
-		rdbtnEuler180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnEuler180Degree);
 		GridBagConstraints gbc_rdbtnEuler180Degree = new GridBagConstraints();
 		gbc_rdbtnEuler180Degree.insets = new Insets(0, 0, 5, 5);
@@ -306,7 +306,6 @@ public class BendWgGUI extends JFrame {
 		panel_3.add(rdbtnClothoid90Degree, gbc_rdbtnClothoid90Degree);
 
 		rdbtnClothoid180Degree = new JRadioButton("Hybrid 180 degree");
-		rdbtnClothoid180Degree.setEnabled(false);
 		buttonGroup.add(rdbtnClothoid180Degree);
 		GridBagConstraints gbc_rdbtnClothoid180Degree = new GridBagConstraints();
 		gbc_rdbtnClothoid180Degree.anchor = GridBagConstraints.WEST;
@@ -372,7 +371,7 @@ public class BendWgGUI extends JFrame {
 				gdsButtonActionPerformed(e);
 			}
 		});
-		
+
 		lblPoints = new JLabel("Points: ");
 		GridBagConstraints gbc_lblPoints = new GridBagConstraints();
 		gbc_lblPoints.anchor = GridBagConstraints.EAST;
@@ -380,16 +379,16 @@ public class BendWgGUI extends JFrame {
 		gbc_lblPoints.gridx = 0;
 		gbc_lblPoints.gridy = 2;
 		panel_1.add(lblPoints, gbc_lblPoints);
-		
-		textField = new JTextField();
-		textField.setText("1000");
-		textField.setColumns(10);
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 2;
-		panel_1.add(textField, gbc_textField);
+
+		pointsTextField = new JTextField();
+		pointsTextField.setText("1000");
+		pointsTextField.setColumns(10);
+		GridBagConstraints gbc_pointsTextField = new GridBagConstraints();
+		gbc_pointsTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_pointsTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pointsTextField.gridx = 1;
+		gbc_pointsTextField.gridy = 2;
+		panel_1.add(pointsTextField, gbc_pointsTextField);
 
 		GridBagConstraints gbc_gdsButton = new GridBagConstraints();
 		gbc_gdsButton.fill = GridBagConstraints.HORIZONTAL;
@@ -416,45 +415,58 @@ public class BendWgGUI extends JFrame {
 		b = MathUtils.evaluate(bTextField.getText());
 		R0 = MathUtils.evaluate(R0TextField.getText());
 		width = MathUtils.evaluate(wTextField.getText()) ;
+		numPoints = (int) MathUtils.evaluate(pointsTextField.getText()) ;
 		if (rdbtnCircular90Degree.isSelected()) {
 			Bend90degCircularGDSModule circ90Deg = new Bend90degCircularGDSModule(a, b, R0);
 			circ90Deg.setWidth(width);
+			circ90Deg.setNumPoints(numPoints);
 			circ90Deg.createGDS(filePath, false);
 		}
 		if (rdbtnOptimal90Degree.isSelected()) {
 			Bend90degOptimalGDSModule opt90Deg = new Bend90degOptimalGDSModule(a, b, R0);
 			opt90Deg.setWidth(width);
+			opt90Deg.setNumPoints(numPoints);
 			opt90Deg.createGDS(filePath, false);
-
 		}
 		if(rdbtnEuler90Degree.isSelected()) {
-			Bend90degEulerGDSdegModule euler90Deg = new Bend90degEulerGDSdegModule(a, b, R0) ;
+			Bend90degEulerGDSModule euler90Deg = new Bend90degEulerGDSModule(a, b, R0) ;
 			euler90Deg.setWidth(width);
+			euler90Deg.setNumPoints(numPoints);
 			euler90Deg.createGDS(filePath, false);
 		}
-		if (rdbtnClothoid90Degree.isSelected()) {
-			Bend90degClothoidGDSModule clothoid90Deg = new Bend90degClothoidGDSModule(a, b, R0) ;
-			clothoid90Deg.setWidth(width);
-			clothoid90Deg.createGDS(filePath, false);
-		}
+//		if (rdbtnClothoid90Degree.isSelected()) {
+//			Bend90degClothoidGDSModule clothoid90Deg = new Bend90degClothoidGDSModule(a, b, R0) ;
+//			clothoid90Deg.setWidth(width);
+//			clothoid90Deg.createGDS(filePath, false);
+//		}
 		if (rdbtnBezier90Degree.isSelected()) {
 			Bend90degBezierGDSModule bezier90Deg = new Bend90degBezierGDSModule(a, b, R0);
 			bezier90Deg.setWidth(width);
+			bezier90Deg.setNumPoints(numPoints);
 			bezier90Deg.createGDS(filePath, false);
 		}
 		if (rdbtnCircular180Degree.isSelected()) {
 			Bend180degCircularGDSModule circ180Deg = new Bend180degCircularGDSModule(a, b, R0);
 			circ180Deg.setWidth(width);
+			circ180Deg.setNumPoints(numPoints);
 			circ180Deg.createGDS(filePath, false);
 		}
 		if (rdbtnBezier180Degree.isSelected()) {
 			Bend180degBezierGDSModule bezier180Deg = new Bend180degBezierGDSModule(a, b, R0);
 			bezier180Deg.setWidth(width);
+			bezier180Deg.setNumPoints(numPoints);
 			bezier180Deg.createGDS(filePath, false);
+		}
+		if (rdbtnEuler180Degree.isSelected()) {
+			Bend180degEulerGDSModule euler180Deg = new Bend180degEulerGDSModule(a, b, R0);
+			euler180Deg.setWidth(width);
+			euler180Deg.setNumPoints(numPoints);
+			euler180Deg.createGDS(filePath, false);
 		}
 		if(rdbtnOptimal180Degree.isSelected()) {
 			Bend180degOptimalGDSModule opt180Deg = new Bend180degOptimalGDSModule(a, b, R0) ;
 			opt180Deg.setWidth(width);
+			opt180Deg.setNumPoints(numPoints);
 			opt180Deg.createGDS(filePath, false);
 		}
 	}
