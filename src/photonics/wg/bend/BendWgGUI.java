@@ -24,10 +24,12 @@ import mathLib.util.MathUtils;
 import photonics.wg.bend.gds2.Bend180degBezierGDSModule;
 import photonics.wg.bend.gds2.Bend180degCircularGDSModule;
 import photonics.wg.bend.gds2.Bend180degEulerGDSModule;
+import photonics.wg.bend.gds2.Bend180degHybridGDSModule;
 import photonics.wg.bend.gds2.Bend180degOptimalGDSModule;
 import photonics.wg.bend.gds2.Bend90degBezierGDSModule;
 import photonics.wg.bend.gds2.Bend90degCircularGDSModule;
 import photonics.wg.bend.gds2.Bend90degEulerGDSModule;
+import photonics.wg.bend.gds2.Bend90degHybridGDSModule;
 import photonics.wg.bend.gds2.Bend90degOptimalGDSModule;
 
 import java.awt.Toolkit;
@@ -381,7 +383,7 @@ public class BendWgGUI extends JFrame {
 		panel_1.add(lblPoints, gbc_lblPoints);
 
 		pointsTextField = new JTextField();
-		pointsTextField.setText("1000");
+		pointsTextField.setText("100");
 		pointsTextField.setColumns(10);
 		GridBagConstraints gbc_pointsTextField = new GridBagConstraints();
 		gbc_pointsTextField.insets = new Insets(0, 0, 5, 5);
@@ -434,11 +436,12 @@ public class BendWgGUI extends JFrame {
 			euler90Deg.setNumPoints(numPoints);
 			euler90Deg.createGDS(filePath, false);
 		}
-//		if (rdbtnClothoid90Degree.isSelected()) {
-//			Bend90degClothoidGDSModule clothoid90Deg = new Bend90degClothoidGDSModule(a, b, R0) ;
-//			clothoid90Deg.setWidth(width);
-//			clothoid90Deg.createGDS(filePath, false);
-//		}
+		if (rdbtnClothoid90Degree.isSelected()) {
+			Bend90degHybridGDSModule clothoid90Deg = new Bend90degHybridGDSModule(a, b, R0) ;
+			clothoid90Deg.setWidth(width);
+			clothoid90Deg.setNumPoints(numPoints);
+			clothoid90Deg.createGDS(filePath, false);
+		}
 		if (rdbtnBezier90Degree.isSelected()) {
 			Bend90degBezierGDSModule bezier90Deg = new Bend90degBezierGDSModule(a, b, R0);
 			bezier90Deg.setWidth(width);
@@ -468,6 +471,12 @@ public class BendWgGUI extends JFrame {
 			opt180Deg.setWidth(width);
 			opt180Deg.setNumPoints(numPoints);
 			opt180Deg.createGDS(filePath, false);
+		}
+		if(rdbtnClothoid180Degree.isSelected()){
+			Bend180degHybridGDSModule hybrid180Deg = new Bend180degHybridGDSModule(a, b, R0) ;
+			hybrid180Deg.setWidth(width);
+			hybrid180Deg.setNumPoints(numPoints);
+			hybrid180Deg.createGDS(filePath, false);
 		}
 	}
 }
