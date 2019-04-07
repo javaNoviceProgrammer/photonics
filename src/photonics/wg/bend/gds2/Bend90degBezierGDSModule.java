@@ -131,7 +131,7 @@ public class Bend90degBezierGDSModule {
 	public static void main(String[] args) {
 		Bend90degBezierGDSModule bend = new Bend90degBezierGDSModule(100, 2.49, 5) ;
 		bend.setWidth(1);
-		bend.setNumPoints(100);
+		bend.setNumPoints(1000);
 		bend.createGDS(null, true);
 	}
 

@@ -20,6 +20,7 @@ import JGDS2.Struct;
 import flanagan.integration.IntegralFunction;
 import mathLib.func.ArrayFunc;
 import mathLib.integral.Integral1D;
+import mathLib.integral.Integral1DArray;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 
@@ -89,10 +90,21 @@ public class Bend90degOptimalGDSModule {
 	public void createGDS(String filePath, boolean systemExit){
 
 		double[] theta = MathUtils.linspace(0.0, PI/2.0, numPoints) ;
-		double[] x = ArrayFunc.apply(s -> getX(s) , theta) ;
-		double[] y = ArrayFunc.apply(s -> getY(s), theta) ;
+		
+		IntegralFunction funcX = var -> cos(var)/getCurvature(var) ;
+		IntegralFunction funcY = var -> sin(var)/getCurvature(var) ;
+		IntegralFunction funcS = var -> 1.0/getCurvature(var) ;
+		
+		Integral1DArray integralX = new Integral1DArray(funcX, 0.0) ;
+		double[] x = integralX.getIntegral(theta) ;
+		
+		Integral1DArray integralY = new Integral1DArray(funcY, 0.0) ;
+		double[] y = integralY.getIntegral(theta) ;
+		
+		Integral1DArray integralS = new Integral1DArray(funcS, 0.0) ;
+		double[] length = integralS.getIntegral(theta) ;
+		
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
-		double[] length = ArrayFunc.apply(s -> getS(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(x, y);
@@ -157,7 +169,7 @@ public class Bend90degOptimalGDSModule {
 	public static void main(String[] args) {
 		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 5) ;
 		bend.setWidth(0.4);
-		bend.setNumPoints(500);
+		bend.setNumPoints(1000);
 		bend.createGDS(null, true);
 	}
 
