@@ -8,10 +8,18 @@ import java.awt.GridBagLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class testBall {
     public static void main(String[] args) {
-        new testBall();
+        SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				new testBall();
+				
+			}
+		}) ;
     }
 
     public testBall() {
@@ -23,7 +31,8 @@ public class testBall {
         JFrame frame = new JFrame("Testing");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.add(testPane);
+        frame.add(new MyBall(30,30,10));
+        frame.add(new MyBall(100,100,10)) ;
         frame.pack();
         frame.setSize(500, 300); 
         frame.setLocationRelativeTo(null);
@@ -40,12 +49,14 @@ class MyBall extends JComponent
         super();
         this.setLocation(x, y);
         this.setSize(diameter, diameter);
+
     }
 
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         g.setColor(Color.red);
-        g.fillOval(0, 0, 100, 100);
+        g.fillOval(0, 0, 50, 100);
+        
     }
 }
