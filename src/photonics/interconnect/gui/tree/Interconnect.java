@@ -1,4 +1,4 @@
-package photonics.interconnect.gui;
+package photonics.interconnect.gui.tree;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.experiment_aut.Experiment;
