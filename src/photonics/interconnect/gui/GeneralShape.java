@@ -14,7 +14,6 @@ public class GeneralShape extends Application {
 		Scene scene = new Scene(pane, 400, 400) ;
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
 	}
 	
 	public static void main(String[] args) {
