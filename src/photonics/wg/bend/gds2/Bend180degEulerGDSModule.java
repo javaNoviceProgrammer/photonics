@@ -90,13 +90,9 @@ public class Bend180degEulerGDSModule {
 
 		double[] theta = MathUtils.linspace(0.0, PI, numPoints) ;
 
-		IntegralFunction funcX = var -> cos(var)/getCurvature(var) ;
-		IntegralFunction funcY = var -> sin(var)/getCurvature(var) ;
-		IntegralFunction funcS = var -> 1.0/getCurvature(var) ;
-
-		double[] x = ArrayFunc.apply(t -> new Integral1D(funcX, 0.0, t).getIntegral(), theta) ;
-		double[] y = ArrayFunc.apply(t -> new Integral1D(funcY, 0.0, t).getIntegral(), theta) ;
-		double[] length = ArrayFunc.apply(t -> new Integral1D(funcS, 0.0, t).getIntegral(), theta) ;
+		double[] x = ArrayFunc.apply(t -> getX(t), theta) ;
+		double[] y = ArrayFunc.apply(t -> getY(t), theta) ;
+		double[] length = ArrayFunc.apply(t -> getS(t), theta) ;
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
@@ -164,7 +160,7 @@ public class Bend180degEulerGDSModule {
 	public static void main(String[] args) {
 		Bend180degEulerGDSModule bend = new Bend180degEulerGDSModule(100, 2.49, 5) ;
 		bend.setWidth(0.4);
-		bend.setNumPoints(1000);
+		bend.setNumPoints(100);
 		bend.createGDS(null, true);
 	}
 

@@ -103,13 +103,9 @@ public class Bend180degOptimalGDSModule {
 		double[] theta2 = MathUtils.linspace(1e-3, PI/2.0, (int) numPoints/2) ;
 		double[] theta = MathUtils.Arrays.concat(theta1, theta2) ;
 
-		IntegralFunction funcX = var -> cos(var)/getCurvature(var) ;
-		IntegralFunction funcY = var -> sin(var)/getCurvature(var) ;
-		IntegralFunction funcS = var -> 1.0/getCurvature(var) ;
-
-		double[] x = ArrayFunc.apply(t -> new Integral1D(funcX, 0.0, t).getIntegral(), theta) ;
-		double[] y = ArrayFunc.apply(t -> new Integral1D(funcY, 0.0, t).getIntegral(), theta) ;
-		double[] length = ArrayFunc.apply(t -> new Integral1D(funcS, 0.0, t).getIntegral(), theta) ;
+		double[] x = ArrayFunc.apply(t -> getX(t), theta) ;
+		double[] y = ArrayFunc.apply(t -> getY(t), theta) ;
+		double[] length = ArrayFunc.apply(t -> getS(t), theta) ;
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
@@ -175,7 +171,7 @@ public class Bend180degOptimalGDSModule {
 	public static void main(String[] args) {
 		Bend180degOptimalGDSModule bend = new Bend180degOptimalGDSModule(100, 2.49, 5) ;
 		bend.setWidth(0.4);
-		bend.setNumPoints(1000);
+		bend.setNumPoints(100);
 		bend.createGDS(null, true);
 	}
 
