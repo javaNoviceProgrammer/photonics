@@ -34,6 +34,8 @@ import photonics.wg.bend.gds2.Bend90degCircularGDSModule;
 import photonics.wg.bend.gds2.Bend90degEulerGDSModule;
 import photonics.wg.bend.gds2.Bend90degHybridGDSModule;
 import photonics.wg.bend.gds2.Bend90degOptimalGDSModule;
+import javax.swing.border.EtchedBorder;
+import java.awt.Color;
 
 public class BendWgGUI2 extends JFrame {
 
@@ -108,7 +110,7 @@ public class BendWgGUI2 extends JFrame {
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 421, 483);
+		setBounds(100, 100, 421, 523);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -120,7 +122,7 @@ public class BendWgGUI2 extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "gds file path", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "GDS file path", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.fill = GridBagConstraints.BOTH;
@@ -170,14 +172,14 @@ public class BendWgGUI2 extends JFrame {
 		gbc_panel_2.gridx = 0;
 		gbc_panel_2.gridy = 1;
 		contentPane.add(panel_2, gbc_panel_2);
-		panel_2.setBorder(new TitledBorder(null, "loss model", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Loss model", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
 		gbl_panel_2.columnWidths = new int[] { 0, 0, 0 };
 		gbl_panel_2.rowHeights = new int[] { 0, 0, 0, 0 };
 		gbl_panel_2.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		gbl_panel_2.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_2.setLayout(gbl_panel_2);
-		
+
 		lblWaveguide = new JLabel("Waveguide :");
 		GridBagConstraints gbc_lblWaveguide = new GridBagConstraints();
 		gbc_lblWaveguide.anchor = GridBagConstraints.EAST;
@@ -185,10 +187,10 @@ public class BendWgGUI2 extends JFrame {
 		gbc_lblWaveguide.gridx = 0;
 		gbc_lblWaveguide.gridy = 0;
 		panel_2.add(lblWaveguide, gbc_lblWaveguide);
-		
+
 		comboBox = new JComboBox<String>();
 		comboBox.setModel(new DefaultComboBoxModel<String>(
-				new String[] {"WG 400x220 nm - Strip", "WG 450x220 nm - Strip", 
+				new String[] {"WG 400x220 nm - Strip", "WG 450x220 nm - Strip",
 							  "WG 500x220 nm - Strip", "User defined"})
 				);
 		comboBox.setSelectedIndex(0);
@@ -248,7 +250,7 @@ public class BendWgGUI2 extends JFrame {
 		gbc_panel_3.gridx = 0;
 		gbc_panel_3.gridy = 2;
 		contentPane.add(panel_3, gbc_panel_3);
-		panel_3.setBorder(new TitledBorder(null, "type of bend", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_3.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Type of bend", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagLayout gbl_panel_3 = new GridBagLayout();
 		gbl_panel_3.columnWidths = new int[] { 0, 0, 0, 0 };
 		gbl_panel_3.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
@@ -348,7 +350,7 @@ public class BendWgGUI2 extends JFrame {
 		panel_3.add(rdbtnClothoid180Degree, gbc_rdbtnClothoid180Degree);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "parameters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Parameters", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.gridx = 0;
@@ -431,7 +433,7 @@ public class BendWgGUI2 extends JFrame {
 		gbc_gdsButton.gridy = 3;
 		panel_1.add(gdsButton, gbc_gdsButton);
 	}
-	
+
 	protected void setupLossModel() {
 		String selected = comboBox.getSelectedItem() ;
 		if(selected.equals("WG 400x220 nm - Strip")) {
@@ -466,7 +468,7 @@ public class BendWgGUI2 extends JFrame {
 			wTextField.setEditable(true);
 			wTextField.setText("");
 		}
-		
+
 	}
 
 	protected void chooseActionPerformed(ActionEvent e) {
