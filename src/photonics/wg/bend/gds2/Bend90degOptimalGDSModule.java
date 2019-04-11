@@ -20,7 +20,6 @@ import JGDS2.Struct;
 import flanagan.integration.IntegralFunction;
 import mathLib.func.ArrayFunc;
 import mathLib.integral.Integral1D;
-import mathLib.integral.Integral1DArray;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 
@@ -48,7 +47,7 @@ public class Bend90degOptimalGDSModule {
 	public void setNumPoints(int n) {
 		this.numPoints = n ;
 	}
-	
+
 	public double getAuxiliaryC(double theta) {
 		if(PI/4.0 <= theta && theta <= PI/2.0)
 			return pow(cos(theta), 1.0/b) ;
@@ -62,7 +61,7 @@ public class Bend90degOptimalGDSModule {
 			Integral1D integral = new Integral1D(func, 0, PI/2.0) ;
 			A = 1.0/R * integral.getIntegral() ;
 		}
-		
+
 		if(PI/4.0 <= theta && theta <= PI/2.0)
 			return A*getAuxiliaryC(theta) ;
 		else
@@ -90,20 +89,14 @@ public class Bend90degOptimalGDSModule {
 	public void createGDS(String filePath, boolean systemExit){
 
 		double[] theta = MathUtils.linspace(0.0, PI/2.0, numPoints) ;
-		
+
 		IntegralFunction funcX = var -> cos(var)/getCurvature(var) ;
 		IntegralFunction funcY = var -> sin(var)/getCurvature(var) ;
 		IntegralFunction funcS = var -> 1.0/getCurvature(var) ;
-		
-		Integral1DArray integralX = new Integral1DArray(funcX, 0.0) ;
-		double[] x = integralX.getIntegral(theta) ;
-		
-		Integral1DArray integralY = new Integral1DArray(funcY, 0.0) ;
-		double[] y = integralY.getIntegral(theta) ;
-		
-		Integral1DArray integralS = new Integral1DArray(funcS, 0.0) ;
-		double[] length = integralS.getIntegral(theta) ;
-		
+
+		double[] x = ArrayFunc.apply(t -> new Integral1D(funcX, 0.0, t).getIntegral(), theta) ;
+		double[] y = ArrayFunc.apply(t -> new Integral1D(funcY, 0.0, t).getIntegral(), theta) ;
+		double[] length = ArrayFunc.apply(t -> new Integral1D(funcS, 0.0, t).getIntegral(), theta) ;
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
@@ -169,7 +162,7 @@ public class Bend90degOptimalGDSModule {
 	public static void main(String[] args) {
 		Bend90degOptimalGDSModule bend = new Bend90degOptimalGDSModule(100, 2.49, 5) ;
 		bend.setWidth(0.4);
-		bend.setNumPoints(1000);
+		bend.setNumPoints(100);
 		bend.createGDS(null, true);
 	}
 

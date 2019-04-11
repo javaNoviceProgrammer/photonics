@@ -20,7 +20,6 @@ import JGDS2.Struct;
 import flanagan.integration.IntegralFunction;
 import mathLib.func.ArrayFunc;
 import mathLib.integral.Integral1D;
-import mathLib.integral.Integral1DArray;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 
@@ -96,20 +95,14 @@ public class Bend90degHybridGDSModule {
 		theta1 = (PI/4.0)/(1+2*r) ;
 
 		double[] theta = MathUtils.linspace(0.0, PI/2.0, numPoints) ;
-		
+
 		IntegralFunction funcX = var -> cos(var)/getCurvature(var) ;
 		IntegralFunction funcY = var -> sin(var)/getCurvature(var) ;
 		IntegralFunction funcS = var -> 1.0/getCurvature(var) ;
-		
-		Integral1DArray integralX = new Integral1DArray(funcX, 0.0) ;
-		double[] x = integralX.getIntegral(theta) ;
-		
-		Integral1DArray integralY = new Integral1DArray(funcY, 0.0) ;
-		double[] y = integralY.getIntegral(theta) ;
-		
-		Integral1DArray integralS = new Integral1DArray(funcS, 0.0) ;
-		double[] length = integralS.getIntegral(theta) ;
-		
+
+		double[] x = ArrayFunc.apply(t -> new Integral1D(funcX, 0.0, t).getIntegral(), theta) ;
+		double[] y = ArrayFunc.apply(t -> new Integral1D(funcY, 0.0, t).getIntegral(), theta) ;
+		double[] length = ArrayFunc.apply(t -> new Integral1D(funcS, 0.0, t).getIntegral(), theta) ;
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
