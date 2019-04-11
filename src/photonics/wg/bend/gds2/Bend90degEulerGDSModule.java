@@ -90,20 +90,20 @@ public class Bend90degEulerGDSModule {
 	public void createGDS(String filePath, boolean systemExit){
 
 		double[] theta = MathUtils.linspace(0.0, PI/2.0, numPoints) ;
-		
+
 		IntegralFunction funcX = var -> cos(var)/getCurvature(var) ;
 		IntegralFunction funcY = var -> sin(var)/getCurvature(var) ;
 		IntegralFunction funcS = var -> 1.0/getCurvature(var) ;
-		
+
 		Integral1DArray integralX = new Integral1DArray(funcX, 0.0) ;
 		double[] x = integralX.getIntegral(theta) ;
-		
+
 		Integral1DArray integralY = new Integral1DArray(funcY, 0.0) ;
 		double[] y = integralY.getIntegral(theta) ;
-		
+
 		Integral1DArray integralS = new Integral1DArray(funcS, 0.0) ;
 		double[] length = integralS.getIntegral(theta) ;
-		
+
 		double[] curvature = ArrayFunc.apply(s -> getCurvature(s), theta) ;
 
 		MatlabChart fig = new MatlabChart() ;
