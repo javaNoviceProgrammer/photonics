@@ -82,7 +82,7 @@ public class RingFillingFactor {
 //		fig.run(true);
 		
 		double[] x = MathUtils.linspace(-PI, PI, 100) ;
-		double[] y = ArrayFunc.apply(t -> rff.getDneff(Ycut, t), x) ;
+		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
 //		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
 //		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
 		MatlabChart fig = new MatlabChart() ;
