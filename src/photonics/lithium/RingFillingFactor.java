@@ -74,23 +74,25 @@ public class RingFillingFactor {
 //		fig.renderPlot();
 //		fig.run(true);
 		
-		double[] x = MathUtils.linspace(0, PI, 100) ;
-		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, -PI/2.0+t), x) ;
-		MatlabChart fig = new MatlabChart() ;
-		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
-		fig.renderPlot();
-		fig.run(true);
-		
-//		double[] x = MathUtils.linspace(-PI, PI, 100) ;
-//		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
-////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
-////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
+//		double[] x = MathUtils.linspace(0, PI, 100) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, -PI/2.0+t), x) ;
 //		MatlabChart fig = new MatlabChart() ;
 //		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
 //		fig.renderPlot();
 //		fig.run(true);
-//		fig.xlabel("Rotation Angle (deg)");
-//		fig.ylabel("Filling Factor");
+		
+//		System.out.println(rff.getFF(Xcut, -73.0*PI/180.0, 107*PI/180.0));
+		
+		double[] x = MathUtils.linspace(-PI/2.0, PI/2.0, 100) ;
+		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
+		MatlabChart fig = new MatlabChart() ;
+		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
+		fig.renderPlot();
+		fig.run(true);
+		fig.xlabel("Rotation Angle (deg)");
+		fig.ylabel("Filling Factor");
 		
 	}
 
