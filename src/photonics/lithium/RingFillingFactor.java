@@ -35,23 +35,26 @@ public class RingFillingFactor {
 		}
 		return factor ;
 	}
-	
+
 	private double getFF(Crystal cut, double phi0, double phi1) {
+//		RotatedDCField rotation = new RotatedDCField() ;
+//		IntegralFunction1D dneff = phi -> getDneff(cut, phi)*rotation.getRotationFactor(phi) ;
+
 		IntegralFunction1D dneff = phi -> getDneff(cut, phi) ;
 		Integral1D integral = new Integral1D(dneff, phi0, phi1) ;
 		return 1.0/(2*PI)*integral.getIntegral() ;
 	}
-	
+
 	public void plotFF(Crystal cut) {
 		double[] phi = MathUtils.linspace(0, PI, 500) ;
 		double[] ff = ArrayFunc.apply(t -> getFF(cut, -t, t), phi) ;
 		MatlabChart fig = new MatlabChart() ;
 		fig.plot(ArrayFunc.apply(x -> 180.0/PI*x, phi), ff, "b", 1f, cut.name());
 		fig.renderPlot();
-		fig.legendON();
+//		fig.legendON();
 		fig.run(true);
 	}
-	
+
 	public void plotContours(Crystal cut) {
 		double[] phi0 = MathUtils.linspace(-PI, 0, 500) ;
 		double[] phi1 = MathUtils.linspace(0, PI, 500) ;
@@ -60,40 +63,40 @@ public class RingFillingFactor {
 		ColorMapPlot fig = new ColorMapPlot(meshGrid, ArrayFunc.apply(func, meshGrid)) ;
 		fig.run(true);
 	}
-	
+
 	public static void main(String[] args) {
 		RingFillingFactor rff = new RingFillingFactor() ;
 //		rff.plotContours(Xcut);
-//		rff.plotFF(Xcut);
+		rff.plotFF(Xcut);
 //		rff.plotFF(Ycut);
-		
+
 //		double[] x = MathUtils.linspace(0, 2*PI, 100) ;
 //		double[] y = ArrayFunc.apply(t -> rff.getFF(Ycut, -t, 0), x) ;
 //		MatlabChart fig = new MatlabChart() ;
 //		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
 //		fig.renderPlot();
 //		fig.run(true);
-		
+
 //		double[] x = MathUtils.linspace(0, PI, 100) ;
 //		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, -PI/2.0+t), x) ;
 //		MatlabChart fig = new MatlabChart() ;
 //		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
 //		fig.renderPlot();
 //		fig.run(true);
-		
+
 //		System.out.println(rff.getFF(Xcut, -73.0*PI/180.0, 107*PI/180.0));
-		
-		double[] x = MathUtils.linspace(-PI/2.0, PI/2.0, 100) ;
-		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
-//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
-//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
-		MatlabChart fig = new MatlabChart() ;
-		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
-		fig.renderPlot();
-		fig.run(true);
-		fig.xlabel("Rotation Angle (deg)");
-		fig.ylabel("Filling Factor");
-		
+
+//		double[] x = MathUtils.linspace(-PI/2.0, PI/2.0, 100) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
+////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
+////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
+//		MatlabChart fig = new MatlabChart() ;
+//		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
+//		fig.renderPlot();
+//		fig.run(true);
+//		fig.xlabel("Rotation Angle (deg)");
+//		fig.ylabel("Filling Factor");
+
 	}
 
 }
