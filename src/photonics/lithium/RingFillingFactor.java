@@ -18,6 +18,8 @@ import static java.lang.Math.*;
 public class RingFillingFactor {
 
 	private double getDneff(Crystal cut, double phi) {
+		RotatedDCField rotation = new RotatedDCField() ;
+
 		double factor = 0.0 ;
 		switch (cut) {
 			case Xcut:
@@ -33,13 +35,11 @@ public class RingFillingFactor {
 			default:
 				break;
 		}
-		return factor ;
+		return factor * rotation.getRotationFactor(phi) ;
+//		return factor ;
 	}
 
 	private double getFF(Crystal cut, double phi0, double phi1) {
-//		RotatedDCField rotation = new RotatedDCField() ;
-//		IntegralFunction1D dneff = phi -> getDneff(cut, phi)*rotation.getRotationFactor(phi) ;
-
 		IntegralFunction1D dneff = phi -> getDneff(cut, phi) ;
 		Integral1D integral = new Integral1D(dneff, phi0, phi1) ;
 		return 1.0/(2*PI)*integral.getIntegral() ;
@@ -67,7 +67,7 @@ public class RingFillingFactor {
 	public static void main(String[] args) {
 		RingFillingFactor rff = new RingFillingFactor() ;
 //		rff.plotContours(Xcut);
-		rff.plotFF(Xcut);
+//		rff.plotFF(Xcut);
 //		rff.plotFF(Ycut);
 
 //		double[] x = MathUtils.linspace(0, 2*PI, 100) ;
@@ -86,16 +86,16 @@ public class RingFillingFactor {
 
 //		System.out.println(rff.getFF(Xcut, -73.0*PI/180.0, 107*PI/180.0));
 
-//		double[] x = MathUtils.linspace(-PI/2.0, PI/2.0, 100) ;
-//		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
-////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
-////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
-//		MatlabChart fig = new MatlabChart() ;
-//		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
-//		fig.renderPlot();
-//		fig.run(true);
-//		fig.xlabel("Rotation Angle (deg)");
-//		fig.ylabel("Filling Factor");
+		double[] x = MathUtils.linspace(0, 2*PI, 1000) ;
+		double[] y = ArrayFunc.apply(t -> rff.getDneff(Ycut, t), x) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
+		MatlabChart fig = new MatlabChart() ;
+		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
+		fig.renderPlot();
+		fig.run(true);
+		fig.xlabel("Rotation Angle (deg)");
+		fig.ylabel("Filling Factor");
 
 	}
 
