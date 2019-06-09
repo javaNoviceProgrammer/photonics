@@ -24,6 +24,8 @@ public class RingFillingFactor {
 		switch (cut) {
 			case Xcut:
 				factor = cos(phi)*cos(phi)*cos(phi) + (eps22*eps22)/(eps33*eps33)*(r22/r33 * sin(phi) + r23/r33*cos(phi))*sin(phi)*sin(phi) ;
+//				factor = cos(phi)*cos(phi)*cos(phi) + (eps22*eps22)/(eps33*eps33)*(r22/r33 * sin(phi) + r23/r33*cos(phi))*sin(phi)*sin(phi) +
+//							+2*sin(phi)*sin(phi)*cos(phi)*eps22/eps33*r42/r33	;
 //				factor = cos(phi)*cos(phi)*cos(phi) ;
 				break;
 			case Ycut:
@@ -67,7 +69,7 @@ public class RingFillingFactor {
 	public static void main(String[] args) {
 		RingFillingFactor rff = new RingFillingFactor() ;
 //		rff.plotContours(Xcut);
-//		rff.plotFF(Xcut);
+		rff.plotFF(Xcut);
 //		rff.plotFF(Ycut);
 
 //		double[] x = MathUtils.linspace(0, 2*PI, 100) ;
@@ -86,16 +88,16 @@ public class RingFillingFactor {
 
 //		System.out.println(rff.getFF(Xcut, -73.0*PI/180.0, 107*PI/180.0));
 
-		double[] x = MathUtils.linspace(0, 2*PI, 1000) ;
-		double[] y = ArrayFunc.apply(t -> rff.getDneff(Ycut, t), x) ;
-//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
-//		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
-		MatlabChart fig = new MatlabChart() ;
-		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
-		fig.renderPlot();
-		fig.run(true);
-		fig.xlabel("Rotation Angle (deg)");
-		fig.ylabel("Filling Factor");
+//		double[] x = MathUtils.linspace(0, 2*PI, 1000) ;
+//		double[] y = ArrayFunc.apply(t -> rff.getDneff(Xcut, t), x) ;
+////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0+t, PI/2.0+t)*2, x) ;
+////		double[] y = ArrayFunc.apply(t -> rff.getFF(Xcut, -PI/2.0-t, PI/2.0-t) - rff.getFF(Xcut, PI/2.0-t, 3*PI/2.0-t), x) ;
+//		MatlabChart fig = new MatlabChart() ;
+//		fig.plot(ArrayFunc.apply(t -> 180.0/PI*t, x), y);
+//		fig.renderPlot();
+//		fig.run(true);
+//		fig.xlabel("Rotation Angle (deg)");
+//		fig.ylabel("Filling Factor");
 
 	}
 

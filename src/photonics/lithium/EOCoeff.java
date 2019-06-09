@@ -1,7 +1,7 @@
 package photonics.lithium;
 
 public class EOCoeff {
-	
+
 	public static final double r11 = 0.0,
 							   r12 = -3.4,
 							   r13 = 8.6,
@@ -17,7 +17,7 @@ public class EOCoeff {
 							   r51 = 28.0,
 							   r52 = 0.0,
 							   r53 = 0.0,
-							   r61 = 0.0,
+							   r61 = -3.4,
 							   r62 = 0.0,
 							   r63 = 0.0 ;
 
