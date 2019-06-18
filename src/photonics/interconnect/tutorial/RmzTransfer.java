@@ -23,15 +23,15 @@ public class RmzTransfer {
 		
 //		pc.connectPorts("mmi1.port3", "ps1.port1");
 //		pc.connectPorts("mmi1.port2", "ps2.port1");
-		pc.connectPorts("ps1.port2", "ring1.port1");
-		pc.connectPorts("ps2.port2", "ring2.port1");
+//		pc.connectPorts("ps1.port2", "ring1.port1");
+//		pc.connectPorts("ps2.port2", "ring2.port1");
 //		pc.connectPorts("ring1.port2", "mmi2.port3");
 //		pc.connectPorts("ring2.port2", "mmi2.port2");
 		
 		pc.connectPortsUnidirectional("mmi1.port3", "ps1.port1");
 		pc.connectPortsUnidirectional("mmi1.port2", "ps2.port1");
-//		pc.connectPortsUnidirectional("ps1.port2", "ring1.port1");
-//		pc.connectPortsUnidirectional("ps2.port2", "ring2.port1");
+		pc.connectPortsUnidirectional("ps1.port2", "ring1.port1");
+		pc.connectPortsUnidirectional("ps2.port2", "ring2.port1");
 		pc.connectPortsUnidirectional("ring1.port2", "mmi2.port3");
 		pc.connectPortsUnidirectional("ring2.port2", "mmi2.port2");
 		
