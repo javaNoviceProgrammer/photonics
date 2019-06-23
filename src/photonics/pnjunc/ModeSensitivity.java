@@ -1,7 +1,6 @@
 package photonics.pnjunc;
 
 import flanagan.interpolation.CubicSpline;
-import mathLib.fitting.interpol.LinearInterpolation1D;
 import mathLib.func.ArrayFunc;
 import mathLib.func.intf.RealFunction;
 import mathLib.plot.MatlabChart;
@@ -9,14 +8,10 @@ import mathLib.util.MathUtils;
 
 public class ModeSensitivity {
 
-	// type of waveguide
-	// dneff/dnsi (x) normalized
-	// dalhpaeff/dalphasi(x) normalized
-	
 	private double dnSi = 0.01, dAlphaDbperCmSi = 10.0 ;
-	private double neff0, alphaEff0 ;
+	private double neff0 ;
+	private double alphaEff0 ;
 	private double[] dneff_dnsi, dalphaEff_dalphaSi ;
-	String lambda;
 	
 	private CubicSpline dnEffDnSi ;
 	private CubicSpline dAlphaEffDalpha ;
@@ -41,13 +36,12 @@ public class ModeSensitivity {
 			365.071, 276.073, 199.468, 136.935, 88.9167, 53.5881, 35.1203, 22.8745, 14.8029, 9.57433, 6.17413, 3.96001,
 			2.56311, 1.65996, 1.0815, 0.708029, 0.465036, 0.312903};
 
-	private double[] x_neff_nm_1310 = {};
-	private double[] neff_1310 = {};
-	private double[] x_alpha_nm_1310 = {};
-	private double[] alphaEff_1310 = {};
+//	private double[] x_neff_nm_1310 = {};
+//	private double[] neff_1310 = {};
+//	private double[] x_alpha_nm_1310 = {};
+//	private double[] alphaEff_1310 = {};
 
 	public ModeSensitivity(String lambdaNm) {
-		this.lambda = lambdaNm;
 		
 		switch (lambdaNm) {
 		case "1550":
@@ -71,6 +65,14 @@ public class ModeSensitivity {
 
 	public double getDalphaEffDalphaSi(double xNm) {
 		return dAlphaEffDalpha.interpolate(xNm) ;
+	}
+	
+	public double getNeff0() {
+		return neff0 ;
+	}
+	
+	public double getAlphaEff0() {
+		return alphaEff0 * 0.0 ;
 	}
 
 	
