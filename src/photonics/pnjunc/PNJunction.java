@@ -225,8 +225,8 @@ public class PNJunction {
 		double[] clearance = MathUtils.linspace(0.0, 500.0, 100) ;
 		double[] excessLoss = new double[clearance.length] ;
 		for(int i=0; i<clearance.length; i++) {
-			pn.setClearancePPnm(clearance[i]);
-			excessLoss[i] = pn.getLossPPdBperCm() ;
+			pn.setClearanceNNnm(clearance[i]);
+			excessLoss[i] = pn.getLossNNdBperCm() ;
 		}
 		
 		MatlabChart fig3 = new MatlabChart() ;
