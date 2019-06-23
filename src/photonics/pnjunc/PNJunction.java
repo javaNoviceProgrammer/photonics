@@ -1,8 +1,13 @@
 package photonics.pnjunc;
 
+import mathLib.fitting.lmse.LeastSquareFitter;
+import mathLib.fitting.lmse.LeastSquareFunction;
+import mathLib.fitting.lmse.MarquardtFitter;
 import mathLib.func.ArrayFunc;
+import mathLib.func.intf.RealFunction;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
+import mathLib.util.StringUtils;
 
 public class PNJunction {
 
@@ -19,10 +24,21 @@ public class PNJunction {
 	private double offsetNm ;
 
 	private ModeSensitivity modeSens ;
+	private OpticalBand opticalBand ;
 
-	private enum LambdaBand {
-		cBand1550,
-		oBand1310
+	public enum OpticalBand {
+		cBand1550(1550.0),
+		oBand1310(1310.0) ;
+
+		private double wavelength ;
+
+		private OpticalBand(double wavelength) {
+			this.wavelength = wavelength ;
+		}
+
+		public double getLambda() {
+			return wavelength ;
+		}
 	}
 
 	public PNJunction(
@@ -42,11 +58,16 @@ public class PNJunction {
 
 	}
 
+	public void setOpticalBand(OpticalBand lambda) {
+		this.opticalBand = lambda ;
+	}
+
 	public void setModeSensitivity(ModeSensitivity modeSens) {
 		this.modeSens = modeSens;
 	}
 
-	public void setModeSensitivity(LambdaBand lambda) {
+	public void setModeSensitivity(OpticalBand lambda) {
+		this.opticalBand = lambda ;
 		switch (lambda) {
 		case cBand1550:
 			this.modeSens = new ModeSensitivity("1550") ;
@@ -161,6 +182,21 @@ public class PNJunction {
 		return getNeff(v2) - getNeff(v1) ;
 	}
 
+	public double getDphiRadperCm(double v1, double v2) {
+		double dphi = 0.0 ;
+		switch (opticalBand) {
+		case cBand1550:
+			dphi = 2.0*Math.PI/(1550e-7) * getDNeff(v1, v2) ;
+			break;
+		case oBand1310:
+			dphi = 2.0*Math.PI/(1310e-7) * getDNeff(v1, v2) ;
+		default:
+			break;
+		}
+
+		return dphi ;
+	}
+
 	public double getAlphaEffDbPerCm(double voltage) {
 		double xp = getXnm(voltage) ;
 		double xpp = widthNm + clearancePPnm ;
@@ -189,14 +225,22 @@ public class PNJunction {
 	}
 
 
-	// test
+
+
+
+
+
+
+
+	//*********** test *************
+
 	public static void main(String[] args) {
 		PNJunction pn = new PNJunction() ;
-		pn.setN(4.5e17);
-		pn.setP(3.5e17);
+		pn.setN(2.5e17);
+		pn.setP(2.2e17);
 		pn.setNN(5.73e18);
 		pn.setPP(5.73e18);
-		pn.setModeSensitivity(LambdaBand.cBand1550);
+		pn.setModeSensitivity(OpticalBand.cBand1550);
 		pn.setOffsetNm(60.0);
 
 		double[] voltage = MathUtils.linspace(0.0, -6.0, 100) ;
@@ -206,38 +250,91 @@ public class PNJunction {
 		double[] xP = ArrayFunc.apply(v -> pn.getXPnm(v), voltage) ;
 		double[] cjunc = ArrayFunc.apply(v -> pn.getCjuncfFpMilli(v), voltage) ;
 		double[] dneff = ArrayFunc.apply(v -> pn.getDNeff(0.0, v), voltage) ;
+		double[] dphiRadperCm = ArrayFunc.apply(v -> pn.getDphiRadperCm(0.0, v), voltage) ;
 
 
-		MatlabChart fig = new MatlabChart() ;
-		fig.plot(voltage, wj, "b", 2f, "W_j (nm)");
-		fig.plot(voltage, xN, "r", 2f, "x_n (nm)");
-		fig.plot(voltage, xP, "g", 2f, "x_p (nm)");
-		fig.renderPlot();
-//		fig.legendON();
-		fig.run(true);
+//		MatlabChart fig = new MatlabChart() ;
+//		fig.plot(voltage, wj, "b", 2f, "W_j (nm)");
+//		fig.plot(voltage, xN, "r", 2f, "x_n (nm)");
+//		fig.plot(voltage, xP, "g", 2f, "x_p (nm)");
+//		fig.renderPlot();
+//		fig.run(true);
 
 		MatlabChart fig2 = new MatlabChart() ;
 		fig2.plot(voltage, cjunc, "b", 2f, "C_j (fF/mm)");
 		fig2.renderPlot();
-//		fig2.legendON();
 		fig2.run(true);
 
-		double[] clearance = MathUtils.linspace(0.0, 500.0, 100) ;
-		double[] excessLoss = new double[clearance.length] ;
-		for(int i=0; i<clearance.length; i++) {
-			pn.setClearanceNNnm(clearance[i]);
-			excessLoss[i] = pn.getLossNNdBperCm() ;
-		}
+//		double[] clearance = MathUtils.linspace(0.0, 500.0, 100) ;
+//		double[] excessLoss = new double[clearance.length] ;
+//		for(int i=0; i<clearance.length; i++) {
+//			pn.setClearanceNNnm(clearance[i]);
+//			excessLoss[i] = pn.getLossNNdBperCm() ;
+//		}
+//
+//		MatlabChart fig3 = new MatlabChart() ;
+//		fig3.plot(clearance, excessLoss, "b");
+//		fig3.renderPlot();
+//		fig3.run(true);
+//
+//		MatlabChart fig4 = new MatlabChart() ;
+//		fig4.plot(voltage, dneff, "b");
+//		fig4.renderPlot();
+//		fig4.run(true);
 
-		MatlabChart fig3 = new MatlabChart() ;
-		fig3.plot(clearance, excessLoss, "b");
-		fig3.renderPlot();
-		fig3.run(true);
+		RealFunction saturn1 = v -> 1.71 * Math.pow(-v+0.7, 0.8) - 1.26 ;
+		RealFunction saturn1Cap = v -> 237.45 * Math.pow(-v+0.855, -0.3) - 26.11 ;
 
-		MatlabChart fig4 = new MatlabChart() ;
-		fig4.plot(voltage, dneff, "b");
-		fig4.renderPlot();
-		fig4.run(true);
+		MatlabChart fig5 = new MatlabChart() ;
+		fig5.plot(voltage, dphiRadperCm, "b");
+		fig5.plot(voltage, ArrayFunc.apply(saturn1, voltage), "r");
+		fig5.renderPlot();
+		fig5.run(true);
+
+		LeastSquareFunction func = new LeastSquareFunction() {
+			@Override
+			public int getNParameters() {
+				return 2;
+			}
+
+			@Override
+			public int getNInputs() {
+				return 1;
+			}
+
+			@Override
+			public double evaluate(double[] values, double[] parameters) {
+				double valN = parameters[0]*1e17 ;
+				double valP = parameters[1]*1e17 ;
+				pn.setN(valN);
+				pn.setP(valP);
+				return pn.getDphiRadperCm(0.0, values[0]) ;
+			}
+		};
+
+		LeastSquareFitter fitter = new MarquardtFitter(func) ;
+		fitter.setParameters(new double[] {1.0, 1.5});
+		double[][] data = new double[voltage.length][1] ;
+		for(int i=0; i<voltage.length; i++)
+			data[i][0] = voltage[i] ;
+		fitter.setData(data, ArrayFunc.apply(saturn1, voltage));
+
+		fitter.fitData();
+		double[] params = fitter.getParameters() ;
+		System.out.println("N = " + StringUtils.fixedWidthDoubletoString(params[0], 3) +
+							", P = " + StringUtils.fixedWidthDoubletoString(params[1], 3));
+
+
+		pn.setN(params[0]*1e17);
+		pn.setP(params[1]*1e17);
+
+		fig5.plot(voltage, ArrayFunc.apply(v -> pn.getDphiRadperCm(0.0, v), voltage), "g");
+		fig5.renderPlot();
+
+
+		fig2.plot(voltage, ArrayFunc.apply(v -> pn.getCjuncfFpMilli(v), voltage), "g");
+		fig2.plot(voltage, ArrayFunc.apply(saturn1Cap, voltage), "r");
+		fig2.renderPlot();
 
 	}
 
