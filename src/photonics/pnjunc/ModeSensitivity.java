@@ -117,40 +117,43 @@ public class ModeSensitivity {
 		
 		ModeSensitivity modeSens = new ModeSensitivity("1550");
 //		RealFunction alphaDbpCm = clearanceNm -> 20.54 * Math.exp(-0.013*(clearanceNm+24.138)) + 0.149 ; // N+
-//		RealFunction alphaDbpCm = clearanceNm -> 17.872 * Math.exp(-0.013*(clearanceNm+24.013)) + 0.138 ; // P+
+		RealFunction alphaDbpCm = clearanceNm -> 17.872 * Math.exp(-0.013*(clearanceNm+24.013)) + 0.138 ; // P+
 //		RealFunction alphaDbpCm = clearanceNm -> 0.386 * Math.exp(-0.012*(clearanceNm-719.136)) -0.022 ; // N++
-		RealFunction alphaDbpCm = clearanceNm -> 0.385 * Math.exp(-0.012*(clearanceNm-699.408)) -0.068 ; // P++
-		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) ;
+//		RealFunction alphaDbpCm = clearanceNm -> 0.385 * Math.exp(-0.012*(clearanceNm-699.408)) -0.068 ; // P++
 		
-		double[] xNm = MathUtils.linspace(450.0, 500.0, 100) ;
+//		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(5.7e18/2.0, 0.0)*2  ;
+		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(0.0, 7e18/2.0)*2  ;
+		
+		double[] xNm = MathUtils.linspace(0.0, 500.0, 100) ;
 		double[] lossDbpCm = ArrayFunc.apply(x -> dAlphaEffDbpCm.evaluate(x), xNm) ;
 		
 		MatlabChart fig5 = new MatlabChart() ;
 		fig5.plot(xNm, lossDbpCm, "m");
+		fig5.plot(xNm, ArrayFunc.apply(alphaDbpCm, xNm), "b") ;
 		fig5.renderPlot();
 		fig5.run(true);
 		
-		// step 1: find DalphaSi
-		RealFunction dAlphaSidBperCm = clearanceNm -> alphaDbpCm.evaluate(clearanceNm)/dAlphaEffDbpCm.evaluate(clearanceNm) ;
-//		RealFunction dopingNN = clearanceNm -> dAlphaSidBperCm.evaluate(clearanceNm)/4.343/ PlasmaDispersion.An_DaSi_1550 * 1e-19 ;
-		RealFunction dopingNN = clearanceNm -> dAlphaSidBperCm.evaluate(clearanceNm)/4.343/ PlasmaDispersion.Ap_DaSi_1550 * 1e-19 ;
-		
-		MatlabChart fig6 = new MatlabChart() ;
-		fig6.plot(xNm, ArrayFunc.apply(x -> dopingNN.evaluate(x), xNm));
-		fig6.renderPlot();
-		fig6.run(true);
-		
-		MatlabChart fig7 = new MatlabChart() ;
-		double[] x2 = MathUtils.linspace(450.0, 1000.0, 100) ;
-		fig7.plot(x2, ArrayFunc.apply(x -> alphaDbpCm.evaluate(x), x2), "b");
-		double[] x1 = new double[]{450, 480, 500.0} ;
-		fig7.plot(x1, ArrayFunc.apply(x -> dAlphaEffDbpCm.evaluate(x) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(0.0, 5.1e20), x1), "k");
-		fig7.renderPlot();
-		fig7.xlabel("Clearance (nm)");
-		fig7.ylabel("Loss (dB/cm)");
-		fig7.markerON(1);
-		fig7.setFigLineWidth(1, 0f);
-		fig7.run(true);
+//		// step 1: find DalphaSi
+//		RealFunction dAlphaSidBperCm = clearanceNm -> alphaDbpCm.evaluate(clearanceNm)/dAlphaEffDbpCm.evaluate(clearanceNm) ;
+//		RealFunction dopingNN = clearanceNm -> dAlphaSidBperCm.evaluate(clearanceNm)/4.343/ PlasmaDispersion.An_DaSi_1550 * 1e-18 ;
+////		RealFunction dopingNN = clearanceNm -> dAlphaSidBperCm.evaluate(clearanceNm)/4.343/ PlasmaDispersion.Ap_DaSi_1550 * 1e-19 ;
+//		
+//		MatlabChart fig6 = new MatlabChart() ;
+//		fig6.plot(xNm, ArrayFunc.apply(x -> dopingNN.evaluate(x), xNm));
+//		fig6.renderPlot();
+//		fig6.run(true);
+//		
+//		MatlabChart fig7 = new MatlabChart() ;
+//		double[] x2 = MathUtils.linspace(50.0, 500.0, 100) ;
+//		fig7.plot(x2, ArrayFunc.apply(x -> alphaDbpCm.evaluate(x), x2), "b");
+////		double[] x1 = new double[]{450, 480, 500.0} ;
+////		fig7.plot(x1, ArrayFunc.apply(x -> dAlphaEffDbpCm.evaluate(x) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(0.0, 5.1e20), x1), "k");
+//		fig7.renderPlot();
+//		fig7.xlabel("Clearance (nm)");
+//		fig7.ylabel("Loss (dB/cm)");
+//		fig7.markerON(1);
+//		fig7.setFigLineWidth(1, 0f);
+//		fig7.run(true);
 //		
 	}
 
