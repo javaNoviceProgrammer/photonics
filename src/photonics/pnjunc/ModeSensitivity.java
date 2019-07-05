@@ -122,7 +122,8 @@ public class ModeSensitivity {
 //		RealFunction alphaDbpCm = clearanceNm -> 0.385 * Math.exp(-0.012*(clearanceNm-699.408)) -0.068 ; // P++
 		
 //		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(5.7e18/2.0, 0.0)*2  ;
-		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(0.0, 7e18/2.0)*2  ;
+//		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(0.0, 7e18/2.0)*2  ;
+		RealFunction dAlphaEffDbpCm = clearanceNm -> modeSens.getDalphaEffDalphaSi(500.0 + clearanceNm) * PlasmaDispersion.DalphaDbPerCmSi_1550nm(0.0, 7e18/4.0)  ;
 		
 		double[] xNm = MathUtils.linspace(0.0, 500.0, 100) ;
 		double[] lossDbpCm = ArrayFunc.apply(x -> dAlphaEffDbpCm.evaluate(x), xNm) ;
