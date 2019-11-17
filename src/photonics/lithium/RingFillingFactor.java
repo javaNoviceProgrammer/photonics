@@ -1,8 +1,16 @@
 package photonics.lithium;
 
-import static photonics.lithium.EOCoeff.*;
-import static photonics.lithium.EpsilonLN.*;
-import static photonics.lithium.Crystal.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static photonics.lithium.Crystal.Xcut;
+import static photonics.lithium.EOCoeff.r13;
+import static photonics.lithium.EOCoeff.r22;
+import static photonics.lithium.EOCoeff.r23;
+import static photonics.lithium.EOCoeff.r33;
+import static photonics.lithium.EpsilonLN.eps11;
+import static photonics.lithium.EpsilonLN.eps22;
+import static photonics.lithium.EpsilonLN.eps33;
 
 import mathLib.func.ArrayFunc;
 import mathLib.func.intf.RealFunction2D;
@@ -12,8 +20,6 @@ import mathLib.plot.ColorMapPlot;
 import mathLib.plot.MatlabChart;
 import mathLib.plot.util.MeshGrid;
 import mathLib.util.MathUtils;
-
-import static java.lang.Math.*;
 
 public class RingFillingFactor {
 

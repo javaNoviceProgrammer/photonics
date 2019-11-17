@@ -1,11 +1,11 @@
 package photonics.pnjunc.pin;
 
+import static mathLib.util.MathUtils.linspace;
+
 import ch.epfl.general_libraries.clazzes.ParamName;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.plot.MatlabChart;
-
-import static mathLib.util.MathUtils.*;
 
 public class PINModelDC {
 

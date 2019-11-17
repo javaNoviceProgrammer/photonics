@@ -1,5 +1,7 @@
 package photonics.interconnect.elements.general;
 
+import static mathLib.numbers.Complex.ONE;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -8,7 +10,6 @@ import ch.epfl.general_libraries.utils.SimpleMap;
 import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
-import static mathLib.numbers.Complex.*;
 
 public class ThreePortElement extends AbstractElement {
 	

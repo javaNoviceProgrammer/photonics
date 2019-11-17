@@ -3,7 +3,8 @@ package photonics.lithium;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static photonics.lithium.EpsilonLN.*;
+import static photonics.lithium.EpsilonLN.eps22DC;
+import static photonics.lithium.EpsilonLN.eps33DC;
 
 import mathLib.func.ArrayFunc;
 import mathLib.plot.MatlabChart;

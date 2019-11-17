@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -31,8 +32,6 @@ import photonics.wg.bend.gds2.Bend90degCircularGDSModule;
 import photonics.wg.bend.gds2.Bend90degEulerGDSModule;
 import photonics.wg.bend.gds2.Bend90degHybridGDSModule;
 import photonics.wg.bend.gds2.Bend90degOptimalGDSModule;
-
-import java.awt.Toolkit;
 
 public class BendWgGUI extends JFrame {
 

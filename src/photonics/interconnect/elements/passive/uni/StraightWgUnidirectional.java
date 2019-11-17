@@ -1,5 +1,9 @@
 package photonics.interconnect.elements.passive.uni;
 
+import static mathLib.numbers.Complex.j;
+import static mathLib.numbers.ComplexMath.PI;
+import static mathLib.numbers.ComplexMath.exp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +14,6 @@ import mathLib.numbers.Complex;
 import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
-
-import static mathLib.numbers.Complex.* ;
-import static mathLib.numbers.ComplexMath.*;
 
 public class StraightWgUnidirectional extends AbstractElement {
 

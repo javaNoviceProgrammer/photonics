@@ -3,6 +3,7 @@ package photonics.interconnect.elements.passive.uni;
 import static mathLib.numbers.Complex.j;
 import static mathLib.numbers.ComplexMath.PI;
 import static mathLib.numbers.ComplexMath.exp;
+import static mathLib.numbers.ComplexMath.sqrt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import mathLib.numbers.Complex;
 import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
-import static mathLib.numbers.ComplexMath.*;
 
 public class AddDropRingUnidirectional extends AbstractElement {
 

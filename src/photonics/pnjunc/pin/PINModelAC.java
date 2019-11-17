@@ -1,13 +1,13 @@
 package photonics.pnjunc.pin;
 
+import static java.lang.Math.PI;
+import static mathLib.numbers.Complex.ONE;
+import static mathLib.numbers.Complex.plusJ;
+import static mathLib.util.MathUtils.linspace;
+
 import ch.epfl.general_libraries.clazzes.ParamName;
 import mathLib.numbers.Complex;
 import mathLib.plot.MatlabChart;
-
-import static mathLib.numbers.Complex.*;
-import static mathLib.util.MathUtils.*;
-
-import static java.lang.Math.* ;
 
 public class PINModelAC {
 	

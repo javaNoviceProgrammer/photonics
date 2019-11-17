@@ -1,5 +1,6 @@
 package photonics.wg.bend;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import mathLib.util.CustomJFileChooser;
@@ -34,8 +36,6 @@ import photonics.wg.bend.gds2.Bend90degCircularGDSModule;
 import photonics.wg.bend.gds2.Bend90degEulerGDSModule;
 import photonics.wg.bend.gds2.Bend90degHybridGDSModule;
 import photonics.wg.bend.gds2.Bend90degOptimalGDSModule;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
 
 public class BendWgGUI2 extends JFrame {
 

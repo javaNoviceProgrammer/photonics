@@ -1,10 +1,10 @@
 package photonics.pnjunc.pin;
 
+import static java.lang.Math.sqrt;
+import static mathLib.util.MathUtils.linspace;
+
 import ch.epfl.general_libraries.clazzes.ParamName;
 import mathLib.plot.MatlabChart;
-
-import static java.lang.Math.* ;
-import static mathLib.util.MathUtils.*;
 
 public class PINShiftResDC {
 	
