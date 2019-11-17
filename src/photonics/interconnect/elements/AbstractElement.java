@@ -3,7 +3,7 @@ package photonics.interconnect.elements;
 import java.util.ArrayList;
 import java.util.Map;
 
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import photonics.util.Wavelength;
 
 public abstract class AbstractElement {

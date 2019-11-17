@@ -8,7 +8,7 @@ import java.util.Map;
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.utils.SimpleMap;
 import mathLib.numbers.Complex;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.interconnect.modes.NeffCoupled;
 import photonics.util.Wavelength;

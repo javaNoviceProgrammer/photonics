@@ -11,7 +11,7 @@ import java.util.Map;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
 import mathLib.numbers.Complex;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.interconnect.modes.Neff;
 import photonics.util.Wavelength;

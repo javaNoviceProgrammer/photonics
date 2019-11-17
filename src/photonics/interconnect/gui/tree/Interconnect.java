@@ -7,7 +7,7 @@ import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
 import ch.epfl.general_libraries.results.AbstractResultsManager;
 import ch.epfl.general_libraries.results.DataPoint;
 import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import mathLib.util.MathUtils;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
