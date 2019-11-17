@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
 import mathLib.numbers.Complex;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 
 public class AddDropFifthOrder {
 

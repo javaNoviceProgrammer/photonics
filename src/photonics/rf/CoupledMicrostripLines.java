@@ -1,6 +1,11 @@
 package photonics.rf;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan;
+import static java.lang.Math.exp;
+import static java.lang.Math.log;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 import java.util.HashMap;
 import java.util.Map;

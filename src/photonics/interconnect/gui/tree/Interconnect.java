@@ -1,5 +1,7 @@
 package photonics.interconnect.gui.tree;
 
+import static mathLib.numbers.Complex.ONE;
+
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.experiment_aut.Experiment;
 import ch.epfl.general_libraries.experiment_aut.WrongExperimentException;
@@ -7,12 +9,10 @@ import ch.epfl.general_libraries.results.AbstractResultsDisplayer;
 import ch.epfl.general_libraries.results.AbstractResultsManager;
 import ch.epfl.general_libraries.results.DataPoint;
 import ch.epfl.javancox.experiments.builder.ExperimentConfigurationCockpit;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import mathLib.util.MathUtils;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
-
-import static mathLib.numbers.Complex.*;
 
 public class Interconnect implements Experiment {
 

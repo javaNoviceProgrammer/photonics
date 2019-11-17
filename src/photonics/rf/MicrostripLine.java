@@ -1,10 +1,15 @@
 package photonics.rf;
 
-import ch.epfl.general_libraries.clazzes.ParamName;
-import static java.lang.Math.*;
+import static java.lang.Math.E;
+import static java.lang.Math.PI;
+import static java.lang.Math.log;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 import java.util.HashMap;
-import java.util.Map; 
+import java.util.Map;
+
+import ch.epfl.general_libraries.clazzes.ParamName; 
 
 public class MicrostripLine {
 	

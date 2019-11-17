@@ -1,6 +1,10 @@
 package photonics.wg.bend.gds;
 
-import static java.lang.Math.* ;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 import java.awt.BasicStroke;
 import java.awt.geom.Path2D;

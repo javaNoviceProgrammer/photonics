@@ -1,20 +1,10 @@
 package photonics.wg.bend.gds;
 
-import flanagan.integration.IntegralFunction;
-import flanagan.interpolation.CubicSpline;
-import flanagan.roots.RealRoot;
-import flanagan.roots.RealRootFunction;
-import mathLib.fitting.interpol.LinearInterpolation1D;
-import mathLib.func.ArrayFunc;
-import mathLib.func.intf.RealFunction;
-import mathLib.integral.Integral1D;
-import mathLib.ode.Richardson;
-import mathLib.plot.MatlabChart;
-import mathLib.util.ArrayUtils;
-import mathLib.util.MathUtils;
-import photonics.wg.bend.LossModel;
-
-import static java.lang.Math.* ;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 import java.awt.BasicStroke;
 import java.awt.geom.Path2D;
@@ -29,6 +19,19 @@ import JGDS2.Lib;
 import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
+import flanagan.integration.IntegralFunction;
+import flanagan.interpolation.CubicSpline;
+import flanagan.roots.RealRoot;
+import flanagan.roots.RealRootFunction;
+import mathLib.fitting.interpol.LinearInterpolation1D;
+import mathLib.func.ArrayFunc;
+import mathLib.func.intf.RealFunction;
+import mathLib.integral.Integral1D;
+import mathLib.ode.Richardson;
+import mathLib.plot.MatlabChart;
+import mathLib.util.ArrayUtils;
+import mathLib.util.MathUtils;
+import photonics.wg.bend.LossModel;
 
 public class Bend90degEulerGDSdegModule {
 

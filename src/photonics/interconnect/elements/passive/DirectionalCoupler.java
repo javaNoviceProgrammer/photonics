@@ -1,14 +1,18 @@
 package photonics.interconnect.elements.passive;
 
-import static mathLib.numbers.Complex.*;
-import static mathLib.numbers.ComplexMath.*;
+import static mathLib.numbers.Complex.j;
+import static mathLib.numbers.ComplexMath.PI;
+import static mathLib.numbers.ComplexMath.cos;
+import static mathLib.numbers.ComplexMath.exp;
+import static mathLib.numbers.ComplexMath.sin;
+
 import java.util.ArrayList;
 import java.util.Map;
 
 import ch.epfl.general_libraries.clazzes.ParamName;
 import ch.epfl.general_libraries.utils.SimpleMap;
 import mathLib.numbers.Complex;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.interconnect.modes.NeffCoupled;
 import photonics.util.Wavelength;

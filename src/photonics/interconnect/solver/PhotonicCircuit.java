@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import flanagan.io.FileOutput;
 import mathLib.numbers.Complex;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import mathLib.util.CustomJFileChooser;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;

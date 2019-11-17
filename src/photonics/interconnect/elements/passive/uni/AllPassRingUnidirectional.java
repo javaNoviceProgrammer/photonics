@@ -1,5 +1,9 @@
 package photonics.interconnect.elements.passive.uni;
 
+import static mathLib.numbers.Complex.j;
+import static mathLib.numbers.ComplexMath.PI;
+import static mathLib.numbers.ComplexMath.exp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,11 +11,9 @@ import java.util.Map;
 import ch.epfl.general_libraries.clazzes.ParamName;
 import mathLib.func.intf.RealFunction;
 import mathLib.numbers.Complex;
-import mathLib.sfg.numeric.SFG;
+import mathLib.sfg.SFG;
 import photonics.interconnect.elements.AbstractElement;
 import photonics.util.Wavelength;
-import static mathLib.numbers.ComplexMath.*;
-import static mathLib.numbers.Complex.*;
 
 public class AllPassRingUnidirectional extends AbstractElement {
 
