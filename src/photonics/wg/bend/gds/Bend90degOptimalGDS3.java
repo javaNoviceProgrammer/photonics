@@ -16,12 +16,12 @@ import JGDS2.Lib;
 import JGDS2.Rect;
 import JGDS2.Ref;
 import JGDS2.Struct;
+import flanagan.integration.DerivnFunction;
 import flanagan.integration.RungeKutta;
 import flanagan.roots.RealRoot;
 import flanagan.roots.RealRootFunction;
 import mathLib.fitting.interpol.LinearInterpolation1D;
 import mathLib.func.ArrayFunc;
-import mathLib.ode.intf.DerivnFunction1D;
 import mathLib.plot.MatlabChart;
 import mathLib.util.ArrayUtils;
 import mathLib.util.MathUtils;
@@ -46,7 +46,7 @@ public class Bend90degOptimalGDS3 {
 			double A = (a1-a2)/(R0 - x0) ;
 
 			RungeKutta rk = new RungeKutta() ;
-			DerivnFunction1D func = new DerivnFunction1D() {
+			DerivnFunction func = new DerivnFunction() {
 
 				@Override
 				public double[] derivn(double x, double[] yy) {
@@ -82,7 +82,7 @@ public class Bend90degOptimalGDS3 {
 				double A = (a1-a2)/(R0 - x) ;
 
 				RungeKutta rk = new RungeKutta() ;
-				DerivnFunction1D func = new DerivnFunction1D() {
+				DerivnFunction func = new DerivnFunction() {
 
 					@Override
 					public double[] derivn(double x, double[] yy) {
@@ -122,7 +122,7 @@ public class Bend90degOptimalGDS3 {
 		for(int i=0; i<xx.length; i++) {
 
 			RungeKutta rk = new RungeKutta() ;
-			DerivnFunction1D func = new DerivnFunction1D() {
+			DerivnFunction func = new DerivnFunction() {
 
 				@Override
 				public double[] derivn(double x, double[] yy) {
