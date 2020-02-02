@@ -8,7 +8,7 @@ import Jama.EigenvalueDecomposition;
 import mathLib.matrix.ComplexMatrix;
 import mathLib.matrix.Matrix;
 import mathLib.numbers.Complex;
-import mathLib.ode.DiffOperator;
+import mathLib.ode.fdm.DiffOperator;
 import mathLib.plot.MatlabChart;
 import mathLib.util.MathUtils;
 import mathLib.util.Timer;
